@@ -9,15 +9,25 @@ namespace light
     struct Vec
     {
     public:
-        // Number of elements.
+        /**
+         * Number of elements.
+         */
         static const u32 SIZE = Size;
 
-        // Array of elements.
+    public:
+        /**
+         * Elements.
+         */
         Type data[Size];
 
     public:
+        /**
+         * Calculates the magnitude of the vector,
+         * for example on a vector of two elements
+         * performs the square root of a^2 + b^2.
+         */
         Type
-        strength() const;
+        magnitude() const;
 
         Vec<Type, Size>
         operator+(const Vec<Type, Size>& other) const;

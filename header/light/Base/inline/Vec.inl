@@ -4,7 +4,7 @@ namespace light
 {
     template <class Type, u32 Size>
     Type
-    Vec<Type, Size>::strength() const
+    Vec<Type, Size>::magnitude() const
     {
         Type res = 0;
 

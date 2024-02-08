@@ -3,16 +3,33 @@
 #include <time.h>  // time
 #include <stdio.h> // printf
 
+namespace light
+{
+    namespace fails
+    {
+        enum Random {
+            ZERO,
+            SIZE,
+        };
+
+        static String RANDOM[Random::SIZE] = {
+            String("[FAIL] Random: Extracted zero", 29u),
+        };
+    } // fails
+} // light
+
 using namespace light;
 
-Opt<f32>
+Res<f32, fails::Random>
 random_0_to_1(f32 limit = 1.0f)
 {
-    f32      val = rand() / (f32) RAND_MAX;
-    Opt<f32> res;
+    using Random = fails::Random;
+
+    Res<f32, Random> res = Res<f32, Random>(Random::ZERO);
+    f32              val = rand() / (f32) RAND_MAX;
 
     if ( limit != 0  )
-        res = Opt<f32>(val * limit);
+        res = Res<f32, Random>(val * limit);
 
     return res;
 }
@@ -25,12 +42,15 @@ main(int, const char*[])
     printf("MAX_RAND = %u\n", RAND_MAX);
 
     for ( u32 i = 0 ; i < 10u; i += 1u ) {
-        auto opt = random_0_to_1(0.0f);
+        auto opt = random_0_to_1((f32) (rand() % 3u));
 
-        if ( opt.full )
+        if ( opt.full == false ) {
+            printf("%.*s\n",
+                fails::RANDOM[opt.fail].size,
+                fails::RANDOM[opt.fail].data
+            );
+        } else
             printf("random = %.9f\n", opt.item);
-        else
-            printf("random = <fail>\n");
     }
 
     return 0;

@@ -9,28 +9,45 @@ namespace light
     struct Opt
     {
     public:
+        /**
+         * Size of the item.
+         */
+        static const u32 ITEM_SIZE = sizeof(Item);
+
+    public:
         union {
+            /**
+             * Actual item.
+             */
             Item item;
+
+            /**
+             * Array of bytes used to initialize
+             * the memory to zero.
+             */
+            s8 data[ITEM_SIZE] = {0};
         };
 
+        /**
+         * Helper boolean used to determine
+         * if the item exists or not.
+         */
         bool full;
 
     public:
+        /**
+         * Default constructor. Does not provide
+         * any item.
+         */
         Opt();
 
+        /**
+         * Constructor used to provide an item.
+         */
         Opt(Item item);
     };
-
-    template <class Item>
-    Opt<Item>::Opt()
-        : full {false}
-    {}
-
-    template <class Item>
-    Opt<Item>::Opt(Item item)
-        : item {item}
-        , full {true}
-    {}
 } // light
+
+#include <light/Base/inline/Opt.inl>
 
 #endif // LIGHT_BASE_OPT_HPP

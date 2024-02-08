@@ -9,19 +9,27 @@ namespace light
     struct Array
     {
     public:
-        // Number of elements.
+        /**
+         * Number of elements.
+         */
         static const u32 SIZE = Size;
 
     public:
-        // Array of elements.
+        /**
+         * Elements.
+         */
         Type data[Size] = {0};
 
     public:
-        // Subscript operator, doesn't test bounds.
+        /**
+         * Subscript operator, doesn't test bounds.
+         */
         Type&
         operator[](u32 index);
 
-        // Subscript operator, doesn't test bounds.
+        /**
+         * Subscript operator, doesn't test bounds.
+         */
         const Type&
         operator[](u32 index) const;
     };
