@@ -13,7 +13,7 @@ namespace light
         , size {0}
     {}
 
-    String::String(const char* data, u32 size)
+    String::String(const s8* data, u32 size)
         : String()
     {
         if ( data != 0 && size != 0 ) {
@@ -26,7 +26,7 @@ namespace light
     }
 
     bool
-    String::contains(char byte) const
+    String::contains(s8 byte) const
     {
         for ( u32 i = 0; i < size; i++ ) {
             if ( data[i] == byte )
@@ -36,26 +36,29 @@ namespace light
         return false;
     }
 
-    String
-    String::split(char byte)
+    Array<String, 2u>
+    String::split(s8 byte) const
     {
-        String res;
+        Array<String, 2u> res;
+
+        res[0] = String(data, size);
 
         for ( u32 i = 0; i < size; i++ ) {
             if ( data[i] == byte ) {
-                res = String(data, i);
-
-                data += i + 1u;
-                size -= i + 1u;
+                res[0] = String(data, i);
+                res[1] = String(
+                    data + i + 1u,
+                    size - i - 1u
+                );
 
                 break;
             }
         }
-        
+
         return res;
     }
 
-    void
+    String&
     String::trim_left(String bytes)
     {
         u32 index = 0;
@@ -67,9 +70,11 @@ namespace light
             if ( size == 0 )
                 break;
         }
+
+        return *this;
     }
 
-    void
+    String&
     String::trim_right(String bytes)
     {
         u32 index = size - 1u;
@@ -81,12 +86,13 @@ namespace light
             if ( size == 0 )
                 break;
         }
+
+        return *this;
     }
 
-    void
+    String&
     String::trim(String bytes)
     {
-        trim_left(bytes);
-        trim_right(bytes);
+        return trim_left(bytes).trim_right(bytes);
     }
 } // light

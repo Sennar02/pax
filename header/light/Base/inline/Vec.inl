@@ -25,7 +25,7 @@ namespace light
 
         return res;
     }
-    
+
     template <class Type, u32 Size>
     Vec<Type, Size>
     Vec<Type, Size>::operator+(Type other) const
@@ -69,7 +69,7 @@ namespace light
 
         return res;
     }
-    
+
     template <class Type, u32 Size>
     Vec<Type, Size>
     Vec<Type, Size>::operator-(Type other) const
@@ -157,7 +157,7 @@ namespace light
 
         return res;
     }
-    
+
     template <class Type, u32 Size>
     Vec<Type, Size>
     Vec<Type, Size>::operator/(Type other) const
@@ -198,7 +198,7 @@ namespace light
             if ( data[i] != other.data[i] )
                 return false;
         }
-            
+
         return true;
     }
 
@@ -210,7 +210,7 @@ namespace light
             if ( data[i] != other.data[i] )
                 return true;
         }
-            
+
         return false;
     }
 } // light

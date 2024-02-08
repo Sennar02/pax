@@ -14,7 +14,7 @@ namespace light
 
         // Array of elements.
         Type data[Size];
-    
+
     public:
         Type
         strength() const;
