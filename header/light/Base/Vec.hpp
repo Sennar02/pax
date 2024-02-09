@@ -77,6 +77,12 @@ namespace light
         Vec<Type, Size>&
         operator/=(Type other);
 
+        Type&
+        operator[](u32 index);
+
+        const Type&
+        operator[](u32 index) const;
+
         bool
         operator==(const Vec<Type, Size>& other) const;
 

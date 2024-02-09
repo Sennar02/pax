@@ -8,7 +8,7 @@ namespace light
     {
         Type res = 0;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res += data[i] * data[i];
 
         return sqrt(res);
@@ -20,7 +20,7 @@ namespace light
     {
         Vec<Type, Size> res;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res.data[i] = data[i] + other.data[i];
 
         return res;
@@ -32,7 +32,7 @@ namespace light
     {
         Vec<Type, Size> res;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res.data[i] = data[i] + other;
 
         return res;
@@ -42,7 +42,7 @@ namespace light
     Vec<Type, Size>&
     Vec<Type, Size>::operator+=(const Vec<Type, Size>& other)
     {
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] += other.data[i];
 
         return *this;
@@ -52,7 +52,7 @@ namespace light
     Vec<Type, Size>&
     Vec<Type, Size>::operator+=(Type other)
     {
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] += other;
 
         return *this;
@@ -64,7 +64,7 @@ namespace light
     {
         Vec<Type, Size> res;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res.data[i] = data[i] - other.data[i];
 
         return res;
@@ -76,7 +76,7 @@ namespace light
     {
         Vec<Type, Size> res;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res.data[i] = data[i] - other;
 
         return res;
@@ -86,7 +86,7 @@ namespace light
     Vec<Type, Size>&
     Vec<Type, Size>::operator-=(const Vec<Type, Size>& other)
     {
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] -= other.data[i];
 
         return *this;
@@ -96,7 +96,7 @@ namespace light
     Vec<Type, Size>&
     Vec<Type, Size>::operator-=(Type other)
     {
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] -= other;
 
         return *this;
@@ -108,7 +108,7 @@ namespace light
     {
         Vec<Type, Size> res;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res.data[i] = data[i] * other.data[i];
 
         return res;
@@ -120,7 +120,7 @@ namespace light
     {
         Vec<Type, Size> res;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res.data[i] = data[i] * other;
 
         return res;
@@ -130,7 +130,7 @@ namespace light
     Vec<Type, Size>&
     Vec<Type, Size>::operator*=(const Vec<Type, Size>& other)
     {
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] *= other.data[i];
 
         return *this;
@@ -140,7 +140,7 @@ namespace light
     Vec<Type, Size>&
     Vec<Type, Size>::operator*=(Type other)
     {
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] *= other;
 
         return *this;
@@ -152,7 +152,7 @@ namespace light
     {
         Vec<Type, Size> res;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res.data[i] = data[i] / other.data[i];
 
         return res;
@@ -164,7 +164,7 @@ namespace light
     {
         Vec<Type, Size> res;
 
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             res.data[i] = data[i] / other;
 
         return res;
@@ -174,7 +174,7 @@ namespace light
     Vec<Type, Size>&
     Vec<Type, Size>::operator/=(const Vec<Type, Size>& other)
     {
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] /= other.data[i];
 
         return *this;
@@ -184,17 +184,31 @@ namespace light
     Vec<Type, Size>&
     Vec<Type, Size>::operator/=(Type other)
     {
-        for ( u32 i = 0; i < SIZE; i++ )
+        for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] /= other;
 
         return *this;
     }
 
     template <class Type, u32 Size>
+    Type&
+    Vec<Type, Size>::operator[](u32 index)
+    {
+        return data[index];
+    }
+
+    template <class Type, u32 Size>
+    const Type&
+    Vec<Type, Size>::operator[](u32 index) const
+    {
+        return data[index];
+    }
+
+    template <class Type, u32 Size>
     bool
     Vec<Type, Size>::operator==(const Vec<Type, Size>& other) const
     {
-        for ( u32 i = 0; i < SIZE; i++ ) {
+        for ( u32 i = 0; i < SIZE; i += 1u ) {
             if ( data[i] != other.data[i] )
                 return false;
         }
@@ -206,7 +220,7 @@ namespace light
     bool
     Vec<Type, Size>::operator!=(const Vec<Type, Size>& other) const
     {
-        for ( u32 i = 0; i < SIZE; i++ ) {
+        for ( u32 i = 0; i < SIZE; i += 1u ) {
             if ( data[i] != other.data[i] )
                 return true;
         }

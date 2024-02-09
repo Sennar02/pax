@@ -10,9 +10,9 @@ namespace light
     {
     public:
         /**
-         * Size of the item.
+         * Size in bytes of the item.
          */
-        static const u32 ITEM_SIZE = sizeof(Item);
+        static const u32 LEN_ITEM = sizeof(Item);
 
     public:
         union {
@@ -25,7 +25,7 @@ namespace light
              * Array of bytes used to initialize
              * the memory to zero.
              */
-            s8 data[ITEM_SIZE] = {0};
+            s8 data[LEN_ITEM] = {0};
         };
 
         /**

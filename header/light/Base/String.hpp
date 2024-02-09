@@ -2,6 +2,7 @@
 #define LIGHT_BASE_STRING_HPP
 
 #include <light/Base/define.hpp>
+#include <light/Base/Opt.hpp>
 #include <light/Base/Array.hpp>
 
 namespace light
@@ -14,6 +15,16 @@ namespace light
          * default argument for any trim function.
          */
         static const String TRIMS;
+
+        /**
+         * Table of digits for a base 10 number.
+         */
+        static const String BASE_10;
+
+        /**
+         * Table of digits for a base 16 number.
+         */
+        static const String BASE_16;
 
     public:
         /**
@@ -33,11 +44,23 @@ namespace light
         String();
 
         /**
-         * Constructor that can be used to provide the
-         * desired size of the string, or to trigger a
-         * call on "strlen" when called with "MAX_U32".
+         * Constructor that can be used to provide
+         * the desired size of the string.
+         *
+         * WARNING: There is no way that the constructor
+         *          can detect if the size exceeds the
+         *          size of the allocation for the pointer.
          */
-        String(const s8* data, u32 size = MAX_U32);
+        String(const s8* data, u32 size);
+
+        /**
+         * Constructor that can be used to calculate
+         * the size of the string. If the size is smaller
+         * than the lower bound the string is ignored
+         * altogether, if instead the size is bigger than
+         * the upper bound: it just stops counting.
+         */
+        String(const s8* data, u32 lower, u32 upper);
 
         /**
          * Tests if a string contains a specific byte,
@@ -46,6 +69,14 @@ namespace light
          */
         bool
         contains(s8 byte) const;
+
+        /**
+         * Tests if a string contains a specific byte,
+         * returns the index of the first occurrence,
+         * of an empty value if none is found.
+         */
+        Opt<u32>
+        index_of(s8 byte) const;
 
         /**
          * Creates two substrings. The first one ranges from
@@ -80,7 +111,19 @@ namespace light
          */
         String&
         trim(String bytes = TRIMS);
+
+        /**
+         * Subscript operator, doesn't test bounds.
+         */
+        char
+        operator[](u32 index) const;
     };
+
+    s32
+    parse_int(String string, String digits = String::BASE_10);
+
+    f32
+    parse_flt(String string, String digits = String::BASE_10);
 } // light
 
 #endif // LIGHT_BASE_STRING_HPP

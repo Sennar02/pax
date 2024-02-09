@@ -1,8 +1,6 @@
 #ifndef LIGHT_BASE_DEFINE_HPP
 #define LIGHT_BASE_DEFINE_HPP
 
-#include <new>
-
 extern "C" {
     #include <stdint.h>
     #include <stddef.h>
@@ -10,26 +8,28 @@ extern "C" {
 }
 
 namespace light {
-    // Every unsigned integer type.
+    // Some unsigned integer type.
     using u8   = uint8_t;
     using u16  = uint16_t;
     using u32  = uint32_t;
     using u64  = uint64_t;
     using uptr = uintptr_t;
 
-    // Every signed integer type.
+    // Some signed integer type.
     using s8   = char;
     using s16  = int16_t;
     using s32  = int32_t;
     using s64  = int64_t;
     using sptr = intptr_t;
 
-    // Every floating point type.
+    // Some floating point type.
     using f32 = float;
     using f64 = double;
 
-    // Mathematical vector of arbitrary
-    // type and size.
+    /**
+     * Mathematical vector of arbitrary
+     * type and size.
+     */
     template <class Type, u32 Size>
     struct Vec;
 
@@ -45,16 +45,29 @@ namespace light {
     using Vec4s = Vec<s32, 4u>;
     using Vec4f = Vec<f32, 4u>;
 
-    // Tagged union type to communicate
-    // if an operation succeds or fails.
+    /**
+     * Simple static array of arbitrary
+     * type and size.
+     */
+    template <class Type, u32 Size>
+    struct Array;
+
+    /**
+     * Tagged union type to communicate
+     * if an operation succeds or fails.
+     */
     template <class Type, class Fail>
     struct Res;
 
-    // Optional value.
+    /**
+     * Optional value.
+     */
     template <class Type>
     struct Opt;
 
-    // String view.
+    /**
+     * String view.
+     */
     struct String;
 
     // Maximum values for each unsigned integer type.
@@ -103,5 +116,33 @@ namespace light {
     static const u8 LEN_F32 = LEN_U32;
     static const u8 LEN_F64 = LEN_F64;
 } // light
+
+/**
+ * Compares two values and chooses the bigger one.
+ */
+#define light_max(a, b) \
+    (a < b ? b : a)
+
+/**
+ * Compares two values and chooses the smaller one.
+ */
+#define light_min(a, b) \
+    (a < b ? a : b)
+
+/**
+ * Determines if a value is inside a range. The
+ * range is assumed to be in the form [a, b].
+ *
+ * Note: The case a > b is tested.
+ */
+#define light_is_in(a, b, v) \
+    (a <= b && a <= v && v <= b)
+
+/**
+ * Confines a value within a range. The range
+ * is assumed to be in the form [a, b].
+ */
+#define light_clamp(a, b, v) \
+    light_min(b, light_max(a, v))
 
 #endif // LIGHT_BASE_DEFINE_HPP

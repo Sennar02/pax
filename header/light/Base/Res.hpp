@@ -10,14 +10,14 @@ namespace light
     {
     public:
         /**
-         * Size of the item.
+         * Size in bytes of the item.
          */
-        static const u32 ITEM_SIZE = sizeof(Item);
+        static const u32 LEN_ITEM = sizeof(Item);
 
         /**
-         * Size of the failure information.
+         * Size in bytes of the failure information.
          */
-        static const u32 FAIL_SIZE = sizeof(Item);
+        static const u32 LEN_FAIL = sizeof(Fail);
 
     public:
         union {

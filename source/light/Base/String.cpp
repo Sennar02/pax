@@ -6,10 +6,30 @@ extern "C" {
 
 namespace light
 {
-    const String String::TRIMS = String("\40\t\n\r", 4);
+    const String String::TRIMS   = String("\40\t\n\r", 4u);
+
+    const String String::BASE_10 = String("0123456789", 10u);
+    const String String::BASE_16 = String("0123456789abcdef", 16u);
+
+    u32
+    string_count(const s8* data, u32 limit)
+    {
+        u32 size = 0;
+
+        if ( data != 0 ) {
+            for ( ; data[size] != 0; ) {
+                size += 1u;
+
+                if ( size == limit )
+                    break;
+            }
+        }
+
+        return size;
+    }
 
     String::String()
-        : data {0}
+        : data {""}
         , size {0}
     {}
 
@@ -17,23 +37,46 @@ namespace light
         : String()
     {
         if ( data != 0 && size != 0 ) {
-            if ( size == MAX_U32 )
-                size = strlen(data);
-
             this->data = data;
             this->size = size;
+        }
+    }
+
+    String::String(const s8* data, u32 lower, u32 upper)
+        : String()
+    {
+        u32 size = 0;
+
+        if ( data != 0 && lower < upper ) {
+            size = string_count(data, upper);
+
+            if ( size >= lower ) {
+                this->data = data;
+                this->size = size;
+            }
         }
     }
 
     bool
     String::contains(s8 byte) const
     {
-        for ( u32 i = 0; i < size; i++ ) {
+        for ( u32 i = 0; i < size; i += 1u ) {
             if ( data[i] == byte )
                 return true;
         }
 
         return false;
+    }
+
+    Opt<u32>
+    String::index_of(s8 byte) const
+    {
+        for ( u32 i = 0; i < size; i += 1u ) {
+            if ( data[i] == byte )
+                return i;
+        }
+
+        return {};
     }
 
     Array<String, 2u>
@@ -43,7 +86,7 @@ namespace light
 
         res[0] = String(data, size);
 
-        for ( u32 i = 0; i < size; i++ ) {
+        for ( u32 i = 0; i < size; i += 1u ) {
             if ( data[i] == byte ) {
                 res[0] = String(data, i);
                 res[1] = String(
@@ -94,5 +137,62 @@ namespace light
     String::trim(String bytes)
     {
         return trim_left(bytes).trim_right(bytes);
+    }
+
+    char
+    String::operator[](u32 index) const
+    {
+        return data[index];
+    }
+
+    s32
+    parse_int(String string, String digits)
+    {
+        u32 base = digits.size;
+        s32 sign = 1;
+        u32 idx  = 0;
+        s32 res  = 0;
+
+        if ( string.size == 0 ) return 0;
+
+        switch ( string[0] ) {
+            case '+': idx += 1u; break;
+            case '-': idx += 1u, sign = -1; break;
+            default: break;
+        }
+
+        for ( ; idx < string.size; idx += 1u ) {
+            auto opt = digits.index_of(string[idx]);
+
+            if ( opt.full ) {
+                res *= base;
+                res += opt.item;
+            } else
+                break;
+        }
+
+        return res * sign;
+    }
+
+    f32
+    parse_flt(String string, String digits)
+    {
+        f32  base = 1.f / digits.size;
+        u32  idx  = string.size;
+        f32  res  = 0;
+
+        if ( string.size == 0 ) return 0;
+
+        for ( ; idx > 0; idx -= 1u ) {
+            auto opt = digits.index_of(string[idx - 1u]);
+
+            if ( opt.full ) {
+                res *= base;
+                res += opt.item;
+            } else
+                break;
+        }
+
+        return res * base;
     }
 } // light
