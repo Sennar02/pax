@@ -8,8 +8,21 @@ namespace light
 {
     const String String::TRIMS   = String("\40\t\n\r", 4u);
 
-    const String String::BASE_10 = String("0123456789", 10u);
-    const String String::BASE_16 = String("0123456789abcdef", 16u);
+    const u8 String::BASE_2[80u] = {1, 2};
+    const u8 String::BASE_8[80u] = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    const u8 String::BASE_10[80u] = {
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    };
+
+    const u8 String::BASE_16[80u] = {
+         1,  2,  3,  4,  5,  6,  7,  8,  9, 10,
+         0,  0,  0,  0,  0,  0,  0, 11, 12, 13,
+        14, 15, 16,  0,  0,  0,  0,  0,  0,  0,
+         0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+         0,  0,  0,  0,  0,  0,  0,  0,  0, 11,
+        12, 13, 14, 15, 16,  0,  0,  0,  0,  0,
+    };
 
     u32
     string_count(const s8* data, u32 limit)
@@ -146,9 +159,9 @@ namespace light
     }
 
     s32
-    parse_int(String string, String digits)
+    parse_int_impl(String string, const u8 dict[80u], u8 base, u32* dist)
     {
-        u32 base = digits.size;
+        u8  byte = 0;
         s32 sign = 1;
         u32 idx  = 0;
         s32 res  = 0;
@@ -162,21 +175,27 @@ namespace light
         }
 
         for ( ; idx < string.size; idx += 1u ) {
-            auto opt = digits.index_of(string[idx]);
+            byte = string[idx];
 
-            if ( opt.full ) {
+            if ( byte < 48u || byte >= 128u ) break;
+
+            byte = dict[byte - 48u];
+
+            if ( byte != 0 ) {
                 res *= base;
-                res += opt.item;
+                res += byte - 1u;
             } else break;
         }
+
+        if ( dist != 0 ) *dist = idx;
 
         return res * sign;
     }
 
     f32
-    parse_flt(String string, String digits)
+    parse_flt_impl(String string, const u8 dict[80u], u8 base, u32* dist)
     {
-        u32  base = digits.size;
+        u8   byte = 0;
         s32  sign = 1;
         bool dot  = false;
         u32  div  = 1;
@@ -188,7 +207,6 @@ namespace light
         switch ( string[0] ) {
             case '+': idx += 1u; break;
             case '-': idx += 1u, sign = -1; break;
-            case '.': idx += 1u, dot = true; break;
             default: break;
         }
 
@@ -199,17 +217,50 @@ namespace light
                 else break;
             }
 
-            auto opt = digits.index_of(string[idx]);
+            byte = string[idx];
 
-            if ( opt.full ) {
+            if ( byte < 48u || byte >= 128u ) break;
+
+            byte =  dict[byte - 48u];
+
+            if ( byte != 0 ) {
                 res *= base;
-                res += opt.item;
+                res += byte - 1u;
 
                 if ( dot )
                     div *= base;
             } else break;
         }
 
+        if ( dist != 0 ) *dist = idx;
+
         return res * sign / div;
     }
+
+    s32
+    parse_int(String string, const u8 table[80u], u8 base)
+    {
+        return parse_int_impl(string, table, base, 0);
+    }
+
+    f32
+    parse_flt(String string, const u8 table[80u], u8 base)
+    {
+        u32    dist   = 0;
+        f32    lower  = parse_flt_impl(string, table, base, &dist);
+        f32    upper  = 0;
+        s8*    stop   = (s8*) string.data + dist;
+
+        dist = string.size - dist;
+
+        if ( string.size > dist ) {
+            string = String(stop + 1u, dist - 1u);
+
+            if ( *stop == 'e' || *stop == 'E' )
+                upper  = parse_int_impl(string, table, base, 0);
+        }
+
+        return lower * pow(base, upper);
+    }
+
 } // light

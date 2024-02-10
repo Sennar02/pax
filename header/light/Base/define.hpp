@@ -5,6 +5,9 @@ extern "C" {
     #include <stdint.h>
     #include <stddef.h>
     #include <math.h>
+
+    // TODO: To remove after debugging.
+    #include <stdio.h>
 }
 
 namespace light {

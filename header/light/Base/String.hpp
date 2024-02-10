@@ -17,14 +17,24 @@ namespace light
         static const String TRIMS;
 
         /**
-         * Table of digits for a base 10 number.
+         * Table of digits to parse a binary number.
          */
-        static const String BASE_10;
+        static const u8 BASE_2[80u];
 
         /**
-         * Table of digits for a base 16 number.
+         * Table of digits to parse an octal number.
          */
-        static const String BASE_16;
+        static const u8 BASE_8[80u];
+
+        /**
+         * Table of digits to parse a decimal number.
+         */
+        static const u8 BASE_10[80u];
+
+        /**
+         * Table of digits to parse an hexadecimal number.
+         */
+        static const u8 BASE_16[80u];
 
     public:
         /**
@@ -120,10 +130,10 @@ namespace light
     };
 
     s32
-    parse_int(String string, String digits = String::BASE_10);
+    parse_int(String string, const u8 dict[80u] = String::BASE_10, u8 base = 10u);
 
     f32
-    parse_flt(String string, String digits = String::BASE_10);
+    parse_flt(String string, const u8 dict[80u] = String::BASE_10, u8 base = 10u);
 } // light
 
 #endif // LIGHT_BASE_STRING_HPP
