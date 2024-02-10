@@ -167,8 +167,7 @@ namespace light
             if ( opt.full ) {
                 res *= base;
                 res += opt.item;
-            } else
-                break;
+            } else break;
         }
 
         return res * sign;
@@ -177,22 +176,40 @@ namespace light
     f32
     parse_flt(String string, String digits)
     {
-        f32  base = 1.f / digits.size;
-        u32  idx  = string.size;
+        u32  base = digits.size;
+        s32  sign = 1;
+        bool dot  = false;
+        u32  div  = 1;
+        u32  idx  = 0;
         f32  res  = 0;
 
         if ( string.size == 0 ) return 0;
 
-        for ( ; idx > 0; idx -= 1u ) {
-            auto opt = digits.index_of(string[idx - 1u]);
+        switch ( string[0] ) {
+            case '+': idx += 1u; break;
+            case '-': idx += 1u, sign = -1; break;
+            case '.': idx += 1u, dot = true; break;
+            default: break;
+        }
+
+        for ( ; idx < string.size; idx += 1u ) {
+            if ( string[idx] == '.' ) {
+                if ( dot == false )
+                    dot = true, idx += 1u;
+                else break;
+            }
+
+            auto opt = digits.index_of(string[idx]);
 
             if ( opt.full ) {
                 res *= base;
                 res += opt.item;
-            } else
-                break;
+
+                if ( dot )
+                    div *= base;
+            } else break;
         }
 
-        return res * base;
+        return res * sign / div;
     }
 } // light
