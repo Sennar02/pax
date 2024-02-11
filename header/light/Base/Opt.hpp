@@ -20,12 +20,6 @@ namespace light
              * Actual item.
              */
             Item item;
-
-            /**
-             * Array of bytes used to initialize
-             * the memory to zero.
-             */
-            s8 data[LEN_ITEM] = {0};
         };
 
         /**

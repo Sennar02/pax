@@ -5,28 +5,21 @@
 
 using namespace light;
 
-static const String STRING =
-    String(
-        "111011010111111 01100.110111001 110010100100001 011010111000100 01000.11001e001 11000111001100. 10.01100e000011 010.011101e0001 110011001101101 100010101.10e10",
-        0, MAX_U32
-    );
-
 int
 main(int, const char*[])
 {
-    String            string = STRING;
-    Array<String, 2u> pieces;
+    String string;
+    f32    number = 0;
 
-    while ( string.size != 0 ) {
-        pieces = string.split(' ');
+    string = {"-ab.5e-4b", 0, 10u};
+    number = parse_flt(string, String::BASE_16, 16u);
 
-        printf("[%.*s] -> [%.20f]\n",
-            pieces[0].size, pieces[0].data,
-            parse_flt(pieces[0])
-        );
+    printf("%f\n", number);
 
-        string = pieces[1];
-    }
+    string = {"-ab.5e", 0, 10u};
+    number = parse_flt(string, String::BASE_16, 16u);
+
+    printf("%f\n", number);
 
     return 0;
 }

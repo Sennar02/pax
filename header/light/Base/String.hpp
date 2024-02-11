@@ -7,6 +7,8 @@
 
 namespace light
 {
+    using Byte_Table = Array<u8, 128u>;
+
     struct String
     {
     public:
@@ -14,27 +16,27 @@ namespace light
          * Commonly trimmed characters, used as a
          * default argument for any trim function.
          */
-        static const String TRIMS;
+        static const Byte_Table TRIMS;
 
         /**
          * Table of digits to parse a binary number.
          */
-        static const u8 BASE_2[80u];
+        static const Byte_Table BASE_2;
 
         /**
          * Table of digits to parse an octal number.
          */
-        static const u8 BASE_8[80u];
+        static const Byte_Table BASE_8;
 
         /**
          * Table of digits to parse a decimal number.
          */
-        static const u8 BASE_10[80u];
+        static const Byte_Table BASE_10;
 
         /**
          * Table of digits to parse an hexadecimal number.
          */
-        static const u8 BASE_16[80u];
+        static const Byte_Table BASE_16;
 
     public:
         /**
@@ -104,7 +106,7 @@ namespace light
          * it finds any unspecified byte.
          */
         String&
-        trim_left(String bytes = TRIMS);
+        trim_left(const Byte_Table& table = TRIMS);
 
         /**
          * Excludes from the string any byte specified in
@@ -112,7 +114,7 @@ namespace light
          * it finds any unspecified byte.
          */
         String&
-        trim_right(String bytes = TRIMS);
+        trim_right(const Byte_Table& table = TRIMS);
 
         /**
          * Excludes from the string any byte specified in
@@ -120,7 +122,7 @@ namespace light
          * unspecified byte.
          */
         String&
-        trim(String bytes = TRIMS);
+        trim(const Byte_Table& table = TRIMS);
 
         /**
          * Subscript operator, doesn't test bounds.
@@ -130,10 +132,18 @@ namespace light
     };
 
     s32
-    parse_int(String string, const u8 dict[80u] = String::BASE_10, u8 base = 10u);
+    parse_int(
+        String            string,
+        const Byte_Table& table = String::BASE_10,
+        u8                radix = 10u
+    );
 
     f32
-    parse_flt(String string, const u8 dict[80u] = String::BASE_10, u8 base = 10u);
+    parse_flt(
+        String            string,
+        const Byte_Table& table = String::BASE_10,
+        u8                radix = 10u
+    );
 } // light
 
 #endif // LIGHT_BASE_STRING_HPP

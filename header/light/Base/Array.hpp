@@ -18,7 +18,7 @@ namespace light
         /**
          * Elements.
          */
-        Type data[Size] = {};
+        Type data[Size];
 
     public:
         /**
