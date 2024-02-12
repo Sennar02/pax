@@ -3,18 +3,17 @@
 
 #include <light/Base/define.hpp>
 #include <light/Base/Opt.hpp>
-#include <light/Base/Array.hpp>
+#include <light/Base/Buffer.hpp>
 
 namespace light
 {
-    using Byte_Table = Array<u8, 128u>;
+    using Byte_Table = Buffer<u8, 256u>;
 
     struct String
     {
     public:
         /**
-         * Commonly trimmed characters, used as a
-         * default argument for any trim function.
+         * Commonly trimmed characters.
          */
         static const Byte_Table TRIMS;
 
@@ -97,7 +96,7 @@ namespace light
          * one ranges from after the first occurrence of
          * the same byte to the end of the original string.
          */
-        Array<String, 2u>
+        Buffer<String, 2u>
         split(char byte) const;
 
         /**

@@ -53,7 +53,7 @@ namespace light {
      * type and size.
      */
     template <class Type, u32 Size>
-    struct Array;
+    struct Buffer;
 
     /**
      * Tagged union type to communicate

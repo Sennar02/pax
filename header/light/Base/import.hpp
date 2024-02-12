@@ -7,6 +7,6 @@
 #include <light/Base/Res.hpp>
 #include <light/Base/Vec.hpp>
 #include <light/Base/String.hpp>
-#include <light/Base/Array.hpp>
+#include <light/Base/Buffer.hpp>
 
 #endif // LIGHT_BASE_IMPORT_HPP
