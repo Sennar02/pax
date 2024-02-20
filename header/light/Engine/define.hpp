@@ -1,7 +1,7 @@
 #ifndef LIGHT_ENGINE_DEFINE_HPP
 #define LIGHT_ENGINE_DEFINE_HPP
 
-#include <light/Base/import.hpp>
+#include <light/Memory/import.hpp>
 
 namespace light
 {
@@ -15,6 +15,8 @@ namespace light
      * to coordinate its states.
      */
     struct Engine;
+
+    struct Camera;
 };
 
 #endif // LIGHT_ENGINE_DEFINE_HPP

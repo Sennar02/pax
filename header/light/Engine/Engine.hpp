@@ -8,9 +8,36 @@
 
 namespace light
 {
+    struct Timer
+    {
+    public:
+        f32 time;
+        f32 last;
+
+    public:
+        /**
+         *
+         */
+        Timer();
+
+        /**
+         *
+         */
+        f32
+        elapsed();
+    };
+
     struct Engine
     {
     public:
+        Timer timer;
+
+    public:
+        /**
+         *
+         */
+        Engine();
+
         /**
          *
          */

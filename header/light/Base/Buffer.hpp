@@ -9,6 +9,9 @@ namespace light
     struct Buffer
     {
     public:
+        static const u32 LEN_TYPE =
+            sizeof(Type);
+
         /**
          * Number of elements.
          */

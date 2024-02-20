@@ -13,16 +13,28 @@ namespace sdl
 
 namespace light
 {
+    Timer::Timer()
+        : last {0}
+        , time {0}
+    {}
+
     f32
-    get_time(f32 last)
+    Timer::elapsed()
     {
-        f32 time = sdl::get_ticks() / 1000.f;
+        last = time;
+        time = sdl::get_ticks();
 
-        if ( last > time )
-            return 0;
+        if ( time < last ) {
+            time = time + (MAX_U32 - last);
+            last = 0;
+        }
 
-        return time - last;
+        return (time - last) / 1000.f;
     }
+
+    Engine::Engine()
+        : timer {}
+    {}
 
     bool
     Engine::execute(State* state, u32 frame_rate)
@@ -36,21 +48,20 @@ namespace light
         state->startup();
 
         for ( u32 frame = 0; true; frame += 1u ) {
-            time = get_time(time);
+            time += timer.elapsed();
 
             if ( time < step ) skip += 1u;
 
-            if ( state->input() == false )
-                break;
+            if ( state->input() ) {
+                for ( ; time >= step; time -= step ) {
+                    state->fixed_step(step, skip + 1u);
 
-            for ( ; time >= step; time -= step ) {
-                state->fixed_step(step * (skip + 1));
+                    if ( skip != 0 )
+                        skip = 0;
+                }
 
-                if ( skip != 0 )
-                    skip = 0;
-            }
-
-            state->after_step();
+                state->after_step();
+            } else break;
         }
 
         state->cleanup();
