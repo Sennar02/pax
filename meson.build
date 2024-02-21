@@ -8,15 +8,17 @@ project('light', 'cpp',
   license: 'MIT',
 )
 
-light_header = include_directories('header')
 
 cpp = meson.get_compiler('cpp')
 
+light_define = []
+light_header = [
+  include_directories('header'),
+]
 light_depend = [
   cpp.find_library('m', required: true),
   cpp.find_library('SDL2', required: true),
 ]
-light_define = []
 
 subdir('source/light/Base')
 subdir('source/light/Engine')

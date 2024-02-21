@@ -2,9 +2,12 @@
 #define LIGHT_ENGINE_DEFINE_HPP
 
 #include <light/Memory/import.hpp>
+#include <SDL2/SDL.h>
 
 namespace light
 {
+    struct Actor;
+
     /**
      * Interface used to program the engine.
      */
