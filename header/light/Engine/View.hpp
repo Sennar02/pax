@@ -9,14 +9,15 @@ namespace light
     {
     public:
         /**
-         * Where the view looks in the world.
+         * Where the view looks in the world
+         * in world coordinates.
          */
         Vec2f centre;
 
         /**
          * Size of the view in units.
          */
-        Vec2f size;
+        Vec2u size;
 
         /**
          * Unit of size.
@@ -46,14 +47,18 @@ namespace light
     View::visible(Vec2u limits) const
     {
         Vec2f min = centre - (size + 0) * unit / 2u;
-        Vec2f max = centre + (size + 1) * unit / 2u;
+        Vec2f max = centre + (size + 2) * unit / 2u;
 
-        return {
+        limits *= unit;
+
+        Vec4u bounds = {
             (u32) light_max((s32) min[0], 0),
-            (u32) light_min((s32) max[0], (s32) limits[0]),
+            light_min((u32) light_max(max[0], 0), limits[0]),
             (u32) light_max((s32) min[1], 0),
-            (u32) light_min((s32) max[1], (s32) limits[1]),
+            light_min((u32) light_max(max[1], 0), limits[1]),
         };
+
+        return bounds / unit;
     }
 } // light
 
