@@ -21,61 +21,81 @@ namespace light
         Type data[Size];
 
     public:
+        template <class Other>
+        static Vec<Type, Size>
+        from(const Vec<Other, Size>& other);
+
         /**
          * Calculates the magnitude of the vector,
-         * for example on a vector of two elements
-         * performs the square root of a^2 + b^2.
+         * for example on a vector of size two
+         * computes the square root of a^2 + b^2.
          */
         Type
         magnitude() const;
 
+        template <class Other>
         Vec<Type, Size>
-        operator+(const Vec<Type, Size>& other) const;
+        operator+(const Vec<Other, Size>& other) const;
 
+        template <class Other>
         Vec<Type, Size>
-        operator+(Type other) const;
+        operator+(Other other) const;
 
+        template <class Other>
         Vec<Type, Size>&
-        operator+=(const Vec<Type, Size>& other);
+        operator+=(const Vec<Other, Size>& other);
 
+        template <class Other>
         Vec<Type, Size>&
-        operator+=(Type other);
+        operator+=(Other other);
 
+        template <class Other>
         Vec<Type, Size>
-        operator-(const Vec<Type, Size>& other) const;
+        operator-(const Vec<Other, Size>& other) const;
 
+        template <class Other>
         Vec<Type, Size>
-        operator-(Type other) const;
+        operator-(Other other) const;
 
+        template <class Other>
         Vec<Type, Size>&
-        operator-=(const Vec<Type, Size>& other);
+        operator-=(const Vec<Other, Size>& other);
 
+        template <class Other>
         Vec<Type, Size>&
-        operator-=(Type other);
+        operator-=(Other other);
 
+        template <class Other>
         Vec<Type, Size>
-        operator*(const Vec<Type, Size>& other) const;
+        operator*(const Vec<Other, Size>& other) const;
 
+        template <class Other>
         Vec<Type, Size>
-        operator*(Type other) const;
+        operator*(Other other) const;
 
+        template <class Other>
         Vec<Type, Size>&
-        operator*=(const Vec<Type, Size>& other);
+        operator*=(const Vec<Other, Size>& other);
 
+        template <class Other>
         Vec<Type, Size>&
-        operator*=(Type other);
+        operator*=(Other other);
 
+        template <class Other>
         Vec<Type, Size>
-        operator/(const Vec<Type, Size>& other) const;
+        operator/(const Vec<Other, Size>& other) const;
 
+        template <class Other>
         Vec<Type, Size>
-        operator/(Type other) const;
+        operator/(Other other) const;
 
+        template <class Other>
         Vec<Type, Size>&
-        operator/=(const Vec<Type, Size>& other);
+        operator/=(const Vec<Other, Size>& other);
 
+        template <class Other>
         Vec<Type, Size>&
-        operator/=(Type other);
+        operator/=(Other other);
 
         Type&
         operator[](u32 index);

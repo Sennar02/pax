@@ -19,7 +19,7 @@ namespace light
      */
     struct Engine;
 
-    struct Camera;
+    struct View;
 };
 
 #endif // LIGHT_ENGINE_DEFINE_HPP

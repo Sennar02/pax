@@ -3,6 +3,19 @@
 namespace light
 {
     template <class Type, u32 Size>
+    template <class Other>
+    Vec<Type, Size>
+    Vec<Type, Size>::from(const Vec<Other, Size>& other)
+    {
+        Vec<Type, Size> res;
+
+        for ( u32 i = 0; i < SIZE; i += 1u )
+            res.data[i] = other.data[i];
+
+        return res;
+    }
+
+    template <class Type, u32 Size>
     Type
     Vec<Type, Size>::magnitude() const
     {
@@ -15,8 +28,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>
-    Vec<Type, Size>::operator+(const Vec<Type, Size>& other) const
+    Vec<Type, Size>::operator+(const Vec<Other, Size>& other) const
     {
         Vec<Type, Size> res;
 
@@ -27,8 +41,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>
-    Vec<Type, Size>::operator+(Type other) const
+    Vec<Type, Size>::operator+(Other other) const
     {
         Vec<Type, Size> res;
 
@@ -39,8 +54,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>&
-    Vec<Type, Size>::operator+=(const Vec<Type, Size>& other)
+    Vec<Type, Size>::operator+=(const Vec<Other, Size>& other)
     {
         for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] += other.data[i];
@@ -49,8 +65,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>&
-    Vec<Type, Size>::operator+=(Type other)
+    Vec<Type, Size>::operator+=(Other other)
     {
         for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] += other;
@@ -59,8 +76,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>
-    Vec<Type, Size>::operator-(const Vec<Type, Size>& other) const
+    Vec<Type, Size>::operator-(const Vec<Other, Size>& other) const
     {
         Vec<Type, Size> res;
 
@@ -71,8 +89,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>
-    Vec<Type, Size>::operator-(Type other) const
+    Vec<Type, Size>::operator-(Other other) const
     {
         Vec<Type, Size> res;
 
@@ -83,8 +102,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>&
-    Vec<Type, Size>::operator-=(const Vec<Type, Size>& other)
+    Vec<Type, Size>::operator-=(const Vec<Other, Size>& other)
     {
         for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] -= other.data[i];
@@ -93,8 +113,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>&
-    Vec<Type, Size>::operator-=(Type other)
+    Vec<Type, Size>::operator-=(Other other)
     {
         for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] -= other;
@@ -103,8 +124,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>
-    Vec<Type, Size>::operator*(const Vec<Type, Size>& other) const
+    Vec<Type, Size>::operator*(const Vec<Other, Size>& other) const
     {
         Vec<Type, Size> res;
 
@@ -115,8 +137,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>
-    Vec<Type, Size>::operator*(Type other) const
+    Vec<Type, Size>::operator*(Other other) const
     {
         Vec<Type, Size> res;
 
@@ -127,8 +150,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>&
-    Vec<Type, Size>::operator*=(const Vec<Type, Size>& other)
+    Vec<Type, Size>::operator*=(const Vec<Other, Size>& other)
     {
         for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] *= other.data[i];
@@ -137,8 +161,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>&
-    Vec<Type, Size>::operator*=(Type other)
+    Vec<Type, Size>::operator*=(Other other)
     {
         for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] *= other;
@@ -147,8 +172,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>
-    Vec<Type, Size>::operator/(const Vec<Type, Size>& other) const
+    Vec<Type, Size>::operator/(const Vec<Other, Size>& other) const
     {
         Vec<Type, Size> res;
 
@@ -159,8 +185,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>
-    Vec<Type, Size>::operator/(Type other) const
+    Vec<Type, Size>::operator/(Other other) const
     {
         Vec<Type, Size> res;
 
@@ -171,8 +198,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>&
-    Vec<Type, Size>::operator/=(const Vec<Type, Size>& other)
+    Vec<Type, Size>::operator/=(const Vec<Other, Size>& other)
     {
         for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] /= other.data[i];
@@ -181,8 +209,9 @@ namespace light
     }
 
     template <class Type, u32 Size>
+    template <class Other>
     Vec<Type, Size>&
-    Vec<Type, Size>::operator/=(Type other)
+    Vec<Type, Size>::operator/=(Other other)
     {
         for ( u32 i = 0; i < SIZE; i += 1u )
             data[i] /= other;

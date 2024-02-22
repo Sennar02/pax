@@ -5,6 +5,6 @@
 
 #include <light/Engine/State.hpp>
 #include <light/Engine/Engine.hpp>
-#include <light/Engine/Camera.hpp>
+#include <light/Engine/View.hpp>
 
 #endif // LIGHT_ENGINE_IMPORT_HPP

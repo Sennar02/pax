@@ -25,18 +25,18 @@ struct Tile
     u32 actor;
 };
 
-static const u32   TILE_SIZE   = 32u;        // Pixels.
-static const Vec2u WINDOW_SIZE = {20u, 12u}; // Tiles.
-static const Vec2u CAMERA_SIZE = {16u, 9u};  // Tiles.
-static const Vec2u WORLD_SIZE  = {25u, 20u}; // Tiles.
+static const u32   TILE_SIZE   = 24u;        // Pixels.
+static const Vec2u VIEW_SIZE   = {21u, 9u};  // Tiles.
+static const Vec2u WINDOW_SIZE = {21u, 9u};  // Tiles.
+static const Vec2u WORLD_SIZE  = {65u, 35u}; // Tiles.
 
 static const u32   TILE_HALF   = TILE_SIZE / 2u;
+static const Vec2u VIEW_HALF   = VIEW_SIZE / 2u;
 static const Vec2u WINDOW_HALF = WINDOW_SIZE / 2u;
-static const Vec2u CAMERA_HALF = CAMERA_SIZE / 2u;
 
 static const u32 WORLD_AREA = WORLD_SIZE[0] * WORLD_SIZE[1];
 
-static const u32 ACTORS_COUNT = 10u;
+static const u32 ACTORS_COUNT = 20u;
 static const u32 COLOURS_COUNT = 6u;
 
 static const SDL_Color COLOURS[COLOURS_COUNT] = {
@@ -76,21 +76,14 @@ move(f32 step, Vec2f orient, u32 actor, Array<Position>& position, Array<Movemen
             movement[actor].moving = false;
     } else {
         for ( u32 i = 0; i < Vec2f::SIZE; i += 1u ) {
-            next = {
-                (u32) position[actor][0] / TILE_SIZE,
-                (u32) position[actor][1] / TILE_SIZE,
-            };
-
+            next = Vec2u::from(position[actor] / TILE_SIZE);
             next[i] += (u32) orient[i];
 
             if ( grid[next[1] * WORLD_SIZE[0] + next[0]].actor != 0 )
                 orient[i] = 0;
         }
 
-        next = {
-            (u32) position[actor][0] / TILE_SIZE + (u32) orient[0],
-            (u32) position[actor][1] / TILE_SIZE + (u32) orient[1],
-        };
+        next = Vec2u::from(position[actor] / TILE_SIZE + orient);
 
         if ( grid[next[1] * WORLD_SIZE[0] + next[0]].actor != 0 )
             orient = {};
@@ -103,10 +96,7 @@ move(f32 step, Vec2f orient, u32 actor, Array<Position>& position, Array<Movemen
 
             grid[next[1] * WORLD_SIZE[0] + next[0]].actor = actor + 1u;
 
-            next = {
-                (u32) position[actor][0] / TILE_SIZE,
-                (u32) position[actor][1] / TILE_SIZE,
-            };
+            next = Vec2u::from(position[actor] / TILE_SIZE);
 
             grid[next[1] * WORLD_SIZE[0] + next[0]].actor = 0;
         }
@@ -114,25 +104,21 @@ move(f32 step, Vec2f orient, u32 actor, Array<Position>& position, Array<Movemen
 }
 
 void
-draw(SDL_Renderer* renderer, const Camera& camera, const Array<Position>& position, const Array<Colour>& colour, const Array<Tile>& grid)
+draw(SDL_Renderer* renderer, const View& view, const Array<Position>& position, const Array<Colour>& colour, const Array<Tile>& grid)
 {
-    Vec2f origin = camera.top_left();
-    Vec4u bounds = camera.bounds(TILE_SIZE, WORLD_SIZE);
-    Vec2u offset = {
-        (u32) (WINDOW_HALF[0] - CAMERA_HALF[0]) * TILE_SIZE,
-        (u32) (WINDOW_HALF[1] - CAMERA_HALF[1]) * TILE_SIZE,
-    };
+    Vec2f origin = view.origin();
+    Vec4u bounds = view.visible(WORLD_SIZE * TILE_SIZE) / TILE_SIZE;
 
     u32              actor = 0;
     const SDL_Color* rgba  = 0;
-    SDL_Rect        rect  = {0, 0, (s32) TILE_SIZE, (s32) TILE_SIZE};
+    SDL_Rect         rect  = {0, 0, (s32) TILE_SIZE, (s32) TILE_SIZE};
 
     for ( u32 i = bounds[2]; i < bounds[3]; i += 1u ) {
         for ( u32 j = bounds[0]; j < bounds[1]; j += 1u ) {
             rgba = &COLOURS[grid[i * WORLD_SIZE[0] + j].colour];
 
-            rect.x = j * TILE_SIZE + offset[0] - (s32) origin[0];
-            rect.y = i * TILE_SIZE + offset[1] - (s32) origin[1];
+            rect.x = j * TILE_SIZE - (s32) origin[0];
+            rect.y = i * TILE_SIZE - (s32) origin[1];
 
             SDL_SetRenderDrawColor(renderer,
                 rgba->r, rgba->g, rgba->b, rgba->a
@@ -150,8 +136,8 @@ draw(SDL_Renderer* renderer, const Camera& camera, const Array<Position>& positi
 
             actor = grid[i * WORLD_SIZE[0] + j].actor - 1u;
 
-            rect.x = (s32) position[actor][0] + offset[0] - (s32) origin[0];
-            rect.y = (s32) position[actor][1] + offset[1] - (s32) origin[1];
+            rect.x = (s32) position[actor][0] - (s32) origin[0];
+            rect.y = (s32) position[actor][1] - (s32) origin[1];
 
             SDL_SetRenderDrawColor(renderer,
                 colour[actor].r, colour[actor].g,
@@ -194,7 +180,7 @@ public:
 
 private:
     u32           player;
-    Camera        camera;
+    View          view;
     SDL_Window*   window;
     SDL_Renderer* renderer;
     Array<Tile>   grid;
@@ -202,7 +188,7 @@ private:
 
 Title_State::Title_State()
     : player {0}
-    , camera {}
+    , view {}
     , window {0}
     , renderer {0}
     , grid {WORLD_AREA}
@@ -227,10 +213,7 @@ Title_State::startup()
 
         COLOUR[i]               = {(u8) (rand() % 0x80 + 0x80), (u8) (rand() % 0x80 + 0x80), (u8) (rand() % 0x80 + 0x80), 0xff};
         MOVEMENT[i].speed.limit = (f32) (rand() % 3u * 3u) * TILE_SIZE;
-        POSITION[i]             = {
-            (f32) pos[0] * TILE_SIZE,
-            (f32) pos[1] * TILE_SIZE,
-        };
+        POSITION[i]             = Vec2f::from(pos * TILE_SIZE);
 
         grid[pos[1] * WORLD_SIZE[0] + pos[0]].actor = i + 1u;
     }
@@ -238,11 +221,9 @@ Title_State::startup()
     COLOUR[player]               = {0xff, 0xff, 0xff, 0xff};
     MOVEMENT[player].speed.limit = 10.f * TILE_SIZE;
 
-    camera.center = POSITION[player] + TILE_HALF;
-    camera.offset = {
-        (f32) CAMERA_HALF[0] * TILE_SIZE,
-        (f32) CAMERA_HALF[1] * TILE_SIZE,
-    };
+    view.centre = POSITION[player] + TILE_HALF;
+    view.unit = TILE_SIZE;
+    view.size = Vec2f::from(VIEW_SIZE);
 
     window = SDL_CreateWindow(title.data,
         SDL_WINDOWPOS_CENTERED,
@@ -260,8 +241,6 @@ Title_State::startup()
         if ( renderer == 0 )
             SDL_DestroyWindow(window);
     }
-
-    printf("%p, %p\n", window, renderer);
 }
 
 void
@@ -301,7 +280,8 @@ Title_State::fixed_step(f32 step, u32 skip)
 {
     SDL_PumpEvents();
 
-    Vec4u bounds = camera.bounds(TILE_SIZE, WORLD_SIZE);
+    u32   actor  = 0;
+    Vec4u bounds = view.visible(WORLD_SIZE * TILE_SIZE) / TILE_SIZE;
 
     Vec2f target = {};
     Vec2f orient = {
@@ -325,25 +305,28 @@ Title_State::fixed_step(f32 step, u32 skip)
         }
     }
 
-    camera.center = POSITION[player] + TILE_HALF;
+    view.centre = POSITION[player] + TILE_HALF;
 
     system("clear");
 
     for ( u32 i = 0; i < WORLD_SIZE[1]; i += 1u ) {
         for ( u32 j = 0; j < WORLD_SIZE[0]; j += 1u ) {
-            if ( grid[i * WORLD_SIZE[0] + j].actor != 0 ) {
-                if ( grid[i * WORLD_SIZE[0] + j].actor == player + 1u )
-                    printf("\x1b[32m");
-                else
-                    printf("\x1b[31m");
-            }
+            actor = grid[i * WORLD_SIZE[0] + j].actor;
 
             if ( i >= bounds[2] && i < bounds[3] ) {
                 if ( j >= bounds[0] && j < bounds[1] )
-                    printf("\x1b[44m");
+                    printf("\x1b[42m");
             }
 
-            printf("%2u\x1b[0m ", grid[i * WORLD_SIZE[0] + j].actor);
+            if ( actor != 0 ) {
+                if ( actor == player + 1u )
+                    printf("\x1b[41m");
+                else
+                    printf("\x1b[43m");
+
+                printf("%2u\x1b[0m ", actor);
+            } else
+                printf("\x1b[90m ~\x1b[0m ");
         }
 
         printf("\n");
@@ -355,7 +338,7 @@ Title_State::after_step()
 {
     SDL_RenderClear(renderer);
 
-    draw(renderer, camera, POSITION, COLOUR, grid);
+    draw(renderer, view, POSITION, COLOUR, grid);
 
     SDL_RenderPresent(renderer);
 }
@@ -375,7 +358,7 @@ main(int, const char*[])
     }
 
     KEYBOARD = SDL_GetKeyboardState(0);
-    engine.execute(&title_state, 120u);
+    engine.execute(&title_state, 60u);
 
     SDL_Quit();
 
