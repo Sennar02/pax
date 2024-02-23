@@ -5,13 +5,7 @@
 
 using namespace light;
 
-using Colour  = SDL_Color;
-using Rect    = SDL_Rect;
-using Display = SDL_Window;
-using Painter = SDL_Renderer;
-
 using  Position = Vec2f;
-
 struct Movement
 {
     struct {
@@ -31,31 +25,23 @@ public:
 
 public:
     virtual void
-    draw(const View& view, Painter* painter) = 0;
+    draw(const View& view, Painter& painter) const = 0;
 };
 
 struct Floor_Layer
     : public Grid_Layer
 {
 public:
-    const Colour* rgba;
-    Rect          tile;
-
-public:
     virtual void
-    draw(const View& view, Painter* painter);
+    draw(const View& view, Painter& painter) const;
 };
 
 struct Actor_Layer
     : public Grid_Layer
 {
 public:
-    const Colour* rgba;
-    Rect tile;
-
-public:
     virtual void
-    draw(const View& view, Painter* painter);
+    draw(const View& view, Painter& painter) const;
 };
 
 static const u32   TILE_SIZE   = 48u;        // Pixels.
@@ -72,7 +58,7 @@ static const u32 WORLD_AREA = WORLD_SIZE[0] * WORLD_SIZE[1];
 static const u32 ACTORS_COUNT = 20u;
 static const u32 COLOURS_COUNT = 4u;
 
-static const SDL_Color COLOURS_FLOOR[COLOURS_COUNT] = {
+static const Vec4u COLOURS_FLOOR[COLOURS_COUNT] = {
     {0x32, 0x70, 0x00, 0xff},
     {0x00, 0x70, 0x05, 0xff},
     {0x6a, 0x70, 0x00, 0xff},
@@ -81,51 +67,49 @@ static const SDL_Color COLOURS_FLOOR[COLOURS_COUNT] = {
 
 static const u8* KEYBOARD = 0;
 
-static Array<Colour>   COLOUR   = Array<Colour>(ACTORS_COUNT);
+static Array<Vec4u>    COLOUR   = Array<Vec4u>(ACTORS_COUNT);
 static Array<Position> POSITION = Array<Position>(ACTORS_COUNT);
 static Array<Movement> MOVEMENT = Array<Movement>(ACTORS_COUNT);
 
 void
-Floor_Layer::draw(const View& view, Painter* painter)
+Floor_Layer::draw(const View& view, Painter& painter) const
 {
-    Vec2f origin = view.origin();
-    Vec4u limits = view.visible(WORLD_SIZE);
-    u32   index  = 0;
+    Vec2f origin      = view.origin();
+    Vec4u limits      = view.visible(WORLD_SIZE);
+    Vec4f tile        = {};
+    const Vec4u* rgba = 0;
+    u32   index       = 0;
 
-    tile.w = tile.h = view.unit;
+    tile[2] = tile[3] = view.unit;
 
     for ( u32 i = limits[2]; i < limits[3]; i += 1u ) {
         for ( u32 j = limits[0]; j < limits[1]; j += 1u ) {
             index = i * WORLD_SIZE[0] + j;
             index = tiles[index];
+            rgba  = &COLOURS_FLOOR[index];
 
-            rgba = &COLOURS_FLOOR[index];
+            tile[0] = j * view.unit - origin[0];
+            tile[1] = i * view.unit - origin[1];
 
-            tile.x = j * view.unit - origin[0];
-            tile.y = i * view.unit - origin[1];
-
-            SDL_SetRenderDrawColor(painter,
-                rgba->r, rgba->g, rgba->b, rgba->a
-            );
-
-            SDL_RenderFillRect(painter, &tile);
+            painter.set_colour(*rgba);
+            painter.draw_rect_full(tile);
         }
     }
 
-    SDL_SetRenderDrawColor(painter,
-        0xff, 0x00, 0xff, 0xff
-    );
+    painter.set_colour({});
 }
 
 void
-Actor_Layer::draw(const View& view, Painter* painter)
+Actor_Layer::draw(const View& view, Painter& painter) const
 {
-    Vec2f origin = view.origin();
-    Vec4u limits = view.visible(WORLD_SIZE);
-    u32   index = 0;
-    u32   actor = 0;
+    Vec2f origin      = view.origin();
+    Vec4u limits      = view.visible(WORLD_SIZE);
+    Vec4f tile        = {};
+    const Vec4u* rgba = 0;
+    u32   index       = 0;
+    u32   actor       = 0;
 
-    tile.w = tile.h = view.unit;
+    tile[2] = tile[3] = view.unit;
 
     for ( u32 i = limits[2]; i < limits[3]; i += 1u ) {
         for ( u32 j = limits[0]; j < limits[1]; j += 1u ) {
@@ -136,21 +120,16 @@ Actor_Layer::draw(const View& view, Painter* painter)
             if ( index != 0 ) {
                 rgba = &COLOUR[actor];
 
-                tile.x = POSITION[actor][0] - origin[0];
-                tile.y = POSITION[actor][1] - origin[1];
+                tile[0] = POSITION[actor][0] - origin[0];
+                tile[1] = POSITION[actor][1] - origin[1];
 
-                SDL_SetRenderDrawColor(painter,
-                    rgba->r, rgba->g, rgba->b, rgba->a
-                );
-
-                SDL_RenderFillRect(painter, &tile);
+                painter.set_colour(*rgba);
+                painter.draw_rect_full(tile);
             }
         }
     }
 
-    SDL_SetRenderDrawColor(painter,
-        0xff, 0x00, 0xff, 0xff
-    );
+    painter.set_colour({});
 }
 
 /*
@@ -234,8 +213,8 @@ public:
 private:
     u32         player;
     View        view;
-    Display*    display;
-    Painter*    painter;
+    Display     display;
+    Painter     painter;
     Floor_Layer floor_layer;
     Actor_Layer actor_layer;
 };
@@ -243,8 +222,8 @@ private:
 Title_State::Title_State()
     : player {0}
     , view {}
-    , display {0}
-    , painter {0}
+    , display {}
+    , painter {}
     , floor_layer {}
     , actor_layer {}
 {
@@ -288,29 +267,21 @@ Title_State::startup()
     view.unit   = TILE_SIZE;
     view.size   = VIEW_SIZE;
 
-    display = SDL_CreateWindow(title.data,
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        WINDOW_SIZE[0] * TILE_SIZE,
-        WINDOW_SIZE[1] * TILE_SIZE,
-        0
-    );
+    display.create(title, WINDOW_SIZE * TILE_SIZE);
 
-    if ( display != 0 ) {
-        painter = SDL_CreateRenderer(display, -1,
-            SDL_RENDERER_ACCELERATED
-        );
+    if ( display.is_valid() ) {
+        painter.create(display);
 
-        if ( painter == 0 )
-            SDL_DestroyWindow(display);
+        if ( painter.is_valid() == false )
+            display.destroy();
     }
 }
 
 void
 Title_State::cleanup()
 {
-    SDL_DestroyRenderer(painter);
-    SDL_DestroyWindow(display);
+    painter.destroy();
+    display.destroy();
 }
 
 void
@@ -370,6 +341,7 @@ Title_State::fixed_step(f32 step, u32 skip)
 */
     view.centre += orient * 10.f * TILE_SIZE * step;
 
+/*
     system("clear");
 
     for ( u32 i = 0; i < WORLD_SIZE[1]; i += 1u ) {
@@ -391,21 +363,21 @@ Title_State::fixed_step(f32 step, u32 skip)
     }
 
     printf("[%u, %u) x [%u, %u)\n",
-        limits[0],
-        limits[1],
-        limits[2],
-        limits[3]);
+        limits[0], limits[1],
+        limits[2], limits[3]
+    );
+*/
 }
 
 void
 Title_State::after_step()
 {
-    SDL_RenderClear(painter);
+    painter.swap();
 
     floor_layer.draw(view, painter);
     actor_layer.draw(view, painter);
 
-    SDL_RenderPresent(painter);
+    painter.show();
 }
 
 int
@@ -423,7 +395,7 @@ main(int, const char*[])
     }
 
     KEYBOARD = SDL_GetKeyboardState(0);
-    engine.execute(&title_state, 120u);
+    engine.execute(&title_state, 144u);
 
     SDL_Quit();
 

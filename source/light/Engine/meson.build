@@ -4,6 +4,8 @@ light_engine = static_library('light-engine',
     'Actor.cpp',
     'State.cpp',
     'Engine.cpp',
+    'Display.cpp',
+    'Painter.cpp',
   ],
 )
 

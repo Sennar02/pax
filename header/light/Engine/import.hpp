@@ -6,5 +6,7 @@
 #include <light/Engine/State.hpp>
 #include <light/Engine/Engine.hpp>
 #include <light/Engine/View.hpp>
+#include <light/Engine/Display.hpp>
+#include <light/Engine/Painter.hpp>
 
 #endif // LIGHT_ENGINE_IMPORT_HPP

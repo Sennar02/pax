@@ -20,6 +20,8 @@ namespace light
     struct Engine;
 
     struct View;
+    struct Display;
+    struct Painter;
 };
 
 #endif // LIGHT_ENGINE_DEFINE_HPP
