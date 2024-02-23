@@ -205,7 +205,7 @@ public:
     input();
 
     void
-    fixed_step(f32 step, u32 skip);
+    fixed_step(f64 step, u64 skip);
 
     void
     after_step();
@@ -310,13 +310,13 @@ Title_State::input()
 }
 
 void
-Title_State::fixed_step(f32 step, u32 skip)
+Title_State::fixed_step(f64 step, u64)
 {
     SDL_PumpEvents();
 
     u32   index  = 0;
     Vec4u limits = view.visible(WORLD_SIZE);
-    Vec2f target = {};
+//    Vec2f target = {};
     Vec2f orient = {
         ((f32) KEYBOARD[SDL_SCANCODE_D] - KEYBOARD[SDL_SCANCODE_A]),
         ((f32) KEYBOARD[SDL_SCANCODE_S] - KEYBOARD[SDL_SCANCODE_W]),
@@ -341,7 +341,6 @@ Title_State::fixed_step(f32 step, u32 skip)
 */
     view.centre += orient * 10.f * TILE_SIZE * step;
 
-/*
     system("clear");
 
     for ( u32 i = 0; i < WORLD_SIZE[1]; i += 1u ) {
@@ -362,11 +361,10 @@ Title_State::fixed_step(f32 step, u32 skip)
         printf("\n");
     }
 
-    printf("[%u, %u) x [%u, %u)\n",
+    printf("[%lu, %lu) x [%lu, %lu)\n",
         limits[0], limits[1],
         limits[2], limits[3]
     );
-*/
 }
 
 void

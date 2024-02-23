@@ -12,7 +12,7 @@ namespace light
         /**
          * Size in bytes of the item.
          */
-        static const u32 LEN_ITEM = sizeof(Item);
+        static const u64 LEN_ITEM = sizeof(Item);
 
     public:
         union {

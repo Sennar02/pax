@@ -9,8 +9,8 @@ namespace light
     struct Timer
     {
     public:
-        f32 time;
-        f32 last;
+        f64 time;
+        f64 last;
 
     public:
         /**
@@ -21,7 +21,7 @@ namespace light
         /**
          *
          */
-        f32
+        f64
         elapsed();
     };
 
@@ -40,7 +40,7 @@ namespace light
          *
          */
         bool
-        execute(State* state, u32 frames);
+        execute(State* state, u64 frames);
     };
 } // light
 

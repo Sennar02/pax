@@ -2,6 +2,7 @@ light_engine = static_library('light-engine',
   include_directories: [light_header],
   sources: [
     'Actor.cpp',
+    'View.cpp',
     'State.cpp',
     'Engine.cpp',
     'Display.cpp',

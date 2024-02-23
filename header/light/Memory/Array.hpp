@@ -7,37 +7,37 @@ namespace light
     struct Array
     {
     public:
-        static const u32 LEN_TYPE =
+        static const u64 LEN_TYPE =
             sizeof(Type);
 
     public:
         Type* data;
-        u32   size;
+        u64   size;
 
     public:
         /**
          *
          */
-        Array(u32 size = 0);
+        Array(u64 size = 0);
 
         /**
          *
          */
         Type&
-        operator[](u32 index);
+        operator[](u64 index);
 
         /**
          *
          */
         const Type&
-        operator[](u32 index) const;
+        operator[](u64 index) const;
     };
 } // light
 
 namespace light
 {
     template <class Type>
-    Array<Type>::Array(u32 size)
+    Array<Type>::Array(u64 size)
         : data {0}
         , size {0}
     {
@@ -51,14 +51,14 @@ namespace light
 
     template <class Type>
     Type&
-    Array<Type>::operator[](u32 index)
+    Array<Type>::operator[](u64 index)
     {
         return data[index];
     }
 
     template <class Type>
     const Type&
-    Array<Type>::operator[](u32 index) const
+    Array<Type>::operator[](u64 index) const
     {
         return data[index];
     }

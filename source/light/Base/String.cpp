@@ -61,10 +61,10 @@ namespace light
          0, 11, 12, 13, 14, 15, 16,  0,
     };
 
-    u32
-    string_count(const s8* data, u32 limit)
+    u64
+    string_count(const s8* data, u64 limit)
     {
-        u32 size = 0;
+        u64 size = 0;
 
         if ( data != 0 ) {
             for ( ; data[size] != 0; ) {
@@ -83,7 +83,7 @@ namespace light
         , size {0}
     {}
 
-    String::String(const s8* data, u32 size)
+    String::String(const s8* data, u64 size)
         : String()
     {
         if ( data != 0 && size != 0 ) {
@@ -92,10 +92,10 @@ namespace light
         }
     }
 
-    String::String(const s8* data, u32 lower, u32 upper)
+    String::String(const s8* data, u64 lower, u64 upper)
         : String()
     {
-        u32 size = 0;
+        u64 size = 0;
 
         if ( data != 0 && lower < upper ) {
             size = string_count(data, upper);
@@ -110,7 +110,7 @@ namespace light
     bool
     String::contains(s8 byte) const
     {
-        for ( u32 i = 0; i < size; i += 1u ) {
+        for ( u64 i = 0; i < size; i += 1u ) {
             if ( data[i] == byte )
                 return true;
         }
@@ -118,10 +118,10 @@ namespace light
         return false;
     }
 
-    Opt<u32>
+    Opt<u64>
     String::index_of(s8 byte) const
     {
-        for ( u32 i = 0; i < size; i += 1u ) {
+        for ( u64 i = 0; i < size; i += 1u ) {
             if ( data[i] == byte )
                 return i;
         }
@@ -136,7 +136,7 @@ namespace light
 
         res[0] = String(data, size);
 
-        for ( u32 i = 0; i < size; i += 1u ) {
+        for ( u64 i = 0; i < size; i += 1u ) {
             if ( data[i] == byte ) {
                 res[0] = String(data, i);
                 res[1] = String(
@@ -155,7 +155,7 @@ namespace light
     String::trim_left(const Byte_Table& table)
     {
         u8  byte  = 0;
-        u32 index = 0;
+        u64 index = 0;
 
         while ( true ) {
             byte = data[index];
@@ -176,7 +176,7 @@ namespace light
     String::trim_right(const Byte_Table& table)
     {
         u8  byte  = 0;
-        u32 index = size - 1u;
+        u64 index = size - 1u;
 
         while ( true ) {
             byte = data[index];
@@ -200,18 +200,18 @@ namespace light
     }
 
     char
-    String::operator[](u32 index) const
+    String::operator[](u64 index) const
     {
         return data[index];
     }
 
-    s32
-    parse_int_impl(String string, const Byte_Table& table, u8 base, u32* dist)
+    s64
+    parse_int_impl(String string, const Byte_Table& table, u8 base, u64* dist)
     {
         u8  byte = 0;
-        s32 sign = 1;
-        u32 idx  = 0;
-        s32 res  = 0;
+        s64 sign = 1;
+        u64 idx  = 0;
+        s64 res  = 0;
 
         if ( string.size == 0 ) return 0;
 
@@ -235,15 +235,15 @@ namespace light
         return res * sign;
     }
 
-    f32
-    parse_flt_impl(String string, const Byte_Table& table, u8 base, u32* dist)
+    f64
+    parse_flt_impl(String string, const Byte_Table& table, u8 base, u64* dist)
     {
         u8   byte = 0;
-        s32  sign = 1;
+        s64  sign = 1;
         bool frac = false;
-        u32  div  = 1;
-        u32  idx  = 0;
-        f32  res  = 0;
+        u64  div  = 1;
+        u64  idx  = 0;
+        f64  res  = 0;
 
         if ( string.size == 0 ) return 0;
 
@@ -276,18 +276,18 @@ namespace light
         return res * sign / div;
     }
 
-    s32
+    s64
     parse_int(String string, const Byte_Table& table, u8 base)
     {
         return parse_int_impl(string, table, base, 0);
     }
 
-    f32
+    f64
     parse_flt(String string, const Byte_Table& table, u8 base)
     {
-        u32    dist   = 0;
-        f32    lower  = parse_flt_impl(string, table, base, &dist);
-        f32    upper  = 0;
+        u64    dist   = 0;
+        f64    lower  = parse_flt_impl(string, table, base, &dist);
+        f64    upper  = 0;
         s8*    stop   = (s8*) string.data + dist;
 
         dist = string.size - dist;

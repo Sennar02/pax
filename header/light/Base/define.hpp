@@ -33,26 +33,26 @@ namespace light {
      * Mathematical vector of arbitrary
      * type and size.
      */
-    template <class Type, u32 Size>
+    template <class Type, u64 Size>
     struct Vec;
 
-    using Vec2u = Vec<u32, 2u>;
-    using Vec2s = Vec<s32, 2u>;
-    using Vec2f = Vec<f32, 2u>;
+    using Vec2u = Vec<u64, 2u>;
+    using Vec2s = Vec<s64, 2u>;
+    using Vec2f = Vec<f64, 2u>;
 
-    using Vec3u = Vec<u32, 3u>;
-    using Vec3s = Vec<s32, 3u>;
-    using Vec3f = Vec<f32, 3u>;
+    using Vec3u = Vec<u64, 3u>;
+    using Vec3s = Vec<s64, 3u>;
+    using Vec3f = Vec<f64, 3u>;
 
-    using Vec4u = Vec<u32, 4u>;
-    using Vec4s = Vec<s32, 4u>;
-    using Vec4f = Vec<f32, 4u>;
+    using Vec4u = Vec<u64, 4u>;
+    using Vec4s = Vec<s64, 4u>;
+    using Vec4f = Vec<f64, 4u>;
 
     /**
      * Simple static array of arbitrary
      * type and size.
      */
-    template <class Type, u32 Size>
+    template <class Type, u64 Size>
     struct Buffer;
 
     /**
@@ -119,33 +119,5 @@ namespace light {
     static const u8 LEN_F32 = LEN_U32;
     static const u8 LEN_F64 = LEN_F64;
 } // light
-
-/**
- * Compares two values and chooses the bigger one.
- */
-#define light_max(a, b) \
-    (a < b ? b : a)
-
-/**
- * Compares two values and chooses the smaller one.
- */
-#define light_min(a, b) \
-    (a < b ? a : b)
-
-/**
- * Determines if a value is inside a range. The
- * range is assumed to be in the form [a, b].
- *
- * Note: The case a > b is tested.
- */
-#define light_is_in(a, b, v) \
-    (a <= b && a <= v && v <= b)
-
-/**
- * Confines a value within a range. The range
- * is assumed to be in the form [a, b].
- */
-#define light_clamp(a, b, v) \
-    light_min(b, light_max(a, v))
 
 #endif // LIGHT_BASE_DEFINE_HPP

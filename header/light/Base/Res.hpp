@@ -12,12 +12,12 @@ namespace light
         /**
          * Size in bytes of the item.
          */
-        static const u32 LEN_ITEM = sizeof(Item);
+        static const u64 LEN_ITEM = sizeof(Item);
 
         /**
          * Size in bytes of the failure information.
          */
-        static const u32 LEN_FAIL = sizeof(Fail);
+        static const u64 LEN_FAIL = sizeof(Fail);
 
     public:
         union {

@@ -22,7 +22,7 @@ namespace light
         /**
          * Unit of size.
          */
-        u32 unit;
+        u64 unit;
 
     public:
         /**
@@ -36,30 +36,6 @@ namespace light
         Vec4u
         visible(Vec2u limits) const;
     };
-
-    Vec2f
-    View::origin() const
-    {
-        return centre - (size * unit) / 2u;
-    }
-
-    Vec4u
-    View::visible(Vec2u limits) const
-    {
-        Vec2f min = centre - (size + 0) * unit / 2u;
-        Vec2f max = centre + (size + 2) * unit / 2u;
-
-        limits *= unit;
-
-        Vec4u bounds = {
-            (u32) light_max((s32) min[0], 0),
-            light_min((u32) light_max(max[0], 0), limits[0]),
-            (u32) light_max((s32) min[1], 0),
-            light_min((u32) light_max(max[1], 0), limits[1]),
-        };
-
-        return bounds / unit;
-    }
 } // light
 
 #endif // LIGHT_ENGINE_VIEW_HPP

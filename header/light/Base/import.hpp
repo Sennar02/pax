@@ -8,5 +8,6 @@
 #include <light/Base/Vec.hpp>
 #include <light/Base/String.hpp>
 #include <light/Base/Buffer.hpp>
+#include <light/Base/math.hpp>
 
 #endif // LIGHT_BASE_IMPORT_HPP

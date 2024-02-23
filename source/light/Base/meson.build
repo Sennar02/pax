@@ -2,6 +2,7 @@ light_base = static_library('light-base',
   include_directories: [light_header],
   sources: [
     'String.cpp',
+    'math.cpp',
   ],
 )
 

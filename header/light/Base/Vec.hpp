@@ -5,14 +5,14 @@
 
 namespace light
 {
-    template <class Type, u32 Size>
+    template <class Type, u64 Size>
     struct Vec
     {
     public:
         /**
          * Number of elements.
          */
-        static const u32 SIZE = Size;
+        static const u64 SIZE = Size;
 
     public:
         /**
@@ -98,10 +98,10 @@ namespace light
         operator/=(Other other);
 
         Type&
-        operator[](u32 index);
+        operator[](u64 index);
 
         const Type&
-        operator[](u32 index) const;
+        operator[](u64 index) const;
 
         bool
         operator==(const Vec<Type, Size>& other) const;

@@ -5,17 +5,17 @@
 
 namespace light
 {
-    template <class Type, u32 Size>
+    template <class Type, u64 Size>
     struct Buffer
     {
     public:
-        static const u32 LEN_TYPE =
+        static const u64 LEN_TYPE =
             sizeof(Type);
 
         /**
          * Number of elements.
          */
-        static const u32 SIZE = Size;
+        static const u64 SIZE = Size;
 
     public:
         /**
@@ -28,13 +28,13 @@ namespace light
          * Subscript operator, doesn't test bounds.
          */
         Type&
-        operator[](u32 index);
+        operator[](u64 index);
 
         /**
          * Subscript operator, doesn't test bounds.
          */
         const Type&
-        operator[](u32 index) const;
+        operator[](u64 index) const;
     };
 } // light
 

@@ -4,21 +4,21 @@ namespace sdl
 {
     using namespace light;
 
-    f32
+    f64
     get_seconds()
     {
-        return SDL_GetTicks() / 1000.f;
+        return SDL_GetTicks() / 1000.0;
     }
 } // sdl
 
 namespace light
 {
     Timer::Timer()
-        : last {0}
-        , time {0}
+        : time {0}
+        , last {0}
     {}
 
-    f32
+    f64
     Timer::elapsed()
     {
         last = time;
@@ -35,17 +35,17 @@ namespace light
     {}
 
     bool
-    Engine::execute(State* state, u32 frame_rate)
+    Engine::execute(State* state, u64 frame_rate)
     {
-        f32 step = 1.f / frame_rate;
-        f32 time = 0;
-        u32 skip = 0;
+        f64 step = 1.f / frame_rate;
+        f64 time = 0;
+        u64 skip = 0;
 
         if ( state == 0 ) return false;
 
         state->startup();
 
-        for ( u32 frame = 0; true; frame += 1u ) {
+        for ( u64 frame = 0; true; frame += 1u ) {
             time += timer.elapsed();
 
             if ( time < step ) skip += 1u;

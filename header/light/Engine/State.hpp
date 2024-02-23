@@ -53,7 +53,7 @@ namespace light
          * be scaled to realign with the simulation.
          */
         virtual void
-        fixed_step(f32 step, u32 skip) = 0;
+        fixed_step(f64 step, u64 skip) = 0;
 
         /**
          * Procedure called exactly once during one frame.

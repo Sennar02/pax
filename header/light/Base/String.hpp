@@ -46,7 +46,7 @@ namespace light
         /**
          * Amount of characters.
          */
-        u32 size;
+        u64 size;
 
     public:
         /**
@@ -62,7 +62,7 @@ namespace light
          *          can detect if the size exceeds the
          *          size of the allocation for the pointer.
          */
-        String(const s8* data, u32 size);
+        String(const s8* data, u64 size);
 
         /**
          * Constructor that can be used to calculate
@@ -71,7 +71,7 @@ namespace light
          * altogether, if instead the size is bigger than
          * the upper bound: it just stops counting.
          */
-        String(const s8* data, u32 lower, u32 upper);
+        String(const s8* data, u64 lower, u64 upper);
 
         /**
          * Tests if a string contains a specific byte,
@@ -86,7 +86,7 @@ namespace light
          * returns the index of the first occurrence,
          * of an empty value if none is found.
          */
-        Opt<u32>
+        Opt<u64>
         index_of(s8 byte) const;
 
         /**
@@ -127,17 +127,17 @@ namespace light
          * Subscript operator, doesn't test bounds.
          */
         char
-        operator[](u32 index) const;
+        operator[](u64 index) const;
     };
 
-    s32
+    s64
     parse_int(
         String            string,
         const Byte_Table& table = String::BASE_10,
         u8                radix = 10u
     );
 
-    f32
+    f64
     parse_flt(
         String            string,
         const Byte_Table& table = String::BASE_10,
