@@ -9,82 +9,70 @@ namespace light
 {
     using Byte_Table = Buffer<u8, 256u>;
 
+    /**
+     * Commonly trimmed characters.
+     */
+    extern const Byte_Table STRING_TRIM;
+
     struct String
     {
     public:
         /**
-         * Commonly trimmed characters.
+         * Pointer to immutable bytes.
          */
-        static const Byte_Table TRIMS;
+        const s8* data = "";
 
         /**
-         * Table of digits to parse a binary number.
+         * Number of bytes.
          */
-        static const Byte_Table BASE_2;
-
-        /**
-         * Table of digits to parse an octal number.
-         */
-        static const Byte_Table BASE_8;
-
-        /**
-         * Table of digits to parse a decimal number.
-         */
-        static const Byte_Table BASE_10;
-
-        /**
-         * Table of digits to parse an hexadecimal number.
-         */
-        static const Byte_Table BASE_16;
+        u64 size = 0;
 
     public:
         /**
-         * Pointer to the characters.
-         */
-        const s8* data;
-
-        /**
-         * Amount of characters.
-         */
-        u64 size;
-
-    public:
-        /**
-         * Default constructor.
+         * Default constructor to make the compiler happy.
          */
         String();
 
         /**
-         * Constructor that can be used to provide
-         * the desired size of the string.
+         * Constructor that can be used to provide a
+         * specific size for the string.
          *
-         * WARNING: There is no way that the constructor
-         *          can detect if the size exceeds the
-         *          size of the allocation for the pointer.
+         * WARNING: This function cannot test if the
+         *          size is valid, for this providing
+         * a size larger than the allocated space could
+         * lead to:
+         *  - memory corruptions,
+         *  - crashes,
+         *  - vulnerabilities.
          */
         String(const s8* data, u64 size);
 
         /**
          * Constructor that can be used to calculate
-         * the size of the string. If the size is smaller
-         * than the lower bound the string is ignored
-         * altogether, if instead the size is bigger than
-         * the upper bound: it just stops counting.
+         * the size of the string within specific
+         * constraints.
+         *
+         * If the size is bigger than the upper bound
+         * it considers only the first valid portion.
+         * Otherwise, if the size is smaller than the
+         * lower bound the string is completely ignored.
          */
         String(const s8* data, u64 lower, u64 upper);
 
         /**
-         * Tests if a string contains a specific byte,
-         * returns true as soon as it finds an occurrence,
+         * Tests if a string contains a specific byte.
+         *
+         * Returns true as soon as it finds an occurrence,
          * or false if none is found.
          */
         bool
         contains(s8 byte) const;
 
         /**
-         * Tests if a string contains a specific byte,
-         * returns the index of the first occurrence,
-         * of an empty value if none is found.
+         * Tests if a string contains a specific byte.
+         *
+         * Returns the index of the first occurrence,
+         * or an empty optional if none is found.
          */
         Opt<u64>
         index_of(s8 byte) const;
@@ -92,7 +80,7 @@ namespace light
         /**
          * Creates two substrings. The first one ranges from
          * the start of the original string to the first
-         * occurrence of a specific byte, the second
+         * occurrence of a specific byte included, the second
          * one ranges from after the first occurrence of
          * the same byte to the end of the original string.
          */
@@ -100,49 +88,85 @@ namespace light
         split(char byte) const;
 
         /**
-         * Excludes from the string any byte specified in
-         * the argument, exclusively on the left side, until
-         * it finds any unspecified byte.
+         * Excludes from the head of the string any byte
+         * specified in the table until it finds an exception.
          */
         String&
-        trim_left(const Byte_Table& table = TRIMS);
+        trim_left(const Byte_Table& table = STRING_TRIM);
 
         /**
-         * Excludes from the string any byte specified in
-         * the argument, exclusively on the right side, until
-         * it finds any unspecified byte.
+         * Excludes from the tail of the string any byte
+         * specified in the table until it finds an exception.
          */
         String&
-        trim_right(const Byte_Table& table = TRIMS);
+        trim_right(const Byte_Table& table = STRING_TRIM);
 
         /**
-         * Excludes from the string any byte specified in
-         * the argument, on both sides, until it finds any
-         * unspecified byte.
+         * Excludes from both sides of the string any byte
+         * specified in the table until it finds an exception.
          */
         String&
-        trim(const Byte_Table& table = TRIMS);
+        trim(const Byte_Table& table = STRING_TRIM);
 
         /**
          * Subscript operator, doesn't test bounds.
          */
-        char
+        const s8&
         operator[](u64 index) const;
     };
 
-    s64
-    parse_int(
-        String            string,
-        const Byte_Table& table = String::BASE_10,
-        u8                radix = 10u
-    );
+    /**
+     * Tries to read an unsigned integer from a string.
+     *
+     * The number has to be in the following form:
+     *  - Any digit inside the table.
+     */
+    u64
+    parse_u64(String string);
 
+    /**
+     * Tries to read a signed integer from a string.
+     *
+     * The number has to be in the following form:
+     *  - Optional "+" or "-",
+     *  - Any digit inside the table.
+     *
+     * It tries to match as much as possible before
+     * returning.
+     *
+     * For example:
+     *  1) -145  will produce -145,
+     *  2) 12-12 will produce 12, (Ignores the -12)
+     *  3) +-3   will produce 0. (Ignores the -3)
+     */
+    s64
+    parse_s64(String string);
+
+    /**
+     * Tries to read a floating point from a string.
+     *
+     * The number has to be in the following form:
+     *  - Optional "+" or "-",
+     *  - Any digit inside the table,
+     *  - Optional ".",
+     *  - Any digit inside the table,
+     *  - Optional "e",
+     *  - Optional "+" or "-",
+     *  - Any digit inside the table.
+     *
+     * It tries to match as much as possible before
+     * returning.
+     *
+     * For example:
+     *  1) -1e-2     will produce -0.01
+     *  2) -.e+3     will produce 0
+     *  3) 12.3e-1.3 will produce 1.23 (Ignores the .3)
+     *  4) .4        will produce 0.4
+     *  5) 4.        will produce 4
+     *  6) 3.e       will produce 3
+     */
     f64
-    parse_flt(
-        String            string,
-        const Byte_Table& table = String::BASE_10,
-        u8                radix = 10u
-    );
+    parse_f64(String string);
 } // light
 
 #endif // LIGHT_BASE_STRING_HPP

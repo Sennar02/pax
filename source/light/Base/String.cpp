@@ -1,64 +1,13 @@
 #include <light/Base/String.hpp>
 
-extern "C" {
-    #include <string.h>
-}
-
 namespace light
 {
-    const Byte_Table String::TRIMS = {
+    const Byte_Table STRING_TRIM = {
          0,  0,  0,  0,  0,  0,  0,  0,
          0,  1,  1,  0,  0,  1,  0,  0,
          0,  0,  0,  0,  0,  0,  0,  0,
          0,  0,  0,  0,  0,  0,  0,  0,
          1,  0,  0,  0,  0,  0,  0,  0,
-    };
-
-    const Byte_Table String::BASE_2 = {
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         1,  2,  0,  0,  0,  0,  0,  0,
-    };
-
-    const Byte_Table String::BASE_8 = {
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         1,  2,  3,  4,  5,  6,  7,  8,
-    };
-
-    const Byte_Table String::BASE_10 = {
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         1,  2,  3,  4,  5,  6,  7,  8,
-         9, 10,  0,  0,  0,  0,  0,  0,
-    };
-
-    const Byte_Table String::BASE_16 = {
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         1,  2,  3,  4,  5,  6,  7,  8,
-         9, 10,  0,  0,  0,  0,  0,  0,
-         0, 11, 12, 13, 14, 15, 16,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0,  0,  0,  0,  0,  0,  0,  0,
-         0, 11, 12, 13, 14, 15, 16,  0,
     };
 
     u64
@@ -78,13 +27,9 @@ namespace light
         return size;
     }
 
-    String::String()
-        : data {""}
-        , size {0}
-    {}
+    String::String() {}
 
     String::String(const s8* data, u64 size)
-        : String()
     {
         if ( data != 0 && size != 0 ) {
             this->data = data;
@@ -93,7 +38,6 @@ namespace light
     }
 
     String::String(const s8* data, u64 lower, u64 upper)
-        : String()
     {
         u64 size = 0;
 
@@ -199,14 +143,35 @@ namespace light
         return trim_left(table).trim_right(table);
     }
 
-    char
+    const s8&
     String::operator[](u64 index) const
     {
         return data[index];
     }
 
+    u64
+    parse_u64(String string)
+    {
+        u8  byte = 0;
+        u64 idx  = 0;
+        u64 res  = 0;
+
+        if ( string.size == 0 ) return 0;
+
+        for ( ; idx < string.size; idx += 1u ) {
+            byte = string.data[idx] - '0';
+
+            if ( byte < 10u ) {
+                res *= 10u;
+                res += byte;
+            } else break;
+        }
+
+        return res;
+    }
+
     s64
-    parse_int_impl(String string, const Byte_Table& table, u8 base, u64* dist)
+    parse_s64(String string)
     {
         u8  byte = 0;
         s64 sign = 1;
@@ -222,27 +187,24 @@ namespace light
         }
 
         for ( ; idx < string.size; idx += 1u ) {
-            byte = table[string.data[idx]];
+            byte = string.data[idx] - '0';
 
-            if ( byte != 0 ) {
-                res *= base;
-                res += byte - 1u;
+            if ( byte < 10u ) {
+                res *= 10u;
+                res += byte;
             } else break;
         }
-
-        if ( dist != 0 ) *dist = idx;
 
         return res * sign;
     }
 
     f64
-    parse_flt_impl(String string, const Byte_Table& table, u8 base, u64* dist)
+    parse_f64_base(String string, u64& idx)
     {
         u8   byte = 0;
         s64  sign = 1;
         bool frac = false;
         u64  div  = 1;
-        u64  idx  = 0;
         f64  res  = 0;
 
         if ( string.size == 0 ) return 0;
@@ -260,45 +222,40 @@ namespace light
                 else break;
             }
 
-            byte = table[string.data[idx]];
+            byte = string.data[idx] - '0';
 
-            if ( byte != 0 ) {
-                res *= base;
-                res += byte - 1u;
+            if ( byte < 10u ) {
+                res *= 10u;
+                res += byte;
 
                 if ( frac )
-                    div *= base;
+                    div *= 10u;
             } else break;
         }
 
-        if ( dist != 0 ) *dist = idx;
+        if ( res == 0 ) return res;
 
         return res * sign / div;
     }
 
-    s64
-    parse_int(String string, const Byte_Table& table, u8 base)
-    {
-        return parse_int_impl(string, table, base, 0);
-    }
-
     f64
-    parse_flt(String string, const Byte_Table& table, u8 base)
+    parse_f64(String string)
     {
-        u64    dist   = 0;
-        f64    lower  = parse_flt_impl(string, table, base, &dist);
-        f64    upper  = 0;
-        s8*    stop   = (s8*) string.data + dist;
+        u64    idx  = 0;
+        f64    base = parse_f64_base(string, idx);
+        f64    exp  = 0;
+        s8*    stop = (s8*) string.data + idx;
+        u64    left = string.size - idx;
 
-        dist = string.size - dist;
+        if ( base == 0 ) return 0;
 
-        if ( string.size > dist ) {
-            string = String(stop + 1u, dist - 1u);
+        if ( left != 0 ) {
+            string = String(stop + 1u, left - 1u);
 
             if ( *stop == 'e' || *stop == 'E' )
-                upper  = parse_int_impl(string, table, base, 0);
+                exp = parse_s64(string);
         }
 
-        return lower * pow(base, upper);
+        return base * pow(10u, exp);
     }
 } // light

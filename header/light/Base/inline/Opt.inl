@@ -3,13 +3,11 @@
 namespace light
 {
     template <class Item>
-    Opt<Item>::Opt()
-        : full {false}
-    {}
+    Opt<Item>::Opt() {}
 
     template <class Item>
     Opt<Item>::Opt(Item item)
         : item {item}
-        , full {true}
+        , is_valid {true}
     {}
 } // light

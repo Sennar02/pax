@@ -4,15 +4,11 @@ namespace light
 {
     template <class Type, u64 Size>
     template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::from(const Vec<Other, Size>& other)
+    void
+    Vec<Type, Size>::from(Vec<Other, Size> other)
     {
-        Vec<Type, Size> res;
-
         for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = other.data[i];
-
-        return res;
+            data[i] = other.data[i];
     }
 
     template <class Type, u64 Size>
@@ -25,198 +21,6 @@ namespace light
             res += data[i] * data[i];
 
         return sqrt(res);
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::operator+(const Vec<Other, Size>& other) const
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = data[i] + other.data[i];
-
-        return res;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::operator+(Other other) const
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = data[i] + other;
-
-        return res;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>&
-    Vec<Type, Size>::operator+=(const Vec<Other, Size>& other)
-    {
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            data[i] += other.data[i];
-
-        return *this;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>&
-    Vec<Type, Size>::operator+=(Other other)
-    {
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            data[i] += other;
-
-        return *this;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::operator-(const Vec<Other, Size>& other) const
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = data[i] - other.data[i];
-
-        return res;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::operator-(Other other) const
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = data[i] - other;
-
-        return res;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>&
-    Vec<Type, Size>::operator-=(const Vec<Other, Size>& other)
-    {
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            data[i] -= other.data[i];
-
-        return *this;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>&
-    Vec<Type, Size>::operator-=(Other other)
-    {
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            data[i] -= other;
-
-        return *this;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::operator*(const Vec<Other, Size>& other) const
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = data[i] * other.data[i];
-
-        return res;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::operator*(Other other) const
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = data[i] * other;
-
-        return res;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>&
-    Vec<Type, Size>::operator*=(const Vec<Other, Size>& other)
-    {
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            data[i] *= other.data[i];
-
-        return *this;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>&
-    Vec<Type, Size>::operator*=(Other other)
-    {
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            data[i] *= other;
-
-        return *this;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::operator/(const Vec<Other, Size>& other) const
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = data[i] / other.data[i];
-
-        return res;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>
-    Vec<Type, Size>::operator/(Other other) const
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            res.data[i] = data[i] / other;
-
-        return res;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>&
-    Vec<Type, Size>::operator/=(const Vec<Other, Size>& other)
-    {
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            data[i] /= other.data[i];
-
-        return *this;
-    }
-
-    template <class Type, u64 Size>
-    template <class Other>
-    Vec<Type, Size>&
-    Vec<Type, Size>::operator/=(Other other)
-    {
-        for ( u64 i = 0; i < SIZE; i += 1u )
-            data[i] /= other;
-
-        return *this;
     }
 
     template <class Type, u64 Size>
@@ -235,7 +39,7 @@ namespace light
 
     template <class Type, u64 Size>
     bool
-    Vec<Type, Size>::operator==(const Vec<Type, Size>& other) const
+    Vec<Type, Size>::operator==(Vec<Type, Size> other) const
     {
         for ( u64 i = 0; i < SIZE; i += 1u ) {
             if ( data[i] != other.data[i] )
@@ -247,7 +51,7 @@ namespace light
 
     template <class Type, u64 Size>
     bool
-    Vec<Type, Size>::operator!=(const Vec<Type, Size>& other) const
+    Vec<Type, Size>::operator!=(Vec<Type, Size> other) const
     {
         for ( u64 i = 0; i < SIZE; i += 1u ) {
             if ( data[i] != other.data[i] )
@@ -255,5 +59,101 @@ namespace light
         }
 
         return false;
+    }
+
+    template <class Type, class Other, u64 Size>
+    Vec<Type, Size>
+    vec_add(Vec<Type, Size> a, Vec<Other, Size> b)
+    {
+        Vec<Type, Size> res;
+
+        for ( u64 i = 0; i < res.SIZE; i += 1u )
+            res.data[i] = a.data[i] + b.data[i];
+
+        return res;
+    }
+
+    template <class Type, class Other, u64 Size>
+    Vec<Type, Size>
+    vec_sadd(Vec<Type, Size> a, Other b)
+    {
+        Vec<Type, Size> res;
+
+        for ( u64 i = 0; i < res.SIZE; i += 1u )
+            res.data[i] = a.data[i] + b;
+
+        return res;
+    }
+
+    template <class Type, class Other, u64 Size>
+    Vec<Type, Size>
+    vec_sub(Vec<Type, Size> a, Vec<Other, Size> b)
+    {
+        Vec<Type, Size> res;
+
+        for ( u64 i = 0; i < res.SIZE; i += 1u )
+            res.data[i] = a.data[i] - b.data[i];
+
+        return res;
+    }
+
+    template <class Type, class Other, u64 Size>
+    Vec<Type, Size>
+    vec_ssub(Vec<Type, Size> a, Other b)
+    {
+        Vec<Type, Size> res;
+
+        for ( u64 i = 0; i < res.SIZE; i += 1u )
+            res.data[i] = a.data[i] - b;
+
+        return res;
+    }
+
+    template <class Type, class Other, u64 Size>
+    Vec<Type, Size>
+    vec_mul_scale(Vec<Type, Size> a, Vec<Other, Size> b)
+    {
+        Vec<Type, Size> res;
+
+        for ( u64 i = 0; i < res.SIZE; i += 1u )
+            res.data[i] = a.data[i] * b.data[i];
+
+        return res;
+    }
+
+    template <class Type, class Other, u64 Size>
+    Vec<Type, Size>
+    vec_smul_scale(Vec<Type, Size> a, Other b)
+    {
+        Vec<Type, Size> res;
+
+        for ( u64 i = 0; i < res.SIZE; i += 1u )
+            res.data[i] = a.data[i] * b;
+
+        return res;
+    }
+
+    template <class Type, class Other, u64 Size>
+    Vec<Type, Size>
+    vec_div_scale(Vec<Type, Size> a, Vec<Other, Size> b)
+    {
+        Vec<Type, Size> res;
+
+        for ( u64 i = 0; i < res.SIZE; i += 1u )
+            res.data[i] = a.data[i] / b.data[i];
+
+        return res;
+    }
+
+    template <class Type, class Other, u64 Size>
+    Vec<Type, Size>
+    vec_sdiv_scale(Vec<Type, Size> a, Other b)
+    {
+        Vec<Type, Size> res;
+
+        for ( u64 i = 0; i < res.SIZE; i += 1u )
+            res.data[i] = a.data[i] / b;
+
+        return res;
     }
 } // light

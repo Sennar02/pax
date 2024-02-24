@@ -17,7 +17,7 @@ namespace light
     public:
         union {
             /**
-             * Actual item.
+             * Item.
              */
             Item item;
         };
@@ -26,12 +26,11 @@ namespace light
          * Helper boolean used to determine
          * if the item exists or not.
          */
-        bool full;
+        bool is_valid = false;
 
     public:
         /**
-         * Default constructor. Does not provide
-         * any item.
+         * Default constructor.
          */
         Opt();
 

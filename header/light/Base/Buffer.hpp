@@ -9,6 +9,9 @@ namespace light
     struct Buffer
     {
     public:
+        /**
+         * Size in bytes of the type.
+         */
         static const u64 LEN_TYPE =
             sizeof(Type);
 
@@ -19,7 +22,7 @@ namespace light
 
     public:
         /**
-         * Elements.
+         * Static array of elements.
          */
         Type data[Size];
 

@@ -15,31 +15,28 @@ namespace light
         static const u64 LEN_ITEM = sizeof(Item);
 
         /**
-         * Size in bytes of the failure information.
+         * Size in bytes of the failure data.
          */
         static const u64 LEN_FAIL = sizeof(Fail);
 
     public:
         union {
             /**
-             * Actual item.
+             * item.
              */
             Item item;
 
             /**
-             * Failure information.
+             * Failure data.
              */
             Fail fail;
         };
 
         /**
          * Helper boolean used to determine if
-         * the item exists or not. If the item
-         * does not exist, it's certain that
-         * additional failure information has
-         * been provided.
+         * the item exists or not.
          */
-        bool full;
+        bool is_valid = false;
 
     public:
         /**
@@ -48,8 +45,7 @@ namespace light
         Res(Item item);
 
         /**
-         * Constructor used to provide failure
-         * information.
+         * Constructor used to provide failure data.
          */
         Res(Fail fail);
     };

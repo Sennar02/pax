@@ -45,7 +45,7 @@ namespace light
 
         state->startup();
 
-        for ( u64 frame = 0; true; frame += 1u ) {
+        while ( true ) {
             time += timer.elapsed();
 
             if ( time < step ) skip += 1u;
