@@ -7,15 +7,13 @@ namespace light
 {
     struct Display
     {
-    private:
+    public:
         /**
-         * Internal pointer to an sdl window.
+         * Internal pointer.
          */
         SDL_Window* data;
 
     public:
-        friend Painter;
-
         /**
          * Default constructor.
          */

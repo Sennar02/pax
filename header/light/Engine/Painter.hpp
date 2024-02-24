@@ -8,7 +8,7 @@ namespace light
 {
     struct Painter
     {
-    private:
+    public:
         /**
          *
          */

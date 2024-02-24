@@ -1,6 +1,8 @@
 #ifndef LIGHT_MEMORY_ARRAY_HPP
 #define LIGHT_MEMORY_ARRAY_HPP
 
+#include <light/Memory/define.hpp>
+
 namespace light
 {
     template <class Type>
@@ -18,7 +20,12 @@ namespace light
         /**
          *
          */
-        Array(u64 size = 0);
+        Array();
+
+        /**
+         *
+         */
+        Array(u64 size);
 
         /**
          *
@@ -37,9 +44,14 @@ namespace light
 namespace light
 {
     template <class Type>
-    Array<Type>::Array(u64 size)
+    Array<Type>::Array()
         : data {0}
         , size {0}
+    {}
+
+    template <class Type>
+    Array<Type>::Array(u64 size)
+        : Array()
     {
         if ( size != 0 ) {
             this->data = (Type*) calloc(1u, size * LEN_TYPE);
