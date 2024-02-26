@@ -37,6 +37,118 @@ namespace light
         magnitude() const;
 
         /**
+         * Performs the addition of two vectors.
+         */
+        template <class Other>
+        Vec<Type, Size>
+        operator+(Vec<Other, Size> other) const;
+
+        /**
+         * Performs the addition of a vector and a scalar.
+        */
+        template <class Other>
+        Vec<Type, Size>
+        operator+(Other other) const;
+
+        /**
+         * Performs the addition on the vector with another.
+         */
+        template <class Other>
+        Vec<Type, Size>&
+        operator+=(Vec<Other, Size> other);
+
+        /**
+         * Performs the addition on the vector with a scalar.
+        */
+        template <class Other>
+        Vec<Type, Size>&
+        operator+=(Other other);
+
+        /**
+         * Performs the subtraction of two vectors.
+         */
+        template <class Other>
+        Vec<Type, Size>
+        operator-(Vec<Other, Size> other) const;
+
+        /**
+         * Performs the subtraction of a vector and a scalar.
+         */
+        template <class Other>
+        Vec<Type, Size>
+        operator-(Other other) const;
+
+        /**
+         * Performs the subtraction on the vector with another.
+         */
+        template <class Other>
+        Vec<Type, Size>&
+        operator-=(Vec<Other, Size> other);
+
+        /**
+         * Performs the subtraction on the vector with a scalar.
+        */
+        template <class Other>
+        Vec<Type, Size>&
+        operator-=(Other other);
+
+        /**
+         * Performs the Hadamard multiplication of two vectors.
+         */
+        template <class Other>
+        Vec<Type, Size>
+        operator*(Vec<Other, Size> other) const;
+
+        /**
+         * Performs the Hadamard multiplication of a vector and a scalar.
+        */
+        template <class Other>
+        Vec<Type, Size>
+        operator*(Other other) const;
+
+        /**
+         * Performs the Hadamard multiplication on the vector with another.
+         */
+        template <class Other>
+        Vec<Type, Size>&
+        operator*=(Vec<Other, Size> other);
+
+        /**
+         * Performs the Hadamard multiplication on the vector a scalar.
+         */
+        template <class Other>
+        Vec<Type, Size>&
+        operator*=(Other other);
+
+        /**
+         * Performs the Hadamard division of two vectors.
+         */
+        template <class Other>
+        Vec<Type, Size>
+        operator/(Vec<Other, Size> other) const;
+
+        /**
+         * Performs the Hadamard division of a vector and a scalar.
+         */
+        template <class Other>
+        Vec<Type, Size>
+        operator/(Other other) const;
+
+        /**
+         * Performs the Hadamard division on the vector with another.
+         */
+        template <class Other>
+        Vec<Type, Size>&
+        operator/=(Vec<Other, Size> other);
+
+        /**
+         * Performs the Hadamard division on the vector a scalar.
+         */
+        template <class Other>
+        Vec<Type, Size>&
+        operator/=(Other other);
+
+        /**
          * Subscript operator, doesn't test bounds.
          */
         Type&
@@ -60,62 +172,6 @@ namespace light
         bool
         operator!=(Vec<Type, Size> other) const;
     };
-
-    /**
-     * Performs the addition of two vectors.
-     */
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_add(Vec<Type, Size> a, Vec<Other, Size> b);
-
-    /**
-     * Performs the addition of a vector and a scalar.
-     */
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_sadd(Vec<Type, Size> a, Other b);
-
-    /**
-     * Performs the subtraction of two vectors.
-     */
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_sub(Vec<Type, Size> a, Vec<Other, Size> b);
-
-    /**
-     * Performs the subtraction of a vector and a scalar.
-     */
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_ssub(Vec<Type, Size> a, Other b);
-
-    /**
-     * Performs the scaling multiplication of two vectors.
-     */
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_mul_scale(Vec<Type, Size> a, Vec<Other, Size> b);
-
-    /**
-     * Performs the scaling multiplication of a vector and a scalar.
-     */
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_smul_scale(Vec<Type, Size> a, Other b);
-
-    /**
-     * Performs the scaling division of two vectors.
-     */
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_div_scale(Vec<Type, Size> a, Vec<Other, Size> b);
-
-    /**
-     * Performs the scaling division of a vector and a scalar.
-     */
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_sdiv_scale(Vec<Type, Size> a, Other b);
 } // light
 
 #include <light/Base/inline/Vec.inl>

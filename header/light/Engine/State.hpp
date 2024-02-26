@@ -48,12 +48,10 @@ namespace light
         /**
          * Procedure called from zero to any number of
          * times during one frame, to alter the world
-         * state at a consistent rate, if for any reason
-         * the engine couldn't keep up, the step could
-         * be scaled to realign with the simulation.
+         * state at a consistent rate.
          */
         virtual void
-        fixed_step(f64 step, u64 skip) = 0;
+        fixed_step(f64 step) = 0;
 
         /**
          * Procedure called exactly once during one frame.

@@ -37,9 +37,8 @@ namespace light
     bool
     Engine::execute(State* state, u64 frame_rate)
     {
-        f64 step = 1.f / frame_rate;
+        f64 step = 1.0 / frame_rate;
         f64 time = 0;
-        u64 skip = 0;
 
         if ( state == 0 ) return false;
 
@@ -48,15 +47,9 @@ namespace light
         while ( true ) {
             time += timer.elapsed();
 
-            if ( time < step ) skip += 1u;
-
             if ( state->input() ) {
-                for ( ; time >= step; time -= step ) {
-                    state->fixed_step(step, skip + 1u);
-
-                    if ( skip != 0 )
-                        skip = 0;
-                }
+                for ( ; time >= step; time -= step )
+                    state->fixed_step(step);
 
                 state->after_step();
             } else break;

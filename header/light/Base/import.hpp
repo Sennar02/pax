@@ -9,5 +9,6 @@
 #include <light/Base/String.hpp>
 #include <light/Base/Buffer.hpp>
 #include <light/Base/math.hpp>
+#include <light/Base/bits.hpp>
 
 #endif // LIGHT_BASE_IMPORT_HPP

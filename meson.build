@@ -24,7 +24,10 @@ subdir('source/light/Base')
 subdir('source/light/Engine')
 
 executable('light',
-  sources:             ['source/main.cpp'],
+  sources:             [
+    'source/main.cpp',
+    'source/game/Piece.cpp',
+  ],
   include_directories: [light_header],
   dependencies:        [light_depend],
   link_with:           [light_define],
