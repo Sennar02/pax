@@ -28,7 +28,8 @@ namespace light
         /**
          *
          */
-        Vec2f origin() const;
+        Vec2f
+        offset() const;
 
         /**
          *

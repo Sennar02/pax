@@ -54,13 +54,13 @@ namespace light
          *
          */
         void
-        set_colour(Vec4u rgba);
+        set_colour(Vec4u rgba = {});
 
         /**
          *
          */
         void
-        draw_rect_full(Vec4f rect);
+        fill_rect(Vec4f border);
     };
 } // light
 

@@ -56,15 +56,15 @@ namespace light
     }
 
     void
-    Painter::draw_rect_full(Vec4f rect)
+    Painter::fill_rect(Vec4f border)
     {
-        SDL_Rect helper = {
-            (s32) rect[0], // x
-            (s32) rect[1], // y
-            (s32) rect[2], // w
-            (s32) rect[3], // h
+        SDL_Rect rect = {
+            (s32) border[0], // x
+            (s32) border[1], // y
+            (s32) border[2], // w
+            (s32) border[3], // h
         };
 
-        SDL_RenderFillRect(data, &helper);
+        SDL_RenderFillRect(data, &rect);
     }
 } // light

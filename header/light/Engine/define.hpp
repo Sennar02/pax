@@ -20,6 +20,11 @@ namespace light
     struct Engine;
 
     struct View;
+
+    struct Tile;
+    struct Grid_Layer;
+    struct Grid;
+
     struct Display;
     struct Painter;
 };

@@ -3,7 +3,7 @@
 namespace light
 {
     Vec2f
-    View::origin() const
+    View::offset() const
     {
         return centre - size * (unit / 2u);
     }

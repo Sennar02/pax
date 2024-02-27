@@ -15,7 +15,8 @@ namespace light
     public:
         Type* data;
         u64   size;
-        u64   width;
+        u64   cols;
+        u64   rows;
 
     public:
         /**
@@ -60,7 +61,8 @@ namespace light
     Array2d<Type>::Array2d()
         : data {0}
         , size {0}
-        , width {0}
+        , cols {0}
+        , rows {0}
     {}
 
     template <class Type>
@@ -73,8 +75,9 @@ namespace light
             this->data = (Type*) calloc(1u, area * LEN_TYPE);
 
             if ( this->data != 0 ) {
-                this->size  = area;
-                this->width = size[0];
+                this->size = area;
+                this->cols = size[0];
+                this->rows = size[1];
             }
         }
     }
@@ -86,7 +89,7 @@ namespace light
         u64 i = index[0];
         u64 j = index[1];
 
-        return data[j * width + i];
+        return data[j * cols + i];
     }
 
     template <class Type>
@@ -96,7 +99,7 @@ namespace light
         u64 i = index[0];
         u64 j = index[1];
 
-        return data[j * width + i];
+        return data[j * cols + i];
     }
 
     template <class Type>

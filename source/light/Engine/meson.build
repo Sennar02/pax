@@ -3,6 +3,8 @@ light_engine = static_library('light-engine',
   sources: [
     'Actor.cpp',
     'View.cpp',
+    'Grid_Layer.cpp',
+    'Grid.cpp',
     'State.cpp',
     'Engine.cpp',
     'Display.cpp',

@@ -7,36 +7,10 @@
 
 using namespace game;
 
-struct Grid_Layer
-{
-public:
-    Array2d<u64> grid;
-
-public:
-    virtual void
-    draw(const View& view, Painter& painter) const = 0;
-};
-
-struct Floor_Layer
-    : public Grid_Layer
-{
-public:
-    virtual void
-    draw(const View& view, Painter& painter) const;
-};
-
-struct Actor_Layer
-    : public Grid_Layer
-{
-public:
-    virtual void
-    draw(const View& view, Painter& painter) const;
-};
-
-static const u64   TILE_SIZE    = 12u;        // Pixels.
+static const u64   TILE_SIZE    = 48u;        // Pixels.
 static const Vec2u GRID_SIZE    = {45u, 25u}; // Tiles.
-static const Vec2u VIEW_SIZE    = {50u, 50u};  // Tiles.
-static const Vec2u DISPLAY_SIZE = {50u, 50u};  // Tiles.
+static const Vec2u VIEW_SIZE    = {16u, 9u};  // Tiles.
+static const Vec2u DISPLAY_SIZE = {16u, 9u};  // Tiles.
 
 static const u64   TILE_HALF    = TILE_SIZE / 2u;
 static const Vec2u GRID_HALF    = GRID_SIZE / 2u;
@@ -46,7 +20,9 @@ static const Vec2u DISPLAY_HALF = DISPLAY_SIZE / 2u;
 static const u64 GRID_AREA =
     GRID_SIZE[0] * GRID_SIZE[1];
 
-static const u64 ACTOR_COUNT = 200u;
+static const u64 ACTORS_COUNT  = 200u;
+static const u64 LAYERS_COUNT  = 2u;
+static const u64 ACTIONS_COUNT = 1u;
 
 // TODO: Implement a tile system.
 static const u64 COLOURS_COUNT = 4u;
@@ -62,10 +38,119 @@ static const Vec4u COLOURS_FLOOR[COLOURS_COUNT] = {
 // TODO: Implement an input system.
 static const u8* KEYBOARD = 0;
 
-static Array<Vec4u>    COLOUR   = Array<Vec4u>(ACTOR_COUNT);
-static Array<Position> POSITION = Array<Position>(ACTOR_COUNT);
-static Array<Motion>   MOTION   = Array<Motion>(ACTOR_COUNT);
-static Array<Controls> CONTROLS = Array<Controls>(ACTOR_COUNT);
+static Array<Vec4u>    COLOUR   = Array<Vec4u>(ACTORS_COUNT);
+static Array<Position> POSITION = Array<Position>(ACTORS_COUNT);
+static Array<Motion>   MOTION   = Array<Motion>(ACTORS_COUNT);
+static Array<Controls> CONTROLS = Array<Controls>(ACTORS_COUNT);
+
+struct Draw_Context {
+    Painter* painter = 0;
+    View*    view    = 0;
+};
+
+void
+floor_layer_draw(Array2d<u64>& indeces, void* extra)
+{
+    auto* context = (Draw_Context*) extra;
+
+    if ( context == 0 ) return;
+
+    Painter painter = *context->painter;
+    View    view    = *context->view;
+    Vec2f   offset  = view.offset();
+    Vec4u   bounds  = view.visible({indeces.cols, indeces.rows});
+    Vec4u   colour  = {};
+    Vec4f   tile    = {};
+
+    tile[2] = tile[3] = view.unit;
+
+    for ( u64 j = bounds[2]; j < bounds[3]; j += 1u ) {
+        for ( u64 i = bounds[0]; i < bounds[1]; i += 1u ) {
+            colour = COLOURS_FLOOR[indeces[{i, j}]];
+
+            tile[0] = tile[2] * i - offset[0];
+            tile[1] = tile[3] * j - offset[1];
+
+            painter.set_colour(colour);
+            painter.fill_rect(tile);
+        }
+    }
+
+    painter.set_colour();
+}
+
+void
+actor_layer_draw(Array2d<u64>& indeces, void* extra)
+{
+    auto* context = (Draw_Context*) extra;
+
+    if ( context == 0 ) return;
+
+    Painter painter = *context->painter;
+    View    view    = *context->view;
+    Vec2f   offset  = view.offset();
+    Vec4u   bounds  = view.visible({indeces.cols, indeces.rows});
+    Vec4u   colour  = {};
+    Vec4f   tile    = {};
+    u64     actor   = 0;
+
+    tile[2] = tile[3] = view.unit;
+
+    for ( u64 j = bounds[2]; j < bounds[3]; j += 1u ) {
+        for ( u64 i = bounds[0]; i < bounds[1]; i += 1u ) {
+            actor = indeces[{i, j}];
+
+            if ( actor != 0 ) {
+                Position& pos = POSITION[actor - 1u];
+
+                colour  = COLOUR[actor - 1u];
+                tile[0] = pos[0] - offset[0];
+                tile[1] = pos[1] - offset[1];
+
+                painter.set_colour(colour);
+                painter.fill_rect(tile);
+            }
+        }
+    }
+
+    painter.set_colour();
+}
+
+void
+actor_layer_write(Array2d<u64>& indeces, void* extra)
+{
+    auto* context = (Draw_Context*) extra;
+
+    if ( context == 0 ) return;
+
+    View  view   = *context->view;
+    Vec4u bounds = view.visible({indeces.cols, indeces.rows});
+    u64   index  = 0;
+
+    system("clear");
+
+    for ( u64 j = 0; j < indeces.rows; j += 1u ) {
+        for ( u64 i = 0; i < indeces.cols; i += 1u ) {
+            index = indeces[{i, j}];
+
+            if ( i >= bounds[0] && i < bounds[1] &&
+                 j >= bounds[2] && j < bounds[3])
+                printf("\x1b[46m");
+
+            if ( index != 0 )
+                printf("\x1b[93m%3lu\x1b[0m ", index);
+            else
+                printf("\x1b[90m ~ \x1b[0m ");
+        }
+
+        printf("\n");
+    }
+
+    printf("[%lu, %lu) x [%lu, %lu)\n",
+        bounds[0], bounds[1],
+        bounds[2], bounds[3]
+    );
+}
 
 Vec2f
 motion_func_player(void*)
@@ -91,68 +176,9 @@ motion_func_random(void*)
 }
 
 void
-Floor_Layer::draw(const View& view, Painter& painter) const
-{
-    Vec2f origin = view.origin();
-    Vec4u limits = view.visible(GRID_SIZE);
-    Vec4f tile   = {};
-    Vec4u rgba   = {};
-    u64   index  = 0;
-
-    tile[2] = tile[3] = view.unit;
-
-    for ( u64 j = limits[2]; j < limits[3]; j += 1u ) {
-        for ( u64 i = limits[0]; i < limits[1]; i += 1u ) {
-            index = grid[{i, j}];
-            rgba  = COLOURS_FLOOR[index];
-
-            tile[0] = i * view.unit - origin[0];
-            tile[1] = j * view.unit - origin[1];
-
-            painter.set_colour(rgba);
-            painter.draw_rect_full(tile);
-        }
-    }
-
-    painter.set_colour({});
-}
-
-void
-Actor_Layer::draw(const View& view, Painter& painter) const
-{
-    Vec2f origin = view.origin();
-    Vec4u limits = view.visible(GRID_SIZE);
-    Vec4f tile   = {};
-    Vec4u rgba   = {};
-    u64   index  = 0;
-    u64   actor  = 0;
-
-    tile[2] = tile[3] = view.unit;
-
-    for ( u64 j = limits[2]; j < limits[3]; j += 1u ) {
-        for ( u64 i = limits[0]; i < limits[1]; i += 1u ) {
-            index = grid[{i, j}];
-            actor = index - 1u;
-
-            if ( index != 0 ) {
-                rgba = COLOUR[actor];
-
-                tile[0] = POSITION[actor][0] - origin[0];
-                tile[1] = POSITION[actor][1] - origin[1];
-
-                painter.set_colour(rgba);
-                painter.draw_rect_full(tile);
-            }
-        }
-    }
-
-    painter.set_colour({});
-}
-
-void
 control()
 {
-    for ( u64 i = 0; i < ACTOR_COUNT; i += 1u ) {
+    for ( u64 i = 0; i < ACTORS_COUNT; i += 1u ) {
         Motion&   mot = MOTION[i];
         Controls& ctl = CONTROLS[i];
 
@@ -162,16 +188,18 @@ control()
 }
 
 void
-collide(Grid_Layer& layer)
+collide(Array2d<u64>& indeces)
 {
     static const u64   DIRS_COUNT       = 3u;
-    static const Vec2u DIRS[DIRS_COUNT] = {{1u, 0}, {0, 1u}, {1u, 1u}};
+    static const Vec2u DIRS[DIRS_COUNT] = {
+        {1u, 0}, {0, 1u}, {1u, 1u},
+    };
 
     Vec2u next = {};
     Vec2u tile = {};
     Vec2f part = {};
 
-    for ( u64 j = 0; j < ACTOR_COUNT; j += 1u ) {
+    for ( u64 j = 0; j < ACTORS_COUNT; j += 1u ) {
         Motion& mot = MOTION[j];
 
         tile = mot.tile_origin;
@@ -180,27 +208,27 @@ collide(Grid_Layer& layer)
         if ( next[0] >= GRID_SIZE[0] ) mot.step_input[0] = 0;
         if ( next[1] >= GRID_SIZE[1] ) mot.step_input[1] = 0;
 
-        if ( mot.step_input[0] == 0 && mot.step_input[1] == 0 ) continue;
+        if ( mot.step_input[0] != 0 || mot.step_input[1] != 0 ) {
+            for ( u64 i = 0; i < DIRS_COUNT; i += 1u ) {
+                part = mot.step_input * DIRS[i];
+                next = tile + part;
 
-        for ( u64 i = 0; i < DIRS_COUNT; i += 1u ) {
-            part = mot.step_input * DIRS[i];
-            next = tile + part;
-
-            if ( layer.grid[next] != 0 )
-                mot.step_input -= part;
+                if ( indeces[next] != 0 )
+                    mot.step_input -= part;
+            }
         }
     }
 }
 
 
 void
-move(Grid_Layer& layer, f64 time)
+move(Array2d<u64>& indeces, f64 time)
 {
     f64   dist = 0;
     f64   incr = 0;
     Vec2f stop = {};
 
-    for ( u64 j = 0; j < ACTOR_COUNT; j += 1u ) {
+    for ( u64 j = 0; j < ACTORS_COUNT; j += 1u ) {
         Motion&   mot = MOTION[j];
         Position& pos = POSITION[j];
 
@@ -208,16 +236,15 @@ move(Grid_Layer& layer, f64 time)
              bit_test(mot.status, Motion::MOVING) == false ) {
             if ( mot.step_input != Vec2f {} ) {
                 mot.tile_origin.from(pos / TILE_SIZE);
+                mot.tile_finish = mot.tile_origin + mot.step_input;
 
-                mot.step_value  = mot.step_input;
-                mot.speed_value = mot.speed_limit / mot.step_value.magnitude();
-                mot.tile_finish = mot.tile_origin + mot.step_value;
+                if ( indeces[mot.tile_finish] == 0 ) {
+                    mot.step_value  = mot.step_input;
+                    mot.speed_value = mot.speed_limit / mot.step_value.magnitude();
+                    mot.status      = bit_write(mot.status, Motion::MOVING, 1);
 
-                if ( layer.grid[mot.tile_finish] == 0 ) {
-                    mot.status = bit_write(mot.status, Motion::MOVING, 1);
-
-                    layer.grid[mot.tile_finish] = j + 1u;
-                    layer.grid[mot.tile_origin] = 0;
+                    indeces[mot.tile_finish] = j + 1u;
+                    indeces[mot.tile_origin] = 0;
                 }
             }
         }
@@ -271,24 +298,33 @@ public:
     after_step();
 
 public:
-    u64         player;
-    View        view;
-    Display     display;
-    Painter     painter;
-    Floor_Layer floor_layer;
-    Actor_Layer actor_layer;
+    u64     player;
+    View    view;
+    Grid    grid;
+    Display display;
+    Painter painter;
 };
 
 Title_State::Title_State()
     : player {0}
     , view {}
+    , grid {}
     , display {}
     , painter {}
-    , floor_layer {}
-    , actor_layer {}
 {
-    floor_layer.grid = Array2d<u64>(GRID_SIZE);
-    actor_layer.grid = Array2d<u64>(GRID_SIZE);
+    Grid_Layer layer;
+
+    grid.layers = Array<Grid_Layer>(LAYERS_COUNT);
+
+    for ( u64 i = 0; i < grid.layers.size; i += 1u ) {
+        layer.indeces = Array2d<u64>(GRID_SIZE);
+        layer.actions = Array<Grid_Action*>(ACTIONS_COUNT);
+
+        grid.push(layer);
+    }
+
+    grid.layers[0].push(&floor_layer_draw);
+    grid.layers[1].push(&actor_layer_draw);
 }
 
 void
@@ -299,22 +335,22 @@ Title_State::startup()
     Vec2u  pos;
 
     for ( u64 i = 0; i < GRID_AREA; i += 1u )
-        floor_layer.grid[i] = rand() % COLOURS_COUNT;
+        grid.layers[0].indeces[i] = rand() % COLOURS_COUNT;
 
-    for ( u64 i = 0; i < ACTOR_COUNT; i += 1u ) {
+    for ( u64 i = 0; i < ACTORS_COUNT; i += 1u ) {
         do {
             pos = {
                 rand() % GRID_SIZE[0],
                 rand() % GRID_SIZE[1],
             };
 
-            actor = actor_layer.grid[pos];
+            actor = grid.layers[1].indeces[pos];
         } while ( actor != 0 );
 
         CONTROLS[i].motion    = &motion_func_random;
         MOTION[i].tile_origin = pos;
-        MOTION[i].speed_limit = 15.0 * TILE_SIZE;
-        MOTION[i].status      = bit_write(MOTION[i].status, Motion::MOBILE, 1);
+        MOTION[i].speed_limit = rand() % 10 * TILE_SIZE;
+        MOTION[i].status      = bit_write(MOTION[i].status, Motion::MOBILE, MOTION[i].speed_limit != 0);
         COLOUR[i]             = {
             ((u8) rand() % 0x40) + 0xa0u,
             ((u8) rand() % 0x40) + 0xa0u,
@@ -324,11 +360,13 @@ Title_State::startup()
 
         POSITION[i].from(pos * TILE_SIZE);
 
-        actor_layer.grid[pos] = i + 1u;
+        grid.layers[1].indeces[pos] = i + 1u;
     }
 
-    COLOUR[player]          = {0xff, 0xff, 0xff, 0xff};
-    CONTROLS[player].motion = &motion_func_player;
+    CONTROLS[player].motion    = &motion_func_player;
+    MOTION[player].speed_limit = 10.0 * TILE_SIZE;
+    MOTION[player].status      = bit_write(MOTION[player].status, Motion::MOBILE, 1);
+    COLOUR[player]             = {0xff, 0xff, 0xff, 0xff};
 
     view.centre = POSITION[player] + TILE_HALF;
     view.unit   = TILE_SIZE;
@@ -382,53 +420,38 @@ Title_State::fixed_step(f64 time)
     SDL_PumpEvents();
 
     control();
-    collide(actor_layer);
-
-    move(actor_layer, time);
+    collide(grid.layers[1].indeces);
+    move(grid.layers[1].indeces, time);
 
     view.centre = POSITION[player] + TILE_HALF;
-
-#define PRINT_WORLD 0
-
-#if PRINT_WORLD
-    u64   index  = 0;
-    Vec4u limits = view.visible(GRID_SIZE);
-
-    system("clear");
-
-    for ( u64 j = 0; j < GRID_SIZE[1]; j += 1u ) {
-        for ( u64 i = 0; i < GRID_SIZE[0]; i += 1u ) {
-            index = actor_layer.grid[{i, j}];
-
-            if ( i >= limits[0] && i < limits[1] &&
-                 j >= limits[2] && j < limits[3])
-                printf("\x1b[46m");
-
-            if ( index != 0 )
-                printf("\x1b[93m%3lu\x1b[0m ", index);
-            else
-                printf("\x1b[90m ~ \x1b[0m ");
-        }
-
-        printf("\n");
-    }
-
-    printf("[%lu, %lu) x [%lu, %lu)\n",
-        limits[0], limits[1],
-        limits[2], limits[3]
-    );
-#endif
 }
 
 void
 Title_State::after_step()
 {
+    Draw_Context context;
+    Grid_Layer   layer;
+
+    context.painter = &painter;
+    context.view    = &view;
+
     painter.swap();
 
-    floor_layer.draw(view, painter);
-    actor_layer.draw(view, painter);
+    for ( u64 j = 0; j < grid.count; j += 1u ) {
+        layer = grid.layers[j];
+
+        for ( u64 i = 0; i < layer.count; i += 1u )
+            layer.actions[i](layer.indeces, &context);
+    }
 
     painter.show();
+
+    #define WRITE_WORLD 1
+
+    #if WRITE_WORLD
+        actor_layer_write(grid.layers[1].indeces, &context);
+    #endif
+
 }
 
 int
