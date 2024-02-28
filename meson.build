@@ -21,6 +21,7 @@ light_depend = [
 ]
 
 subdir('source/light/Base')
+subdir('source/light/Memory')
 subdir('source/light/Engine')
 
 executable('light',

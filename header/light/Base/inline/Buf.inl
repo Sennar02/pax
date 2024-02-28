@@ -1,17 +1,17 @@
-#include <light/Base/Buffer.hpp>
+#include <light/Base/Buf.hpp>
 
 namespace light
 {
     template <class Type, u64 Size>
     Type&
-    Buffer<Type, Size>::operator[](u64 index)
+    Buf<Type, Size>::operator[](u64 index)
     {
         return data[index];
     }
 
     template <class Type, u64 Size>
     const Type&
-    Buffer<Type, Size>::operator[](u64 index) const
+    Buf<Type, Size>::operator[](u64 index) const
     {
         return data[index];
     }

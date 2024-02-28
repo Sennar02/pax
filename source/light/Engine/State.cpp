@@ -2,6 +2,5 @@
 
 namespace light
 {
-    State::State()
-    {}
+    State::State() {}
 } // light

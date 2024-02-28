@@ -9,7 +9,7 @@ namespace light
     {
     public:
         /**
-         * Default constructor.
+         * Default constructor to make the compiler happy.
          */
         State();
 

@@ -73,10 +73,10 @@ namespace light
         return {};
     }
 
-    Buffer<String, 2u>
+    Buf<String, 2u>
     String::split(s8 byte) const
     {
-        Buffer<String, 2u> res;
+        Buf<String, 2u> res;
 
         res[0] = String(data, size);
 

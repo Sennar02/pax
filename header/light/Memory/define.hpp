@@ -5,6 +5,10 @@
 
 namespace light
 {
+    struct Alloc;
+    struct Bump_Alloc;
+    struct Pool_Alloc;
+
     template <class Type>
     struct Array;
 

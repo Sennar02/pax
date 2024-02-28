@@ -1,12 +1,12 @@
-#ifndef LIGHT_BASE_BUFFER_HPP
-#define LIGHT_BASE_BUFFER_HPP
+#ifndef LIGHT_BASE_BUF_HPP
+#define LIGHT_BASE_BUF_HPP
 
 #include <light/Base/define.hpp>
 
 namespace light
 {
     template <class Type, u64 Size>
-    struct Buffer
+    struct Buf
     {
     public:
         /**
@@ -41,6 +41,6 @@ namespace light
     };
 } // light
 
-#include <light/Base/inline/Buffer.inl>
+#include <light/Base/inline/Buf.inl>
 
-#endif // LIGHT_BASE_BUFFER_HPP
+#endif // LIGHT_BASE_BUF_HPP

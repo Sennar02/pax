@@ -3,11 +3,11 @@
 
 #include <light/Base/define.hpp>
 #include <light/Base/Opt.hpp>
-#include <light/Base/Buffer.hpp>
+#include <light/Base/Buf.hpp>
 
 namespace light
 {
-    using Byte_Table = Buffer<u8, 256u>;
+    using Byte_Table = Buf<u8, 256u>;
 
     /**
      * Commonly trimmed characters.
@@ -84,7 +84,7 @@ namespace light
          * one ranges from after the first occurrence of
          * the same byte to the end of the original string.
          */
-        Buffer<String, 2u>
+        Buf<String, 2u>
         split(char byte) const;
 
         /**

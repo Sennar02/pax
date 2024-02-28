@@ -5,8 +5,8 @@ namespace light
     u64
     bit_write(u64 mask, u64 bits, u8 state)
     {
-        return light_bit_set(mask, bits) * (state != 0) +
-               light_bit_clr(mask, bits) * (state == 0);
+        return (state != 0) * light_bit_set(mask, bits) +
+               (state == 0) * light_bit_clr(mask, bits);
     }
 
     u64
@@ -14,8 +14,8 @@ namespace light
     {
         u64 state = mask & bits;
 
-        return light_bit_set(mask, bits) * (state == 0) +
-               light_bit_clr(mask, bits) * (state != 0);
+        return (state == 0) * light_bit_set(mask, bits) +
+               (state != 0) * light_bit_clr(mask, bits);
     }
 
     u64

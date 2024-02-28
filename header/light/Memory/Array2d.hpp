@@ -13,16 +13,21 @@ namespace light
             sizeof(Type);
 
     public:
-        Type* data;
-        u64   size;
-        u64   cols;
-        u64   rows;
+        Type* data = 0;
+        u64   size = 0;
+        u64   cols = 0;
+        u64   rows = 0;
 
     public:
         /**
          *
          */
         Array2d();
+
+        /**
+         *
+         */
+        Array2d(void* data, Vec2u size);
 
         /**
          *
@@ -58,16 +63,23 @@ namespace light
 namespace light
 {
     template <class Type>
-    Array2d<Type>::Array2d()
-        : data {0}
-        , size {0}
-        , cols {0}
-        , rows {0}
-    {}
+    Array2d<Type>::Array2d() {}
+
+    template <class Type>
+    Array2d<Type>::Array2d(void* data, Vec2u size)
+    {
+        u64 area = size[0] * size[1];
+
+        if ( data != 0 && area != 0 ) {
+            this->data = (Type*) data;
+            this->size = area;
+            this->cols = size[0];
+            this->rows = size[1];
+        }
+    }
 
     template <class Type>
     Array2d<Type>::Array2d(Vec2u size)
-        : Array2d()
     {
         u64 area = size[0] * size[1];
 
