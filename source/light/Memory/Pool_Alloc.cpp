@@ -27,15 +27,14 @@ namespace light
         }
     }
 
-    Opt<void*>
+    void*
     Pool_Alloc::reserve(u64 bytes, u8 align)
     {
         s8*   pntr = remove(bytes, align);
         Pref* pref = (Pref*) (pntr - LEN_PREF);
 
         if ( pntr != 0 ) {
-            pref->flag =
-                bit_write(pref->flag, FLAG_USED, 1);
+            pref->flag = bits_write(pref->flag, FLAG_USED, 1);
 
             for ( u64 i = 0; i < page; i += 1u )
                 pntr[i] = 0;
@@ -43,7 +42,13 @@ namespace light
             return pntr;
         }
 
-        return {};
+        return 0;
+    }
+
+    void*
+    Pool_Alloc::reserve()
+    {
+        return reserve(page, 1u);
     }
 
     bool
@@ -55,9 +60,9 @@ namespace light
         if ( pntr == 0 ) return true;
 
         if ( pntr != 0 ) {
-            if ( bit_test(pref->flag, FLAG_USED) ) {
+            if ( bits_test(pref->flag, FLAG_USED) ) {
                 pref->flag =
-                    bit_write(pref->flag, FLAG_USED, 0);
+                    bits_write(pref->flag, FLAG_USED, 0);
 
                 return insert(pntr);
             }
@@ -67,21 +72,9 @@ namespace light
     }
 
     void
-    Pool_Alloc::reset()
-    {
-        reset(page, 1u);
-    }
-
-    Opt<void*>
-    Pool_Alloc::reserve()
-    {
-        return reserve(page, 1u);
-    }
-
-    void
     Pool_Alloc::reset(u64 page, u8 align)
     {
-        s8* addr  = data + round_diff(data, align, LEN_PREF);
+        s8* addr  = data + align_diff(data, align, LEN_PREF);
         u64 count = 0;
 
         if ( page < LEN_NODE ) return;
@@ -103,6 +96,12 @@ namespace light
         }
     }
 
+    void
+    Pool_Alloc::reset()
+    {
+        reset(page, 1u);
+    }
+
     bool
     Pool_Alloc::insert(void* addr)
     {
@@ -121,7 +120,7 @@ namespace light
     Pool_Alloc::remove(u64 bytes, u8 align)
     {
         Node* node = list;
-        u64   diff = round_diff(node, align, 0);
+        u64   diff = align_diff(node, align, 0);
 
         if ( node == 0 ) return 0;
 

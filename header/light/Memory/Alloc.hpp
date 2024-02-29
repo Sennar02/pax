@@ -11,7 +11,7 @@ namespace light
         /**
          *
          */
-        virtual Opt<void*>
+        virtual void*
         reserve(u64 bytes, u8 align) = 0;
 
         /**

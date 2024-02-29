@@ -13,7 +13,7 @@ namespace light
     }
 
     bool
-    Display::create(String title, Vec2u size, u32 flags)
+    Display::create(String title, v2u64 size, u32 flags)
     {
         data = SDL_CreateWindow(title.data,
             SDL_WINDOWPOS_CENTERED,

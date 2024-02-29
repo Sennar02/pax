@@ -29,7 +29,7 @@ namespace light
          *
          */
         bool
-        create(String title, Vec2u size, u32 flags = 0);
+        create(String title, v2u64 size, u32 flags = 0);
 
         /**
          *

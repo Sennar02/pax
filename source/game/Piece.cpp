@@ -2,7 +2,7 @@
 
 namespace game
 {
-    Vec2f
+    v2f64
     motion_func_empty(void*)
     {
         return {};

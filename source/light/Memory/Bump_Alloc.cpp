@@ -13,16 +13,16 @@ namespace light
         }
     }
 
-    Opt<void*>
+    void*
     Bump_Alloc::reserve(u64 bytes, u8 align)
     {
-        s8* pntr = addr + round_diff(addr, align, 0);
+        s8* pntr = addr + align_diff(addr, align, 0);
         s8* next = pntr + bytes;
 
-        if ( bytes == 0 ) return {};
+        if ( bytes == 0 ) return 0;
 
         if ( is_power_of_two(align) == false )
-            return {};
+            return 0;
 
         if ( next <= data + size ) {
             addr = next;
@@ -33,7 +33,7 @@ namespace light
             return pntr;
         }
 
-        return {};
+        return 0;
     }
 
     bool

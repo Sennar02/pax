@@ -14,35 +14,77 @@ namespace light
         struct Node;
         struct Pref;
 
-        u64   size = 0;
-        u64   page = 0;
-        s8*   data = 0;
+        /**
+         *
+         */
+        u64 size = 0;
+
+        /**
+         *
+         */
+        u64 page = 0;
+
+        /**
+         *
+         */
+        s8* data = 0;
+
+        /**
+         *
+         */
         Node* list = 0;
 
     public:
+        /**
+         *
+         */
         Pool_Alloc();
 
-        Pool_Alloc(void* data, u64 size, u64 page, u8 align);
+        /**
+         *
+         */
+        Pool_Alloc(void* data, u64 size, u64 page, u8 align = 8u);
 
-        Opt<void*>
-        reserve(u64 bytes, u8 align);
+        /**
+         *
+         */
+        void*
+        reserve(u64 bytes, u8 align = 1u);
 
+        /**
+         *
+         */
+        void*
+        reserve();
+
+        /**
+         *
+         */
         bool
         reclaim(void* addr);
 
+        /**
+         *
+         */
+        void
+        reset(u64 page, u8 align = 8u);
+
+        /**
+         *
+         */
         void
         reset();
 
-        Opt<void*>
-        reserve();
-
-        void
-        reset(u64 page, u8 align);
-
     private:
+        /**
+         *
+         */
         bool
         insert(void* addr);
 
+        /**
+         *
+         */
         s8*
         remove(u64 bytes, u8 align);
     };

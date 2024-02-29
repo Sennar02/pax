@@ -28,13 +28,13 @@ namespace light
 
     public:
         /**
-         * Subscript operator, doesn't test bounds.
+         * Subscript operator.
          */
         Type&
         operator[](u64 index);
 
         /**
-         * Subscript operator, doesn't test bounds.
+         * Subscript operator.
          */
         const Type&
         operator[](u64 index) const;

@@ -22,7 +22,7 @@ namespace light
 
     public:
         /**
-         * Creates a vector from one of another type.
+         * Populates the vector from one of another type.
          */
         template <class Other>
         void
@@ -114,7 +114,7 @@ namespace light
         operator*=(Vec<Other, Size> other);
 
         /**
-         * Performs the Hadamard multiplication on the vector a scalar.
+         * Performs the Hadamard multiplication on the vector with a scalar.
          */
         template <class Other>
         Vec<Type, Size>&
@@ -142,20 +142,20 @@ namespace light
         operator/=(Vec<Other, Size> other);
 
         /**
-         * Performs the Hadamard division on the vector a scalar.
+         * Performs the Hadamard division on the vector with a scalar.
          */
         template <class Other>
         Vec<Type, Size>&
         operator/=(Other other);
 
         /**
-         * Subscript operator, doesn't test bounds.
+         * Subscript operator.
          */
         Type&
         operator[](u64 index);
 
         /**
-         * Subscript operator, doesn't test bounds.
+         * Subscript operator.
          */
         const Type&
         operator[](u64 index) const;

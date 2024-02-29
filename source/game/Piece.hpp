@@ -11,7 +11,7 @@ namespace game
      * Part of an actor which determines its position
      * in world coordinated.
      */
-    using Position = Vec2f;
+    using Position = v2f64;
 
     /**
      * Part of an actor which changes its position.
@@ -29,7 +29,7 @@ namespace game
          * be only -1, 0 or +1. I don't know what
          * happens otherwise.
          */
-        Vec2f step_value = {};
+        v2f64 step_value = {};
 
         /**
          * Movement direction in tile relative
@@ -37,17 +37,17 @@ namespace game
          * used to correct possible errors and
          * free to change even during the movement.
          */
-        Vec2f step_input = {};
+        v2f64 step_input = {};
 
         /**
          * Position in grid coordinates.
          */
-        Vec2u tile_origin = {};
+        v2u64 tile_origin = {};
 
         /**
          * Destination in grid coordinates.
          */
-        Vec2u tile_finish = {};
+        v2u64 tile_finish = {};
 
         /**
          * Maximum movement speed.
@@ -89,14 +89,14 @@ namespace game
     /**
      * Helper type definition for a motion controls function.
      */
-    using Motion_Func = Vec2f(void* self);
+    using Motion_Func = v2f64(void* self);
 
     /**
      * The simplest and default function for
      * the motion controls. It always returns
      * a (0, 0) vector.
      */
-    Vec2f
+    v2f64
     motion_func_empty(void* self);
 
     /**

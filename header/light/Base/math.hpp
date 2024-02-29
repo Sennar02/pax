@@ -5,18 +5,43 @@
 
 namespace light
 {
+    /**
+     * Truncates the number by discarding the
+     * fractional part and adding one.
+     *
+     * For example:
+     *  1) 0.12  will produce 1
+     *  2) 7.999 will produce 8
+     */
     s64
-    round_top(f64 val);
+    trunc_top(f64 val);
 
+    /**
+     * Truncates the number by discarding the
+     * fractional part.
+     *
+     * For example:
+     *  1) 0.12  will produce 0
+     *  2) 7.999 will produce 7
+     */
     s64
-    round_bot(f64 val);
+    trunc_bot(f64 val);
 
+    /**
+     * Truncates the number by rounding the value.
+     *
+     * For example:
+     *  1) 0.12  will produce 0
+     *  2) 7.999 will produce 8
+     *  3) 3.49  will produce 3
+     *  4) 3.50  will produce 4
+     */
     s64
-    round(f64 val);
+    trunc_rnd(f64 val);
 } // light
 
 /**
- * Compares two values and chooses the bigger one.
+ * Compares two values and chooses the larger one.
  */
 #define light_max(a, b) \
     (a < b ? b : a)
@@ -28,8 +53,8 @@ namespace light
     (a < b ? a : b)
 
 /**
- * Determines if a value is inside a range. The
- * range is assumed to be in the form [a, b].
+ * Determines if a value is inside a range in
+ * the form [a, b].
  *
  * Note: The case a > b is tested.
  */
@@ -37,8 +62,7 @@ namespace light
     (a <= b && a <= v && v <= b)
 
 /**
- * Confines a value within a range. The range
- * is assumed to be in the form [a, b].
+ * Confines a value within a range in the form [a, b].
  */
 #define light_clamp(a, b, v) \
     light_min(b, light_max(a, v))

@@ -26,7 +26,7 @@ namespace light
         /**
          *
          */
-        Alloc* alloc = 0;
+        Alloc* orig = 0;
 
         /**
          *
@@ -57,7 +57,7 @@ namespace light
         /**
          *
          */
-        Array2d(void* data, Vec2u size);
+        Array2d(void* data, v2u64 size);
 
         /**
          *
@@ -68,13 +68,13 @@ namespace light
          *
          */
         bool
-        create(Vec2u size);
+        create(v2u64 size, Alloc* alloc);
 
         /**
          *
          */
         bool
-        create(Vec2u size, Alloc* alloc);
+        create(v2u64 size);
 
         /**
          *
@@ -86,13 +86,13 @@ namespace light
          *
          */
         Type&
-        operator[](Vec2u index);
+        operator[](v2u64 index);
 
         /**
          *
          */
         const Type&
-        operator[](Vec2u index) const;
+        operator[](v2u64 index) const;
 
         /**
          *

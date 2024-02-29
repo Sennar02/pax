@@ -2,24 +2,24 @@
 
 namespace light
 {
-    Vec2f
+    v2f64
     View::offset() const
     {
         return centre - size * (unit / 2u);
     }
 
-    Vec4u
-    View::visible(Vec2u limits) const
+    v4u64
+    View::visible(v2u64 limits) const
     {
-        Vec2u half = size * (unit / 2u);
-        Vec2f min  = centre - half;
-        Vec2f max  = centre + half;
+        v2u64 half = size * (unit / 2u);
+        v2f64 min  = centre - half;
+        v2f64 max  = centre + half;
 
-        Vec4u bounds = {
-            (u64) light_max(round_bot(min[0] - unit), 0),
-            (u64) light_max(round_top(max[0] + unit), 0),
-            (u64) light_max(round_bot(min[1] - unit), 0),
-            (u64) light_max(round_top(max[1] + unit), 0),
+        v4u64 bounds = {
+            (u64) light_max(trunc_bot(min[0] - unit), 0),
+            (u64) light_max(trunc_top(max[0] + unit), 0),
+            (u64) light_max(trunc_bot(min[1] - unit), 0),
+            (u64) light_max(trunc_top(max[1] + unit), 0),
         };
 
         bounds[1] = light_min(bounds[1], limits[0] * unit);

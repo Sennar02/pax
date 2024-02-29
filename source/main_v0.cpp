@@ -8,14 +8,14 @@
 using namespace game;
 
 static const u64   TILE_SIZE    = 48u;        // Pixels.
-static const Vec2u GRID_SIZE    = {45u, 25u}; // Tiles.
-static const Vec2u VIEW_SIZE    = {16u, 9u};  // Tiles.
-static const Vec2u DISPLAY_SIZE = {16u, 9u};  // Tiles.
+static const v2u64 GRID_SIZE    = {45u, 25u}; // Tiles.
+static const v2u64 VIEW_SIZE    = {16u, 9u};  // Tiles.
+static const v2u64 DISPLAY_SIZE = {16u, 9u};  // Tiles.
 
 static const u64   TILE_HALF    = TILE_SIZE / 2u;
-static const Vec2u GRID_HALF    = GRID_SIZE / 2u;
-static const Vec2u VIEW_HALF    = VIEW_SIZE / 2u;
-static const Vec2u DISPLAY_HALF = DISPLAY_SIZE / 2u;
+static const v2u64 GRID_HALF    = GRID_SIZE / 2u;
+static const v2u64 VIEW_HALF    = VIEW_SIZE / 2u;
+static const v2u64 DISPLAY_HALF = DISPLAY_SIZE / 2u;
 
 static const u64 GRID_AREA =
     GRID_SIZE[0] * GRID_SIZE[1];
@@ -28,7 +28,7 @@ static const u64 ACTIONS_COUNT = 1u;
 static const u64 COLOURS_COUNT = 4u;
 
 // TODO: Implement a tile system.
-static const Vec4u COLOURS_FLOOR[COLOURS_COUNT] = {
+static const v4u64 COLOURS_FLOOR[COLOURS_COUNT] = {
     {0x32, 0x70, 0x00, 0xff},
     {0x00, 0x70, 0x05, 0xff},
     {0x6a, 0x70, 0x00, 0xff},
@@ -38,7 +38,7 @@ static const Vec4u COLOURS_FLOOR[COLOURS_COUNT] = {
 // TODO: Implement an input system.
 static const u8* KEYBOARD = 0;
 
-static Array<Vec4u>    COLOUR   = Array<Vec4u>(ACTORS_COUNT);
+static Array<v4u64>    COLOUR   = Array<v4u64>(ACTORS_COUNT);
 static Array<Position> POSITION = Array<Position>(ACTORS_COUNT);
 static Array<Motion>   MOTION   = Array<Motion>(ACTORS_COUNT);
 static Array<Controls> CONTROLS = Array<Controls>(ACTORS_COUNT);
@@ -57,10 +57,10 @@ floor_layer_draw(Array2d<u64>& indeces, void* extra)
 
     Painter painter = *context->painter;
     View    view    = *context->view;
-    Vec2f   offset  = view.offset();
-    Vec4u   bounds  = view.visible({indeces.cols, indeces.rows});
-    Vec4u   colour  = {};
-    Vec4f   tile    = {};
+    v2f64   offset  = view.offset();
+    v4u64   bounds  = view.visible({indeces.cols, indeces.rows});
+    v4u64   colour  = {};
+    v4f64   tile    = {};
 
     tile[2] = tile[3] = view.unit;
 
@@ -88,10 +88,10 @@ actor_layer_draw(Array2d<u64>& indeces, void* extra)
 
     Painter painter = *context->painter;
     View    view    = *context->view;
-    Vec2f   offset  = view.offset();
-    Vec4u   bounds  = view.visible({indeces.cols, indeces.rows});
-    Vec4u   colour  = {};
-    Vec4f   tile    = {};
+    v2f64   offset  = view.offset();
+    v4u64   bounds  = view.visible({indeces.cols, indeces.rows});
+    v4u64   colour  = {};
+    v4f64   tile    = {};
     u64     actor   = 0;
 
     tile[2] = tile[3] = view.unit;
@@ -124,7 +124,7 @@ actor_layer_write(Array2d<u64>& indeces, void* extra)
     if ( context == 0 ) return;
 
     View  view   = *context->view;
-    Vec4u bounds = view.visible({indeces.cols, indeces.rows});
+    v4u64 bounds = view.visible({indeces.cols, indeces.rows});
     u64   index  = 0;
 
     system("clear");
@@ -152,7 +152,7 @@ actor_layer_write(Array2d<u64>& indeces, void* extra)
     );
 }
 
-Vec2f
+v2f64
 motion_func_player(void*)
 {
     static const u64 DIR_NORTH = SDL_SCANCODE_W;
@@ -166,7 +166,7 @@ motion_func_player(void*)
     };
 }
 
-Vec2f
+v2f64
 motion_func_random(void*)
 {
     if ( rand() % 10u == 0 )
@@ -182,7 +182,7 @@ control()
         Motion&   mot = MOTION[i];
         Controls& ctl = CONTROLS[i];
 
-        if ( bit_test(mot.status, Motion::MOBILE) )
+        if ( bits_test(mot.status, Motion::MOBILE) )
             mot.step_input = ctl.motion(0);
     }
 }
@@ -191,13 +191,13 @@ void
 collide(Array2d<u64>& indeces)
 {
     static const u64   DIRS_COUNT       = 3u;
-    static const Vec2u DIRS[DIRS_COUNT] = {
+    static const v2u64 DIRS[DIRS_COUNT] = {
         {1u, 0}, {0, 1u}, {1u, 1u},
     };
 
-    Vec2u next = {};
-    Vec2u tile = {};
-    Vec2f part = {};
+    v2u64 next = {};
+    v2u64 tile = {};
+    v2f64 part = {};
 
     for ( u64 j = 0; j < ACTORS_COUNT; j += 1u ) {
         Motion& mot = MOTION[j];
@@ -226,22 +226,22 @@ move(Array2d<u64>& indeces, f64 time)
 {
     f64   dist = 0;
     f64   incr = 0;
-    Vec2f stop = {};
+    v2f64 stop = {};
 
     for ( u64 j = 0; j < ACTORS_COUNT; j += 1u ) {
         Motion&   mot = MOTION[j];
         Position& pos = POSITION[j];
 
-        if ( bit_test(mot.status, Motion::MOBILE) &&
-             bit_test(mot.status, Motion::MOVING) == false ) {
-            if ( mot.step_input != Vec2f {} ) {
+        if ( bits_test(mot.status, Motion::MOBILE) &&
+             bits_test(mot.status, Motion::MOVING) == false ) {
+            if ( mot.step_input != v2f64 {} ) {
                 mot.tile_origin.from(pos / TILE_SIZE);
                 mot.tile_finish = mot.tile_origin + mot.step_input;
 
                 if ( indeces[mot.tile_finish] == 0 ) {
                     mot.step_value  = mot.step_input;
                     mot.speed_value = mot.speed_limit / mot.step_value.magnitude();
-                    mot.status      = bit_write(mot.status, Motion::MOVING, 1);
+                    mot.status      = bits_write(mot.status, Motion::MOVING, 1);
 
                     indeces[mot.tile_finish] = j + 1u;
                     indeces[mot.tile_origin] = 0;
@@ -249,7 +249,7 @@ move(Array2d<u64>& indeces, f64 time)
             }
         }
 
-        if ( bit_test(mot.status, Motion::MOVING) ) {
+        if ( bits_test(mot.status, Motion::MOVING) ) {
             stop.from(mot.tile_finish * TILE_SIZE);
 
             for ( u64 i = 0; i < mot.step_value.SIZE; i += 1u ) {
@@ -263,7 +263,7 @@ move(Array2d<u64>& indeces, f64 time)
             }
 
             if ( pos == stop ) {
-                mot.status      = bit_write(mot.status, Motion::MOVING, 0);
+                mot.status      = bits_write(mot.status, Motion::MOVING, 0);
                 mot.tile_origin = mot.tile_finish;
             }
         }
@@ -332,7 +332,7 @@ Title_State::startup()
 {
     String title = String("Light", 0, 5u);
     u64    actor = 0;
-    Vec2u  pos;
+    v2u64  pos;
 
     for ( u64 i = 0; i < GRID_AREA; i += 1u )
         grid.layers[0].indeces[i] = rand() % COLOURS_COUNT;
@@ -350,7 +350,7 @@ Title_State::startup()
         CONTROLS[i].motion    = &motion_func_random;
         MOTION[i].tile_origin = pos;
         MOTION[i].speed_limit = rand() % 10 * TILE_SIZE;
-        MOTION[i].status      = bit_write(MOTION[i].status, Motion::MOBILE, MOTION[i].speed_limit != 0);
+        MOTION[i].status      = bits_write(MOTION[i].status, Motion::MOBILE, MOTION[i].speed_limit != 0);
         COLOUR[i]             = {
             ((u8) rand() % 0x40) + 0xa0u,
             ((u8) rand() % 0x40) + 0xa0u,
@@ -365,7 +365,7 @@ Title_State::startup()
 
     CONTROLS[player].motion    = &motion_func_player;
     MOTION[player].speed_limit = 10.0 * TILE_SIZE;
-    MOTION[player].status      = bit_write(MOTION[player].status, Motion::MOBILE, 1);
+    MOTION[player].status      = bits_write(MOTION[player].status, Motion::MOBILE, 1);
     COLOUR[player]             = {0xff, 0xff, 0xff, 0xff};
 
     view.centre = POSITION[player] + TILE_HALF;

@@ -37,17 +37,17 @@ namespace light {
     template <class Type, u64 Size>
     struct Vec;
 
-    using Vec2u = Vec<u64, 2u>;
-    using Vec2s = Vec<s64, 2u>;
-    using Vec2f = Vec<f64, 2u>;
+    using v2u64 = Vec<u64, 2u>;
+    using v2s64 = Vec<s64, 2u>;
+    using v2f64 = Vec<f64, 2u>;
 
-    using Vec3u = Vec<u64, 3u>;
-    using Vec3s = Vec<s64, 3u>;
-    using Vec3f = Vec<f64, 3u>;
+    using v3u64 = Vec<u64, 3u>;
+    using v3s64 = Vec<s64, 3u>;
+    using v3f64 = Vec<f64, 3u>;
 
-    using Vec4u = Vec<u64, 4u>;
-    using Vec4s = Vec<s64, 4u>;
-    using Vec4f = Vec<f64, 4u>;
+    using v4u64 = Vec<u64, 4u>;
+    using v4s64 = Vec<s64, 4u>;
+    using v4f64 = Vec<f64, 4u>;
 
     /**
      * Simple static array of arbitrary

@@ -26,7 +26,7 @@ namespace light
         /**
          *
          */
-        Alloc* alloc = 0;
+        Alloc* orig = 0;
 
         /**
          *
@@ -58,13 +58,13 @@ namespace light
          *
          */
         bool
-        create(u64 size);
+        create(u64 size, Alloc* alloc);
 
         /**
          *
          */
         bool
-        create(u64 size, Alloc* alloc);
+        create(u64 size);
 
         /**
          *

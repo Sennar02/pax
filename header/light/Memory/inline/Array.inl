@@ -17,7 +17,19 @@ namespace light
     template <class Type>
     Array<Type>::Array(Alloc* alloc)
     {
-        this->alloc = alloc;
+        this->orig = alloc;
+    }
+
+    template <class Type>
+    bool
+    Array<Type>::create(u64 size, Alloc* alloc)
+    {
+        if ( data != 0 )
+            return false;
+
+        this->orig = alloc;
+
+        return create(size);
     }
 
     template <class Type>
@@ -27,10 +39,8 @@ namespace light
         u64        bytes = LEN_TYPE * size;
         Opt<void*> block;
 
-        if ( data != 0 ) return false;
-
-        if ( alloc != 0 ) {
-            block = alloc->reserve(bytes, ALG_TYPE);
+        if ( orig != 0 && data == 0 ) {
+            block = orig->reserve(bytes, ALG_TYPE);
 
             if ( block.is_valid ) {
                 this->data = (Type*) block.item;
@@ -45,24 +55,12 @@ namespace light
 
     template <class Type>
     bool
-    Array<Type>::create(u64 size, Alloc* alloc)
-    {
-        if ( data != 0 )
-            return false;
-
-        this->alloc = alloc;
-
-        return create(size);
-    }
-
-    template <class Type>
-    bool
     Array<Type>::destroy()
     {
         bool res = false;
 
-        if ( alloc != 0 && data != 0 ) {
-            res = alloc->reclaim(data);
+        if ( orig != 0 && data != 0 ) {
+            res = orig->reclaim(data);
 
             if ( res ) {
                 this->data = 0;

@@ -38,9 +38,9 @@ namespace light
          * specific size for the string.
          *
          * WARNING: This function cannot test if the
-         *          size is valid, for this providing
-         * a size larger than the allocated space could
-         * lead to:
+         *          size is valid, because of this
+         * providing a size larger than the allocated
+         * space could lead to:
          *  - memory corruptions,
          *  - crashes,
          *  - vulnerabilities.
@@ -79,37 +79,47 @@ namespace light
 
         /**
          * Creates two substrings. The first one ranges from
-         * the start of the original string to the first
-         * occurrence of a specific byte included, the second
+         * the start of the original string until the first
+         * occurrence of a specific byte, while the second
          * one ranges from after the first occurrence of
          * the same byte to the end of the original string.
+         *
+         * For example:
+         *  1) String("Byte byte!", 10u).split(' ')
+         *      will produce ["Byte", "byte!"]
+         *
+         *  2) String("Byte byte!", 10u).split('!')
+         *      will produce ["Byte byte", ""]
+         *
+         *  3) String("Byte byte!", 10u).split('B')
+         *      will produce ["", "yte byte!"]
          */
         Buf<String, 2u>
         split(char byte) const;
 
         /**
          * Excludes from the head of the string any byte
-         * specified in the table until it finds an exception.
+         * specified in the table.
          */
         String&
         trim_left(const Byte_Table& table = STRING_TRIM);
 
         /**
          * Excludes from the tail of the string any byte
-         * specified in the table until it finds an exception.
+         * specified in the table.
          */
         String&
         trim_right(const Byte_Table& table = STRING_TRIM);
 
         /**
-         * Excludes from both sides of the string any byte
-         * specified in the table until it finds an exception.
+         * Excludes from both ends of the string any byte
+         * specified in the table.
          */
         String&
         trim(const Byte_Table& table = STRING_TRIM);
 
         /**
-         * Subscript operator, doesn't test bounds.
+         * Subscript operator.
          */
         const s8&
         operator[](u64 index) const;
@@ -119,7 +129,7 @@ namespace light
      * Tries to read an unsigned integer from a string.
      *
      * The number has to be in the following form:
-     *  - Any digit inside the table.
+     *  - Any digit from 0 to 9.
      */
     u64
     parse_u64(String string);
@@ -129,7 +139,7 @@ namespace light
      *
      * The number has to be in the following form:
      *  - Optional "+" or "-",
-     *  - Any digit inside the table.
+     *  - Any digit from 0 to 9.
      *
      * It tries to match as much as possible before
      * returning.
@@ -147,12 +157,12 @@ namespace light
      *
      * The number has to be in the following form:
      *  - Optional "+" or "-",
-     *  - Any digit inside the table,
+     *  - Any digit from 0 to 9,
      *  - Optional ".",
-     *  - Any digit inside the table,
-     *  - Optional "e",
+     *  - Any digit from 0 to 9,
+     *  - Optional "e" or "E",
      *  - Optional "+" or "-",
-     *  - Any digit inside the table.
+     *  - Any digit from 0 to 9.
      *
      * It tries to match as much as possible before
      * returning.

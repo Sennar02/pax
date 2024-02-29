@@ -11,8 +11,19 @@ namespace light
         : public Alloc
     {
     public:
+        /**
+         *
+         */
         u64 size = 0;
+
+        /**
+         *
+         */
         s8* data = 0;
+
+        /**
+         *
+         */
         s8* addr = 0;
 
     public:
@@ -29,8 +40,8 @@ namespace light
         /**
          *
          */
-        Opt<void*>
-        reserve(u64 bytes, u8 align);
+        void*
+        reserve(u64 bytes, u8 align = 8u);
 
         /**
          *

@@ -47,7 +47,7 @@ namespace light
     }
 
     void
-    Painter::set_colour(Vec4u rgba)
+    Painter::set_colour(v4u64 rgba)
     {
         SDL_SetRenderDrawColor(data,
             rgba[0], rgba[1],
@@ -56,7 +56,7 @@ namespace light
     }
 
     void
-    Painter::fill_rect(Vec4f border)
+    Painter::fill_rect(v4f64 border)
     {
         SDL_Rect rect = {
             (s32) border[0], // x

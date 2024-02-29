@@ -12,7 +12,7 @@ main(int, const char*[])
 
     printf("%lu, %p\n",
         alloc.size,
-        alloc.data
+        (void*) alloc.data
     );
 
     array.create({2, 2});
