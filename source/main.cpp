@@ -7,21 +7,22 @@ main(int, const char*[])
 {
     Buf<s8, 32u> memory = {};
 
-    Pool_Alloc alloc = Pool_Alloc(memory.data, memory.SIZE, 16u, 8u);
-    Array<s32> array = Array<s32>(&alloc);
+    Bump_Alloc   alloc = Bump_Alloc(memory.data, memory.SIZE);
+    Array2d<s32> array = Array2d<s32>(&alloc);
 
-    printf("%lu, %lu, %p\n",
+    printf("%lu, %p\n",
         alloc.size,
-        alloc.page,
         alloc.data
     );
 
-    array.create(alloc.page / array.LEN_TYPE);
+    array.create({2, 2});
 
     if ( array.size != 0 ) {
         for ( u64 i = 0; i < array.size; i += 1u )
             printf("%u\n", array[i]);
     }
+
+    array[1000];
 
     printf("%u\n", array.destroy());
     printf("%lu\n", array.size);

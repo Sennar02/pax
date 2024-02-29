@@ -219,6 +219,11 @@ namespace light
     Type&
     Vec<Type, Size>::operator[](u64 index)
     {
+        #if LIGHT_TEST_BOUNDS
+            if ( index >= SIZE )
+                light_panic("test-bounds", "index %lu exceeds %lu", index, SIZE);
+        #endif
+
         return data[index];
     }
 
@@ -226,6 +231,11 @@ namespace light
     const Type&
     Vec<Type, Size>::operator[](u64 index) const
     {
+        #if LIGHT_TEST_BOUNDS
+            if ( index >= SIZE )
+                light_panic("test-bounds", "index %lu exceeds %lu", index, SIZE);
+        #endif
+
         return data[index];
     }
 
@@ -251,53 +261,5 @@ namespace light
         }
 
         return false;
-    }
-
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_mul_scale(Vec<Type, Size> a, Vec<Other, Size> b)
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < res.SIZE; i += 1u )
-            res.data[i] = a.data[i] * b.data[i];
-
-        return res;
-    }
-
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_smul_scale(Vec<Type, Size> a, Other b)
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < res.SIZE; i += 1u )
-            res.data[i] = a.data[i] * b;
-
-        return res;
-    }
-
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_div_scale(Vec<Type, Size> a, Vec<Other, Size> b)
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < res.SIZE; i += 1u )
-            res.data[i] = a.data[i] / b.data[i];
-
-        return res;
-    }
-
-    template <class Type, class Other, u64 Size>
-    Vec<Type, Size>
-    vec_sdiv_scale(Vec<Type, Size> a, Other b)
-    {
-        Vec<Type, Size> res;
-
-        for ( u64 i = 0; i < res.SIZE; i += 1u )
-            res.data[i] = a.data[i] / b;
-
-        return res;
     }
 } // light

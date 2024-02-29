@@ -82,11 +82,8 @@ namespace light
 
         for ( u64 i = 0; i < size; i += 1u ) {
             if ( data[i] == byte ) {
+                res[1] = String(data + i + 1u, size - i - 1u);
                 res[0] = String(data, i);
-                res[1] = String(
-                    data + i + 1u,
-                    size - i - 1u
-                );
 
                 break;
             }
@@ -146,6 +143,11 @@ namespace light
     const s8&
     String::operator[](u64 index) const
     {
+        #if LIGHT_TEST_BOUNDS
+            if ( index >= size )
+                light_panic("test-bounds", "index %lu exceeds %lu", index, size);
+        #endif
+
         return data[index];
     }
 

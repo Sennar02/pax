@@ -10,7 +10,7 @@ namespace light
         u64 flag;
     };
 
-    static const u64 PREF_OCCUPIED = 1;
+    static const u64 FLAG_USED = 1;
 
     static const u64 LEN_NODE = sizeof(Pool_Alloc::Node);
     static const u64 LEN_PREF = sizeof(Pool_Alloc::Pref);
@@ -35,7 +35,7 @@ namespace light
 
         if ( pntr != 0 ) {
             pref->flag =
-                bit_write(pref->flag, PREF_OCCUPIED, 1);
+                bit_write(pref->flag, FLAG_USED, 1);
 
             for ( u64 i = 0; i < page; i += 1u )
                 pntr[i] = 0;
@@ -55,9 +55,9 @@ namespace light
         if ( pntr == 0 ) return true;
 
         if ( pntr != 0 ) {
-            if ( bit_test(pref->flag, PREF_OCCUPIED) ) {
+            if ( bit_test(pref->flag, FLAG_USED) ) {
                 pref->flag =
-                    bit_write(pref->flag, PREF_OCCUPIED, 0);
+                    bit_write(pref->flag, FLAG_USED, 0);
 
                 return insert(pntr);
             }

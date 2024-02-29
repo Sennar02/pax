@@ -110,15 +110,20 @@ namespace light {
     static const u8 LEN_UPTR = sizeof(uptr);
 
     // Size in bytes for signed integer types.
-    static const u8 LEN_S8   = LEN_U8;
-    static const u8 LEN_S16  = LEN_U16;
-    static const u8 LEN_S32  = LEN_U32;
-    static const u8 LEN_S64  = LEN_U64;
-    static const u8 LEN_SPTR = LEN_UPTR;
+    static const u8 LEN_S8   = sizeof(s8);
+    static const u8 LEN_S16  = sizeof(s16);
+    static const u8 LEN_S32  = sizeof(s32);
+    static const u8 LEN_S64  = sizeof(s64);
+    static const u8 LEN_SPTR = sizeof(sptr);
 
     // Size in bytes for floating point types.
-    static const u8 LEN_F32 = LEN_U32;
-    static const u8 LEN_F64 = LEN_F64;
+    static const u8 LEN_F32 = sizeof(f32);
+    static const u8 LEN_F64 = sizeof(f64);
 } // light
+
+#define LIGHT_TEST_BOUNDS true
+
+#define light_panic(cat, msg, ...) \
+    fprintf(stderr, "[%s@%u] {" cat ": " msg "}\n", __FILE__, __LINE__, __VA_ARGS__), exit(1);
 
 #endif // LIGHT_BASE_DEFINE_HPP
