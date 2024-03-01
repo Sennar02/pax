@@ -19,21 +19,38 @@ namespace light
     }
 
     template <class Type>
-    Array2d<Type>::Array2d(Alloc* alloc)
+    Array2d<Type>::Array2d(v2u64 size, Alloc* alloc)
     {
-        this->orig = alloc;
+        create(size, alloc);
     }
 
     template <class Type>
     bool
     Array2d<Type>::create(v2u64 size, Alloc* alloc)
     {
-        if ( data != 0 )
+        u64        total = size[0] * size[1];
+        u64        bytes = LEN_TYPE * total;
+        Opt<void*> block;
+
+        if ( alloc != 0 && data != 0 )
             return false;
 
         this->orig = alloc;
 
-        return create(size);
+        if ( orig != 0 && data == 0 ) {
+            block = orig->reserve(bytes, ALG_TYPE);
+
+            if ( block.is_valid ) {
+                this->data = (Type*) block.item;
+                this->size = total;
+                this->cols = size[0];
+                this->rows = size[1];
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     template <class Type>

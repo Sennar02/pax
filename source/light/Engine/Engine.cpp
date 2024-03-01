@@ -1,38 +1,8 @@
 #include <light/Engine/Engine.hpp>
 
-namespace sdl
-{
-    using namespace light;
-
-    f64
-    get_seconds()
-    {
-        return SDL_GetTicks() / 1000.0;
-    }
-} // sdl
-
 namespace light
 {
-    Timer::Timer()
-        : time {0}
-        , last {0}
-    {}
-
-    f64
-    Timer::elapsed()
-    {
-        last = time;
-        time = sdl::get_seconds();
-
-        if ( time < last )
-            return time - (last - time);
-
-        return time - last;
-    }
-
-    Engine::Engine()
-        : timer {}
-    {}
+    Engine::Engine() {}
 
     bool
     Engine::execute(State* state, u64 frame_rate)
@@ -45,7 +15,9 @@ namespace light
         state->startup();
 
         while ( true ) {
-            time += timer.elapsed();
+            timer.update();
+
+            time += timer.delta();
 
             if ( state->input() ) {
                 for ( ; time >= step; time -= step )

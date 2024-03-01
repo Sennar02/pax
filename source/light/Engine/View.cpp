@@ -2,29 +2,42 @@
 
 namespace light
 {
-    v2f64
-    View::offset() const
+    v4f64
+    View::bounds() const
     {
-        return centre - size * (unit / 2u);
+        f64   fact = unit / (factor * 2u);
+        v2f64 orig = centre - size * fact;
+        v2f64 stop = centre + size * fact;
+
+        return {
+            orig[0], orig[1],
+            stop[0], stop[1],
+        };
+    }
+
+    v4s64
+    View::snap(v4f64 bounds) const
+    {
+        bounds /= unit;
+
+        return {
+            trunc_bot(bounds[0] - 1),
+            trunc_bot(bounds[1] - 1),
+            trunc_top(bounds[2] + 1),
+            trunc_top(bounds[3] + 1),
+        };
     }
 
     v4u64
-    View::visible(v2u64 limits) const
+    View::cull(v4f64 bounds, v4u64 limits) const
     {
-        v2u64 half = size * (unit / 2u);
-        v2f64 min  = centre - half;
-        v2f64 max  = centre + half;
+        v4s64 truncs = snap(bounds);
 
-        v4u64 bounds = {
-            (u64) light_max(trunc_bot(min[0] - unit), 0),
-            (u64) light_max(trunc_top(max[0] + unit), 0),
-            (u64) light_max(trunc_bot(min[1] - unit), 0),
-            (u64) light_max(trunc_top(max[1] + unit), 0),
+        return {
+            light_max(limits[0], (u64) light_max(0, truncs[0])),
+            light_max(limits[1], (u64) light_max(0, truncs[1])),
+            light_min(limits[2], (u64) light_max(0, truncs[2])),
+            light_min(limits[3], (u64) light_max(0, truncs[3])),
         };
-
-        bounds[1] = light_min(bounds[1], limits[0] * unit);
-        bounds[3] = light_min(bounds[3], limits[1] * unit);
-
-        return bounds / unit;
     }
 } // light

@@ -52,7 +52,7 @@ namespace light
         /**
          *
          */
-        Array(Alloc* alloc);
+        Array(u64 size, Alloc* alloc);
 
         /**
          *

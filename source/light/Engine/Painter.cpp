@@ -47,12 +47,24 @@ namespace light
     }
 
     void
+    Painter::scale(f64 factor)
+    {
+        SDL_RenderSetScale(data, factor, factor);
+    }
+
+    void
     Painter::set_colour(v4u64 rgba)
     {
         SDL_SetRenderDrawColor(data,
             rgba[0], rgba[1],
             rgba[2], rgba[3]
         );
+    }
+
+    void
+    Painter::set_blend_mode(Blend_Mode mode)
+    {
+        SDL_SetRenderDrawBlendMode(data, (SDL_BlendMode) mode);
     }
 
     void

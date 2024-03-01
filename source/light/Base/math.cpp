@@ -3,7 +3,7 @@
 namespace light
 {
     s64
-    round_top(f64 val)
+    trunc_top(f64 val)
     {
         s64 res = val;
 
@@ -14,7 +14,7 @@ namespace light
     }
 
     s64
-    round_bot(f64 val)
+    trunc_bot(f64 val)
     {
         s64 res = val;
 
@@ -25,7 +25,7 @@ namespace light
     }
 
     s64
-    round(f64 val)
+    trunc(f64 val)
     {
         return val + 0.5;
     }

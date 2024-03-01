@@ -4,6 +4,7 @@
 #include <light/Engine/define.hpp>
 
 #include <light/Engine/State.hpp>
+#include <light/Engine/Timer.hpp>
 #include <light/Engine/Engine.hpp>
 #include <light/Engine/View.hpp>
 #include <light/Engine/Grid_Layer.hpp>

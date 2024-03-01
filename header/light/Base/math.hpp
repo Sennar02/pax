@@ -54,17 +54,11 @@ namespace light
 
 /**
  * Determines if a value is inside a range in
- * the form [a, b].
+ * the form [a, b).
  *
  * Note: The case a > b is tested.
  */
 #define light_is_in(a, b, v) \
-    (a <= b && a <= v && v <= b)
-
-/**
- * Confines a value within a range in the form [a, b].
- */
-#define light_clamp(a, b, v) \
-    light_min(b, light_max(a, v))
+    (a <= b && a <= v && v < b)
 
 #endif // LIGHT_BASE_MATH_HPP

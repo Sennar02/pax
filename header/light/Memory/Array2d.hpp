@@ -62,7 +62,7 @@ namespace light
         /**
          *
          */
-        Array2d(Alloc* alloc);
+        Array2d(v2u64 size, Alloc* alloc);
 
         /**
          *

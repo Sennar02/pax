@@ -12,30 +12,41 @@ namespace light
          * Where the view looks in the world
          * in world coordinates.
          */
-        v2f64 centre;
+        v2f64 centre = {};
 
         /**
          * Size of the view in units.
          */
-        v2u64 size;
+        v2u64 size = {};
 
         /**
          * Unit of size.
          */
-        u64 unit;
+        f64 unit = 0;
+
+        /**
+         *
+         */
+        f64 factor = 1;
 
     public:
         /**
          *
          */
-        v2f64
-        offset() const;
+        v4f64
+        bounds() const;
+
+        /**
+         *
+         */
+        v4s64
+        snap(v4f64 bounds) const;
 
         /**
          *
          */
         v4u64
-        visible(v2u64 limits) const;
+        cull(v4f64 bounds, v4u64 limits) const;
     };
 } // light
 

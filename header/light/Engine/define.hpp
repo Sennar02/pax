@@ -6,12 +6,16 @@
 
 namespace light
 {
-    struct Actor;
-
     /**
      * Interface used to program the engine.
      */
     struct State;
+
+    /**
+     * Calculates the seconds elapsed from the start
+     * or the application or from the last update.
+     */
+    struct Timer;
 
     /**
      * Core of the application, uses a state machine
@@ -19,9 +23,11 @@ namespace light
      */
     struct Engine;
 
+    /**
+     * Determines the visible portion of the world.
+     */
     struct View;
 
-    struct Tile;
     struct Grid_Layer;
     struct Grid;
 

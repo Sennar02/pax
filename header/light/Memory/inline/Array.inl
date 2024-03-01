@@ -15,21 +15,36 @@ namespace light
     }
 
     template <class Type>
-    Array<Type>::Array(Alloc* alloc)
+    Array<Type>::Array(u64 size, Alloc* alloc)
     {
-        this->orig = alloc;
+        create(size, alloc);
     }
 
     template <class Type>
     bool
     Array<Type>::create(u64 size, Alloc* alloc)
     {
-        if ( data != 0 )
+        u64        bytes = LEN_TYPE * size;
+        Opt<void*> block;
+
+        if ( alloc != 0 && data != 0 )
             return false;
 
         this->orig = alloc;
 
-        return create(size);
+        if ( orig != 0 && data == 0 ) {
+            block = orig->reserve(bytes, ALG_TYPE);
+
+            if ( block.is_valid ) {
+                this->data = (Type*) block.item;
+                this->size = size;
+
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     template <class Type>

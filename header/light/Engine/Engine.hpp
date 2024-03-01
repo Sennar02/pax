@@ -3,32 +3,14 @@
 
 #include <light/Engine/define.hpp>
 #include <light/Engine/State.hpp>
+#include <light/Engine/Timer.hpp>
 
 namespace light
 {
-    struct Timer
-    {
-    public:
-        f64 time;
-        f64 last;
-
-    public:
-        /**
-         *
-         */
-        Timer();
-
-        /**
-         *
-         */
-        f64
-        elapsed();
-    };
-
     struct Engine
     {
     public:
-        Timer timer;
+        Timer timer = {};
 
     public:
         /**

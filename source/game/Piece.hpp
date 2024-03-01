@@ -68,7 +68,7 @@ namespace game
         /**
          * Flags.
          */
-        u64 status = 0;
+        u64 flag = 0;
 
         /**
          * Definitions of the various status flags.
@@ -87,24 +87,17 @@ namespace game
     };
 
     /**
-     * Helper type definition for a motion controls function.
-     */
-    using Motion_Func = v2f64(void* self);
-
-    /**
-     * The simplest and default function for
-     * the motion controls. It always returns
-     * a (0, 0) vector.
-     */
-    v2f64
-    motion_func_empty(void* self);
-
-    /**
      * Part of an actor which controls its evolution
      * during the program execution.
      */
-    struct Controls {
-        Motion_Func* motion = &motion_func_empty;
+    struct Controls
+    {
+    public:
+        /**
+         *
+         */
+        virtual v2f64
+        motion_step() = 0;
     };
 }
 

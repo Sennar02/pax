@@ -8,8 +8,21 @@ namespace light
     /**
      *
      */
-    using Grid_Action =
-        void(Array2d<u64>& tiles, void* extra);
+    struct Grid_Step
+    {
+    public:
+        /**
+         *
+         */
+        virtual void
+        fixed_step(f64 time, Array2d<u64>& table) = 0;
+
+        /**
+         *
+         */
+        virtual void
+        after_step(Array2d<u64>& table) = 0;
+    };
 
     struct Grid_Layer
     {
@@ -17,13 +30,13 @@ namespace light
         /**
          *
          */
-        Array2d<u64> indeces = Array2d<u64>();
+        Array2d<u64> table = Array2d<u64>();
 
         /**
          *
          */
-        Array<Grid_Action*> actions =
-            Array<Grid_Action*>();
+        Array<Grid_Step*> steps =
+            Array<Grid_Step*>();
 
         /**
          *
@@ -35,12 +48,12 @@ namespace light
          *
          */
         bool
-        push(Grid_Action* action);
+        push(Grid_Step* step);
 
         /**
          *
          */
-        Grid_Action*
+        Grid_Step*
         pull();
     };
 } // light

@@ -3,29 +3,29 @@
 namespace light
 {
     bool
-    Grid_Layer::push(Grid_Action* action)
+    Grid_Layer::push(Grid_Step* step)
     {
         u64 index = count + 1u;
 
-        if ( action == 0 ) return false;
+        if ( step == 0 ) return false;
 
-        if ( count < actions.size ) {
-            actions[count] = action;
-            count          = index;
+        if ( count < steps.size ) {
+            steps[count] = step;
+            count        = index;
         }
 
         return count == index;
     }
 
-    Grid_Action*
+    Grid_Step*
     Grid_Layer::pull()
     {
-        Grid_Action* res   = 0;
-        u64          index = count - 1u;
+        Grid_Step* res   = 0;
+        u64        index = count - 1u;
 
         if ( count != 0 ) {
             count = index;
-            res   = actions[count];
+            res   = steps[count];
         }
 
         return res;
