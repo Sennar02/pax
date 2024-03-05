@@ -22,7 +22,12 @@ namespace light
         /**
          * Unit of size.
          */
-        f64 unit = 0;
+        u64 unit = 1;
+
+        /**
+         *
+         */
+        v2f64 offset = {};
 
         /**
          *

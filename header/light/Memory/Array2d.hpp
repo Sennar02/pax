@@ -26,7 +26,7 @@ namespace light
         /**
          *
          */
-        Alloc* orig = 0;
+        Alloc* alloc = 0;
 
         /**
          *
@@ -81,6 +81,19 @@ namespace light
          */
         bool
         destroy();
+
+        /**
+         *
+         */
+        Array2d<Type>&
+        fill(const Type& value);
+
+        /**
+         *
+         */
+        template <class Func, class... Args>
+        Array2d<Type>&
+        fill(Func filler, Args... args);
 
         /**
          *

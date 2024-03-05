@@ -51,7 +51,7 @@ namespace light
          * state at a consistent rate.
          */
         virtual void
-        fixed_step(f64 step) = 0;
+        fixed_step(f64 step, u64 tick) = 0;
 
         /**
          * Procedure called exactly once during one frame.

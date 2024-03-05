@@ -4,13 +4,14 @@
 #include <light/Base/define.hpp>
 #include <light/Base/Opt.hpp>
 #include <light/Base/Buf.hpp>
+#include <light/Base/util.hpp>
 
 namespace light
 {
     using Byte_Table = Buf<u8, 256u>;
 
     /**
-     * Commonly trimmed characters.
+     * Bytes commonly excluded from strings.
      */
     extern const Byte_Table STRING_TRIM;
 
@@ -34,13 +35,12 @@ namespace light
         String();
 
         /**
-         * Constructor that can be used to provide a
-         * specific size for the string.
+         * Constructor that can be used to provide a specific size for the string.
          *
-         * WARNING: This function cannot test if the
-         *          size is valid, because of this
-         * providing a size larger than the allocated
-         * space could lead to:
+         * !!! WARNING !!!
+         *
+         * This function cannot test if the size is valid or not, because of this,
+         * providing one larger than the allocated space can lead to:
          *  - memory corruptions,
          *  - crashes,
          *  - vulnerabilities.
@@ -48,41 +48,34 @@ namespace light
         String(const s8* data, u64 size);
 
         /**
-         * Constructor that can be used to calculate
-         * the size of the string within specific
-         * constraints.
+         * Constructor that can be used to calculate the size of the string without
+         * exceeding a specific upper bound.
          *
-         * If the size is bigger than the upper bound
-         * it considers only the first valid portion.
-         * Otherwise, if the size is smaller than the
-         * lower bound the string is completely ignored.
+         * If the size happens to be larger than the upper bound, this function uses
+         * only the first valid portion. Otherwise, if the size is smaller than the
+         * lower bound, this function ignores the string completely.
          */
         String(const s8* data, u64 lower, u64 upper);
 
         /**
-         * Tests if a string contains a specific byte.
-         *
-         * Returns true as soon as it finds an occurrence,
-         * or false if none is found.
+         * Tests if a string contains a specific byte. Returns true as soon as it
+         * finds an occurrence, or false if none is found.
          */
         bool
         contains(s8 byte) const;
 
         /**
-         * Tests if a string contains a specific byte.
-         *
-         * Returns the index of the first occurrence,
-         * or an empty optional if none is found.
+         * Tests if a string contains a specific byte. Returns the index of the first
+         * occurrence as soon as it finds one, or an empty optional if none is found.
          */
         Opt<u64>
         index_of(s8 byte) const;
 
         /**
-         * Creates two substrings. The first one ranges from
-         * the start of the original string until the first
-         * occurrence of a specific byte, while the second
-         * one ranges from after the first occurrence of
-         * the same byte to the end of the original string.
+         * Divides the string in two parts. The first one ranges from the start of the
+         * original string until the first occurrence of the specified byte, while the
+         * second one ranges from after the same occurrence to the end of the original
+         * string.
          *
          * For example:
          *  1) String("Byte byte!", 10u).split(' ')
@@ -98,22 +91,19 @@ namespace light
         split(char byte) const;
 
         /**
-         * Excludes from the head of the string any byte
-         * specified in the table.
+         * Excludes from the head of the string any byte specified in the table.
          */
         String&
         trim_left(const Byte_Table& table = STRING_TRIM);
 
         /**
-         * Excludes from the tail of the string any byte
-         * specified in the table.
+         * Excludes from the tail of the string any byte specified in the table.
          */
         String&
         trim_right(const Byte_Table& table = STRING_TRIM);
 
         /**
-         * Excludes from both ends of the string any byte
-         * specified in the table.
+         * Excludes from both ends of the string any byte specified in the table.
          */
         String&
         trim(const Byte_Table& table = STRING_TRIM);
@@ -159,10 +149,10 @@ namespace light
      *  - Optional "+" or "-",
      *  - Any digit from 0 to 9,
      *  - Optional ".",
-     *  - Any digit from 0 to 9,
+     *  - Optionals digits from 0 to 9,
      *  - Optional "e" or "E",
      *  - Optional "+" or "-",
-     *  - Any digit from 0 to 9.
+     *  - Optionals digits from 0 to 9.
      *
      * It tries to match as much as possible before
      * returning.

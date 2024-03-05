@@ -23,9 +23,18 @@ namespace light
         /**
          *
          */
-        virtual void
+        virtual Alloc&
         reset() = 0;
     };
+
+    /**
+     *
+     */
+    template <class Type, class... Args>
+    Type*
+    reserve(Alloc& alloc, Args... args);
 } // light
+
+#include <light/Memory/inline/Alloc.inl>
 
 #endif // LIGHT_MEMORY_ALLOC_HPP

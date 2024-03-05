@@ -12,27 +12,26 @@ extern "C" {
 }
 
 namespace light {
-    // Some unsigned integer types.
+    // Some unsigned integer type.
     using u8   = uint8_t;
     using u16  = uint16_t;
     using u32  = uint32_t;
     using u64  = uint64_t;
     using uptr = uintptr_t;
 
-    // Some signed integer types.
+    // Some signed integer type.
     using s8   = char;
     using s16  = int16_t;
     using s32  = int32_t;
     using s64  = int64_t;
     using sptr = intptr_t;
 
-    // Some floating point types.
+    // Some floating point type.
     using f32 = float;
     using f64 = double;
 
     /**
-     * Mathematical vector of arbitrary
-     * type and size.
+     * Mathematical vector of arbitrary type and size.
      */
     template <class Type, u64 Size>
     struct Vec;
@@ -50,18 +49,10 @@ namespace light {
     using v4f64 = Vec<f64, 4u>;
 
     /**
-     * Simple static array of arbitrary
-     * type and size.
+     * Static array of arbitrary type and size.
      */
     template <class Type, u64 Size>
     struct Buf;
-
-    /**
-     * Tagged union type to communicate
-     * if an operation succeds or fails.
-     */
-    template <class Type, class Fail>
-    struct Res;
 
     /**
      * Optional value.
@@ -70,7 +61,14 @@ namespace light {
     struct Opt;
 
     /**
-     * String view.
+     * Optional value which carries additional data when the optional
+     * is an empty one.
+     */
+    template <class Type, class Fail>
+    struct Res;
+
+    /**
+     * Immutable string.
      */
     struct String;
 
@@ -121,9 +119,9 @@ namespace light {
     static const u8 LEN_F64 = sizeof(f64);
 } // light
 
+/**
+ * Determines if the whole library should test arrays bounds.
+ */
 #define LIGHT_TEST_BOUNDS true
-
-#define light_panic(cat, msg, ...) \
-    fprintf(stderr, "[%s@%u] {" cat ": " msg "}\n", __FILE__, __LINE__, __VA_ARGS__), exit(1);
 
 #endif // LIGHT_BASE_DEFINE_HPP

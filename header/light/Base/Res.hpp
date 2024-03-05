@@ -21,20 +21,12 @@ namespace light
 
     public:
         union {
-            /**
-             * item.
-             */
             Item item;
-
-            /**
-             * Failure data.
-             */
             Fail fail;
         };
 
         /**
-         * Helper boolean used to determine if
-         * the item exists or not.
+         * Determines if the item exists or not.
          */
         bool is_valid = false;
 
@@ -45,7 +37,7 @@ namespace light
         Res(Item item);
 
         /**
-         * Constructor used to provide failure data.
+         * Constructor used to provide additional failure data.
          */
         Res(Fail fail);
     };

@@ -52,7 +52,7 @@ namespace light
         /**
          *
          */
-        void
+        Alloc&
         reset();
     };
 } // light

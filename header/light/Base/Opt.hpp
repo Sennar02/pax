@@ -16,15 +16,11 @@ namespace light
 
     public:
         union {
-            /**
-             * Item.
-             */
             Item item;
         };
 
         /**
-         * Helper boolean used to determine
-         * if the item exists or not.
+         * Determines if the item exists or not.
          */
         bool is_valid = false;
 

@@ -22,7 +22,7 @@ namespace light
          *
          */
         bool
-        execute(State* state, u64 frames);
+        execute(State& state, u64 frames);
     };
 } // light
 

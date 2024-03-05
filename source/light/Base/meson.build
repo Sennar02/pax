@@ -4,6 +4,7 @@ light_base = static_library('light-base',
     'String.cpp',
     'math.cpp',
     'bits.cpp',
+    'util.cpp',
   ],
 )
 

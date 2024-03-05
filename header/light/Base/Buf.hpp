@@ -2,6 +2,7 @@
 #define LIGHT_BASE_BUF_HPP
 
 #include <light/Base/define.hpp>
+#include <light/Base/util.hpp>
 
 namespace light
 {

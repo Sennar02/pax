@@ -6,8 +6,8 @@ namespace light
     View::bounds() const
     {
         f64   fact = unit / (factor * 2u);
-        v2f64 orig = centre - size * fact;
-        v2f64 stop = centre + size * fact;
+        v2f64 orig = centre + offset - size * fact;
+        v2f64 stop = centre + offset + size * fact;
 
         return {
             orig[0], orig[1],
@@ -21,10 +21,10 @@ namespace light
         bounds /= unit;
 
         return {
-            trunc_bot(bounds[0] - 1),
-            trunc_bot(bounds[1] - 1),
-            trunc_top(bounds[2] + 1),
-            trunc_top(bounds[3] + 1),
+            bot(bounds[0] - 1),
+            bot(bounds[1] - 1),
+            top(bounds[2] + 1),
+            top(bounds[3] + 1),
         };
     }
 

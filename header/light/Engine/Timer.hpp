@@ -22,7 +22,7 @@ namespace light
         /**
          *
          */
-        void
+        Timer&
         update();
 
         /**

@@ -6,44 +6,28 @@
 namespace light
 {
     /**
-     * Sets the value of each bit in the mask
-     * specified by another to a specific state.
+     * Sets the bits specified in the mask to a particular state.
      */
     u64
-    bits_write(u64 mask, u64 bits, u8 state);
+    bits_write(u64 number, u64 mask, u8 state);
 
     /**
-     * Negates the value of each bit in the
-     * mask specified by another.
+     * Flips the value of the bits specified in the mask.
      */
     u64
-    bits_flip(u64 mask, u64 bits);
+    bits_flip(u64 number, u64 mask);
 
     /**
-     * Returns the exact values for each bit
-     * in the mask.
+     * Returns the exact values of the bits specified in the mask.
      */
     u64
     bits_read(u64 mask, u64 bits);
 
     /**
-     * Determines if every bit in the mask is
-     * activated.
+     * Determines if the bits specified in the mask are all active.
      */
     bool
     bits_test(u64 mask, u64 bits);
 } // light
-
-/**
- * Adds a mask of bits to another.
- */
-#define light_bits_set(mask, bits) \
-    (mask | bits)
-
-/**
- * Removes a mask of bits from another.
- */
-#define light_bits_clr(mask, bits) \
-    (mask & ~bits)
 
 #endif // LIGHT_BASE_BITS_HPP

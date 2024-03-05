@@ -71,13 +71,13 @@ namespace light
         return false;
     }
 
-    void
+    Alloc&
     Pool_Alloc::reset(u64 page, u8 align)
     {
         s8* addr  = data + align_diff(data, align, LEN_PREF);
         u64 count = 0;
 
-        if ( page < LEN_NODE ) return;
+        if ( page < LEN_NODE ) return *this;
 
         if ( data != 0 ) {
             this->page = page;
@@ -94,12 +94,14 @@ namespace light
                 addr += page;
             }
         }
+
+        return *this;
     }
 
-    void
+    Alloc&
     Pool_Alloc::reset()
     {
-        reset(page, 1u);
+        return reset(page, 1u);
     }
 
     bool

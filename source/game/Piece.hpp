@@ -11,12 +11,17 @@ namespace game
      * Part of an actor which determines its position
      * in world coordinated.
      */
-    using Position = v2f64;
+    struct Location {
+        /**
+         *
+         */
+        v2f64 point;
+    };
 
     /**
      * Part of an actor which changes its position.
      */
-    struct Motion {
+    struct Movement {
         /**
          * Movement direction in tile relative
          * coordinates, for example:
@@ -29,7 +34,7 @@ namespace game
          * be only -1, 0 or +1. I don't know what
          * happens otherwise.
          */
-        v2f64 step_value = {};
+        v2s64 step_value = {};
 
         /**
          * Movement direction in tile relative
@@ -37,17 +42,17 @@ namespace game
          * used to correct possible errors and
          * free to change even during the movement.
          */
-        v2f64 step_input = {};
+        v2s64 step_input = {};
 
         /**
-         * Position in grid coordinates.
+         *
          */
-        v2u64 tile_origin = {};
+        v2f64 step_limit = {};
 
         /**
-         * Destination in grid coordinates.
+         *
          */
-        v2u64 tile_finish = {};
+        f64 step_unit = 1;
 
         /**
          * Maximum movement speed.
@@ -73,7 +78,7 @@ namespace game
         /**
          * Definitions of the various status flags.
          */
-        enum Status {
+        enum Flag {
             /**
              * Wheter currently moving or not.
              */
@@ -96,8 +101,8 @@ namespace game
         /**
          *
          */
-        virtual v2f64
-        motion_step() = 0;
+        virtual v2s64
+        movement_step() = 0;
     };
 }
 

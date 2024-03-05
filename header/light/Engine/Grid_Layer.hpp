@@ -15,13 +15,13 @@ namespace light
          *
          */
         virtual void
-        fixed_step(f64 time, Array2d<u64>& table) = 0;
+        fixed_step(f64, Array2d<u64>&) {}
 
         /**
          *
          */
         virtual void
-        after_step(Array2d<u64>& table) = 0;
+        after_step(Array2d<u64>&) {}
     };
 
     struct Grid_Layer

@@ -2,11 +2,13 @@
 
 namespace light
 {
-    void
+    Timer&
     Timer::update()
     {
         prev = last;
         last = SDL_GetTicks() / 1000.0;
+
+        return *this;
     }
 
     f64

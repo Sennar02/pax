@@ -66,13 +66,13 @@ namespace light
         /**
          *
          */
-        void
+        Alloc&
         reset(u64 page, u8 align = 8u);
 
         /**
          *
          */
-        void
+        Alloc&
         reset();
 
     private:

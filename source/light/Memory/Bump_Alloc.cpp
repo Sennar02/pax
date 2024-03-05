@@ -42,9 +42,11 @@ namespace light
         return addr == 0;
     }
 
-    void
+    Alloc&
     Bump_Alloc::reset()
     {
         addr = data;
+
+        return *this;
     }
 } // light

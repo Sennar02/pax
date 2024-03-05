@@ -3,30 +3,27 @@
 namespace light
 {
     u64
-    bits_write(u64 mask, u64 bits, u8 state)
+    bits_write(u64 number, u64 mask, u8 state)
     {
-        return (state != 0) * light_bits_set(mask, bits) +
-               (state == 0) * light_bits_clr(mask, bits);
+        return (state != 0) * (number | mask) +
+               (state == 0) * (number & ~mask);
     }
 
     u64
-    bits_flip(u64 mask, u64 bits)
+    bits_flip(u64 number, u64 mask)
     {
-        u64 state = mask & bits;
-
-        return (state == 0) * light_bits_set(mask, bits) +
-               (state != 0) * light_bits_clr(mask, bits);
+        return number ^ mask;
     }
 
     u64
-    bits_read(u64 mask, u64 bits)
+    bits_read(u64 number, u64 mask)
     {
-        return mask & bits;
+        return number & mask;
     }
 
     bool
-    bits_test(u64 mask, u64 bits)
+    bits_test(u64 number, u64 mask)
     {
-        return (mask & bits) == bits;
+        return (number & mask) != 0;
     }
 } // light

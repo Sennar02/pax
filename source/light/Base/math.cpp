@@ -3,30 +3,29 @@
 namespace light
 {
     s64
-    trunc_top(f64 val)
+    top(f64 val)
     {
         s64 res = val;
 
-        if ( res < val )
-            return res + 1;
-
-        return res;
+        return res +
+            (val > res);
     }
 
     s64
-    trunc_bot(f64 val)
+    bot(f64 val)
     {
         s64 res = val;
 
-        if ( res > val )
-            return res - 1;
-
-        return res;
+        return res -
+            (res > val);
     }
 
     s64
-    trunc(f64 val)
+    rnd(f64 val)
     {
-        return val + 0.5;
+        s64 sig =
+            (val > 0) - (val < 0);
+
+        return val + sig * 0.5;
     }
 } // light
