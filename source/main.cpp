@@ -1,4 +1,4 @@
-#include <light/Signal/import.hpp>
+#include <light/Engine/import.hpp>
 
 #include <time.h>  // time
 #include <stdio.h> // printf
@@ -94,7 +94,7 @@ main(int, const char*[])
         Movement mvmt;
 
         mvmt.step_unit   = TILE_SIZE;
-        mvmt.speed_limit = rand() % 15 * TILE_SIZE;
+        mvmt.speed_limit = (rand() % 5 + 5) * TILE_SIZE;
         mvmt.flag =
             bits_write(mvmt.flag, Movement::MOBILE, mvmt.speed_limit != 0);
 
@@ -117,7 +117,7 @@ main(int, const char*[])
             ctrls[i] = reserve<Random_Controls>(bump);
 
             if ( ctrls[i] != 0 )
-                ((Random_Controls*) ctrls[i])->spaces = rand() % frames;
+                ((Random_Controls*) ctrls[i])->spaces = rand() % top(frames / 2u) + bot(frames / 2u);
             else
                 light_panic("null", "ctrls[i] == %p", (void*) ctrls[i]);
         } else {
@@ -148,7 +148,7 @@ main(int, const char*[])
     mvmts[0].speed_limit = 10 * TILE_SIZE;
 
     game_state.grid.layers[0].push(&floor_draw);
-    game_state.grid.layers[1].push(&actor_draw);
+//    game_state.grid.layers[1].push(&actor_draw);
 
     #define LIGHT_ACTOR_WRITE false
 

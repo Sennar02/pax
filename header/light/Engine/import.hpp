@@ -2,7 +2,9 @@
 #define LIGHT_ENGINE_IMPORT_HPP
 
 #include <light/Engine/define.hpp>
-
+#include <light/Engine/Event.hpp>
+#include <light/Engine/Event_Table.hpp>
+#include <light/Engine/Receiver.hpp>
 #include <light/Engine/State.hpp>
 #include <light/Engine/Timer.hpp>
 #include <light/Engine/Engine.hpp>

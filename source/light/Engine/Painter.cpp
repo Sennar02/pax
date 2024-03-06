@@ -35,13 +35,13 @@ namespace light
     }
 
     void
-    Painter::swap()
+    Painter::prepare()
     {
         SDL_RenderClear(data);
     }
 
     void
-    Painter::show()
+    Painter::present()
     {
         SDL_RenderPresent(data);
     }

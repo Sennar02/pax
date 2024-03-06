@@ -52,13 +52,13 @@ namespace light
          *
          */
         void
-        swap();
+        prepare();
 
         /**
          *
          */
         void
-        show();
+        present();
 
         /**
          *

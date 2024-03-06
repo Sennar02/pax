@@ -1,6 +1,8 @@
 #ifndef GAME_GAME_STATE_HPP
 #define GAME_GAME_STATE_HPP
 
+#include <light/Engine/define.hpp>
+#include <light/Engine/Event.hpp>
 #include "Piece.hpp"
 
 namespace game

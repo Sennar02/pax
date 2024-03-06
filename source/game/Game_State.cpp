@@ -49,7 +49,7 @@ namespace game
         if ( display.is_valid() ) {
             painter.create(display);
 
-            if ( display.is_valid() == false )
+            if ( painter.is_valid() == false )
                 display.destroy();
         }
     }
@@ -129,7 +129,7 @@ namespace game
     {
         Grid_Layer layer;
 
-        painter.swap();
+        painter.prepare();
 
         for ( u64 l = 0; l < grid.count; l += 1u ) {
             layer = grid.layers[l];
@@ -138,6 +138,6 @@ namespace game
                 layer.steps[s]->after_step(layer.table);
         }
 
-        painter.show();
+        painter.present();
     }
 } // game

@@ -1,6 +1,7 @@
 light_engine = static_library('light-engine',
   include_directories: [light_header],
   sources: [
+    'Event.cpp',
     'State.cpp',
     'Timer.cpp',
     'Engine.cpp',

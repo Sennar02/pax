@@ -7,6 +7,14 @@
 namespace light
 {
     /**
+     *
+     */
+    struct Event;
+    struct Event_Table;
+
+    struct Receiver;
+
+    /**
      * Interface used to program the engine.
      */
     struct State;
