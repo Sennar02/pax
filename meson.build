@@ -26,7 +26,7 @@ subdir('source/light/Engine')
 
 executable('light',
   sources:             [
-    'source/main.cpp',
+    'source/main_events.cpp',
     'source/game/Piece.cpp',
     'source/game/Game_State.cpp',
     'source/game/Floor_Layer.cpp',

@@ -1,4 +1,4 @@
-#include <light/Engine/Grid.hpp>
+#include <light/Engine/Kernel/Grid.hpp>
 
 namespace light
 {

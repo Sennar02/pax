@@ -2,16 +2,20 @@
 #define LIGHT_ENGINE_IMPORT_HPP
 
 #include <light/Engine/define.hpp>
-#include <light/Engine/Event.hpp>
-#include <light/Engine/Event_Table.hpp>
-#include <light/Engine/Receiver.hpp>
-#include <light/Engine/State.hpp>
-#include <light/Engine/Timer.hpp>
+#include <light/Engine/Events/Event.hpp>
+#include <light/Engine/Events/Event_Source.hpp>
+#include <light/Engine/Events/Event_Queue.hpp>
+#include <light/Engine/Events/Event_Broker.hpp>
+#include <light/Engine/Events/Keybd_Event.hpp>
+#include <light/Engine/Events/Mouse_Event.hpp>
+#include <light/Engine/Events/Observer.hpp>
+#include <light/Engine/Kernel/State.hpp>
+#include <light/Engine/Kernel/Timer.hpp>
+#include <light/Engine/Kernel/View.hpp>
+#include <light/Engine/Kernel/Grid_Layer.hpp>
+#include <light/Engine/Kernel/Grid.hpp>
+#include <light/Engine/Kernel/Display.hpp>
+#include <light/Engine/Kernel/Painter.hpp>
 #include <light/Engine/Engine.hpp>
-#include <light/Engine/View.hpp>
-#include <light/Engine/Grid_Layer.hpp>
-#include <light/Engine/Grid.hpp>
-#include <light/Engine/Display.hpp>
-#include <light/Engine/Painter.hpp>
 
 #endif // LIGHT_ENGINE_IMPORT_HPP

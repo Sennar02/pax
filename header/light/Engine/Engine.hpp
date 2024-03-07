@@ -2,8 +2,8 @@
 #define LIGHT_ENGINE_ENGINE_HPP
 
 #include <light/Engine/define.hpp>
-#include <light/Engine/State.hpp>
-#include <light/Engine/Timer.hpp>
+#include <light/Engine/Kernel/State.hpp>
+#include <light/Engine/Kernel/Timer.hpp>
 
 namespace light
 {

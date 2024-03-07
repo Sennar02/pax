@@ -2,7 +2,7 @@
 #define LIGHT_ENGINE_GRID_HPP
 
 #include <light/Engine/define.hpp>
-#include <light/Engine/Grid_Layer.hpp>
+#include <light/Engine/Kernel/Grid_Layer.hpp>
 
 namespace light
 {

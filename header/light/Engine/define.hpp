@@ -10,9 +10,18 @@ namespace light
      *
      */
     struct Event;
-    struct Event_Table;
+    struct Keybd_Event;
+    struct Mouse_Event;
 
-    struct Receiver;
+    struct Event_Queue;
+
+    template <class Type>
+    struct Event_Source;
+
+    struct Event_Broker;
+
+    template <class Type>
+    struct Observer;
 
     /**
      * Interface used to program the engine.

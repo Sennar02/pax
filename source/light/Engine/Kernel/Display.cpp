@@ -1,4 +1,4 @@
-#include <light/Engine/Display.hpp>
+#include <light/Engine/Kernel/Display.hpp>
 
 namespace light
 {

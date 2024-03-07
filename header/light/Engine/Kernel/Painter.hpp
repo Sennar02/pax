@@ -2,7 +2,7 @@
 #define LIGHT_ENGINE_PAINTER_HPP
 
 #include <light/Engine/define.hpp>
-#include <light/Engine/Display.hpp>
+#include <light/Engine/Kernel/Display.hpp>
 
 namespace light
 {

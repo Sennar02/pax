@@ -11,4 +11,7 @@
     fprintf(stderr, "[%s @ %u] {" cat ": " msg "}\n", \
         __FILE__, __LINE__, __VA_ARGS__), abort()
 
+#define light_excl(...) \
+    { __VA_ARGS__ } break
+
 #endif // LIGHT_BASE_UTIL_HPP
