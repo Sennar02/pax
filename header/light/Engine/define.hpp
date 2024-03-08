@@ -1,28 +1,12 @@
 #ifndef LIGHT_ENGINE_DEFINE_HPP
 #define LIGHT_ENGINE_DEFINE_HPP
 
+#include <light/Events/import.hpp>
 #include <light/Memory/import.hpp>
 #include <SDL2/SDL.h>
 
 namespace light
 {
-    /**
-     *
-     */
-    struct Event;
-    struct Keybd_Event;
-    struct Mouse_Event;
-
-    struct Event_Queue;
-
-    template <class Type>
-    struct Event_Source;
-
-    struct Event_Broker;
-
-    template <class Type>
-    struct Observer;
-
     /**
      * Interface used to program the engine.
      */
@@ -50,6 +34,10 @@ namespace light
 
     struct Display;
     struct Painter;
+
+    struct Keybd_Event;
+    struct Mouse_Event;
+    struct Event_System_Source;
 };
 
 #endif // LIGHT_ENGINE_DEFINE_HPP

@@ -2,7 +2,7 @@
 #define LIGHT_ENGINE_MOUSE_EVENT_HPP
 
 #include <light/Engine/define.hpp>
-#include <light/Engine/Events/Event.hpp>
+#include <light/Events/Event.hpp>
 
 namespace light
 {
@@ -14,6 +14,11 @@ namespace light
          *
          */
         static const u64 KIND;
+
+        /**
+         *
+         */
+        static const u64 MASK;
 
     public:
         v2s64 coords = {};
@@ -42,12 +47,6 @@ namespace light
         /**
          *
          */
-        u64
-        mask() const;
-
-        /**
-         *
-         */
         bool
         is_press() const;
 
@@ -57,15 +56,6 @@ namespace light
         bool
         is_release() const;
     };
-
-    Mouse_Event
-    from_sdl(SDL_MouseMotionEvent event);
-
-    Mouse_Event
-    from_sdl(SDL_MouseButtonEvent event);
-
-    Mouse_Event
-    from_sdl(SDL_MouseWheelEvent event);
 } // light
 
 #endif // LIGHT_ENGINE_MOUSE_EVENT_HPP

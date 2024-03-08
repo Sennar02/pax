@@ -2,7 +2,7 @@
 #define GAME_GAME_STATE_HPP
 
 #include <light/Engine/define.hpp>
-#include <light/Engine/Events/Event.hpp>
+#include <light/Events/import.hpp>
 #include "Piece.hpp"
 
 namespace game

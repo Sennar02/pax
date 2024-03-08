@@ -1,13 +1,13 @@
-#ifndef LIGHT_ENGINE_EVENT_SOURCE_HPP
-#define LIGHT_ENGINE_EVENT_SOURCE_HPP
+#ifndef LIGHT_EVENTS_OBSERVABLE_HPP
+#define LIGHT_EVENTS_OBSERVABLE_HPP
 
-#include <light/Engine/define.hpp>
-#include <light/Engine/Events/Observer.hpp>
+#include <light/Events/define.hpp>
+#include <light/Events/Observer.hpp>
 
 namespace light
 {
     template <class Type>
-    struct Event_Source
+    struct Observable
     {
     public:
         /**
@@ -36,6 +36,6 @@ namespace light
     };
 } // light
 
-#include <light/Engine/inline/Event_Source.inl>
+#include <light/Events/inline/Observable.inl>
 
-#endif // LIGHT_ENGINE_EVENT_SOURCE_HPP
+#endif // LIGHT_EVENTS_OBSERVABLE_HPP

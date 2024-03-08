@@ -2,7 +2,7 @@
 #define LIGHT_ENGINE_KEYBD_EVENT_HPP
 
 #include <light/Engine/define.hpp>
-#include <light/Engine/Events/Event.hpp>
+#include <light/Events/Event.hpp>
 
 namespace light
 {
@@ -14,6 +14,11 @@ namespace light
          *
          */
         static const u64 KIND;
+
+        /**
+         *
+         */
+        static const u64 MASK;
 
     public:
         u64 physic = 0;
@@ -36,12 +41,6 @@ namespace light
         /**
          *
          */
-        u64
-        mask() const;
-
-        /**
-         *
-         */
         bool
         is_repeat() const;
 
@@ -57,9 +56,6 @@ namespace light
         bool
         is_release() const;
     };
-
-    Keybd_Event
-    from_sdl(SDL_KeyboardEvent event);
 } // light
 
 #endif // LIGHT_ENGINE_KEYBD_EVENT_HPP

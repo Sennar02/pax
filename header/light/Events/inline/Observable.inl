@@ -1,10 +1,10 @@
-#include <light/Engine/Events/Event_Source.hpp>
+#include <light/Events/Observable.hpp>
 
 namespace light
 {
     template <class Type>
     bool
-    Event_Source<Type>::insert(Observer<Type>& observ)
+    Observable<Type>::insert(Observer<Type>& observ)
     {
         if ( observ.link == 0 ) {
             observ.link = this;
@@ -23,7 +23,7 @@ namespace light
 
     template <class Type>
     bool
-    Event_Source<Type>::remove(Observer<Type>& observ)
+    Observable<Type>::remove(Observer<Type>& observ)
     {
         if ( observ.link == this ) {
             observ.link = 0;
@@ -44,7 +44,7 @@ namespace light
 
     template <class Type>
     bool
-    Event_Source<Type>::publish(const Type& event) const
+    Observable<Type>::publish(const Type& event) const
     {
         Observer<Type>* node = list;
 

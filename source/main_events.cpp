@@ -59,28 +59,28 @@ public:
 int
 main(int, const char*[])
 {
-    Event_Broker  broker;
-    Event_Queue   queue;
-    Keybd_Printer keybd_printer;
-    Mouse_Printer mouse_printer;
-    Closer        closer;
-    Display       display;
+    Dispatcher          dispatcher;
+    Event_System_Source system_src;
+    Keybd_Printer       keybd_printer;
+    Mouse_Printer       mouse_printer;
+    Closer              closer;
+    Display             display;
 
     closer.display = &display;
 
-    broker.table = Array<void*>(
+    dispatcher.table = Array<void*>(
         calloc(1, sizeof(void*) * 10),
         sizeof(void*) * 10
     );
 
-    broker.insert(keybd_printer);
-    broker.insert(closer);
-    broker.insert(mouse_printer);
+    dispatcher.insert(keybd_printer);
+    dispatcher.insert(closer);
+    dispatcher.insert(mouse_printer);
 
     display.create(String("Prova", 0, 10), {1280, 720});
 
     while ( display.is_valid() )
-        queue.dequeue(broker);
+        system_src.provide(dispatcher);
 
     return 0;
 }

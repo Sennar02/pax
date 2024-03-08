@@ -1,10 +1,10 @@
-#include <light/Engine/Events/Event_Broker.hpp>
+#include <light/Events/Dispatcher.hpp>
 
 namespace light
 {
     template <class Type>
     bool
-    Event_Broker::insert(Observer<Type>& observ)
+    Dispatcher::insert(Observer<Type>& observ)
     {
         auto* list = (Observer<Type>*) table[Type::KIND];
 
@@ -25,7 +25,7 @@ namespace light
 
     template <class Type>
     bool
-    Event_Broker::remove(Observer<Type>& observ)
+    Dispatcher::remove(Observer<Type>& observ)
     {
         auto* list = (Observer<Type>*) table[Type::KIND];
 
@@ -48,7 +48,7 @@ namespace light
 
     template <class Type>
     bool
-    Event_Broker::publish(const Type& event) const
+    Dispatcher::publish(const Type& event) const
     {
         Observer<Type>* node = 0;
 

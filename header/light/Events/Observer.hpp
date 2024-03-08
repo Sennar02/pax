@@ -1,7 +1,7 @@
-#ifndef LIGHT_ENGINE_OBSERVER_HPP
-#define LIGHT_ENGINE_OBSERVER_HPP
+#ifndef LIGHT_EVENTS_OBSERVER_HPP
+#define LIGHT_EVENTS_OBSERVER_HPP
 
-#include <light/Engine/define.hpp>
+#include <light/Events/define.hpp>
 
 namespace light
 {
@@ -33,4 +33,4 @@ namespace light
     };
 } // light
 
-#endif // LIGHT_ENGINE_OBSERVER_HPP
+#endif // LIGHT_EVENTS_OBSERVER_HPP

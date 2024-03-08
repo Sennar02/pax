@@ -1,7 +1,7 @@
-#ifndef LIGHT_ENGINE_EVENT_HPP
-#define LIGHT_ENGINE_EVENT_HPP
+#ifndef LIGHT_EVENTS_EVENT_HPP
+#define LIGHT_EVENTS_EVENT_HPP
 
-#include <light/Engine/define.hpp>
+#include <light/Events/define.hpp>
 
 namespace light
 {
@@ -26,13 +26,7 @@ namespace light
          */
         virtual u64
         kind() const = 0;
-
-        /**
-         *
-         */
-        virtual u64
-        mask() const = 0;
     };
 } // light
 
-#endif // LIGHT_ENGINE_EVENT_HPP
+#endif // LIGHT_EVENTS_EVENT_HPP

@@ -1,13 +1,13 @@
-#ifndef LIGHT_ENGINE_EVENT_BROKER_HPP
-#define LIGHT_ENGINE_EVENT_BROKER_HPP
+#ifndef LIGHT_EVENTS_DISPATCHER_HPP
+#define LIGHT_EVENTS_DISPATCHER_HPP
 
-#include <light/Engine/define.hpp>
-#include <light/Engine/Events/Event.hpp>
-#include <light/Engine/Events/Observer.hpp>
+#include <light/Events/define.hpp>
+#include <light/Events/Event.hpp>
+#include <light/Events/Observer.hpp>
 
 namespace light
 {
-    struct Event_Broker
+    struct Dispatcher
     {
     public:
         Array<void*> table = Array<void*>();
@@ -36,6 +36,6 @@ namespace light
     };
 } // light
 
-#include <light/Engine/inline/Event_Broker.inl>
+#include <light/Events/inline/Dispatcher.inl>
 
-#endif // LIGHT_ENGINE_EVENT_BROKER_HPP
+#endif // LIGHT_EVENTS_DISPATCHER_HPP
