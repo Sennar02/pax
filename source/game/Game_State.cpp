@@ -2,7 +2,7 @@
 
 namespace game
 {
-    using namespace light;
+    using namespace pax;
 
     static const u64        bump_size = 1024 * 256u;
     static       Bump_Alloc bump;
@@ -44,7 +44,10 @@ namespace game
     void
     Game_State::startup()
     {
-        display.create(title, view_size * tile_size);
+        Screen screen;
+
+        display.create(screen, view_size * tile_size, title,
+            Display::BORDERLESS | Display::ALWAYS_TOP);
 
         if ( display.is_valid() ) {
             painter.create(display);
@@ -121,7 +124,7 @@ namespace game
         }
 
         if ( tick > 256u )
-            light_panic("perf", "Falling behind %lu", tick);
+            pax_panic("perf", "Falling behind %lu", tick);
     }
 
     void

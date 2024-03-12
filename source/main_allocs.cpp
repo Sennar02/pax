@@ -1,6 +1,6 @@
-#include <light/Memory/import.hpp>
+#include <pax/Memory/import.hpp>
 
-using namespace light;
+using namespace pax;
 
 int
 main(int, const char*[])
@@ -8,21 +8,25 @@ main(int, const char*[])
     Buf<s8, 32u> memory = {};
 
     Bump_Alloc   alloc = Bump_Alloc(memory.data, memory.SIZE);
-    Array2d<s32> array = Array2d<s32>(&alloc);
+    Array2d<s32> array = Array2d<s32>();
 
     printf("%lu, %p\n",
         alloc.size,
         (void*) alloc.data
     );
 
-    array.create({2, 2});
+    array.create({2, 2}, &alloc);
 
     if ( array.size != 0 ) {
-        for ( u64 i = 0; i < array.size; i += 1u )
-            printf("%u\n", array[i]);
+        for ( u64 r = 0; r < array.rows; r += 1u ) {
+            for ( u64 c = 0; c < array.cols; c += 1u )
+                printf("%3u ", array[{r, c}]);
+
+            printf("\n");
+        }
     }
 
-    array[1000];
+    // array[1000];
 
     printf("%u\n", array.destroy());
     printf("%lu\n", array.size);

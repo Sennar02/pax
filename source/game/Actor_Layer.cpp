@@ -78,7 +78,7 @@ namespace game
     void
     Actor_Layer_Control::fixed_step(f64, Array2d<u64>&)
     {
-        u64       size = light_min(mvmts->size, ctrls->size);
+        u64       size = pax_min(mvmts->size, ctrls->size);
         Movement* mvmt = 0;
         Controls* ctrl = 0;
 
@@ -86,8 +86,13 @@ namespace game
             mvmt = &(*mvmts)[i];
             ctrl = (*ctrls)[i];
 
-            if ( bits_test(mvmt->flag, Movement::MOBILE) )
-                mvmt->step_input = ctrl->movement_step();
+            if ( bits_test(mvmt->flag, Movement::MOBILE) ) {
+                if ( mvmt != 0 && ctrl != 0 )
+                    mvmt->step_input = ctrl->movement_step();
+            } else
+                pax_panic("null", "mvmt[%lu] = %p, ctrl[%lu] = %p",
+                    i, (void*) mvmt, i, (void*) ctrl
+                );
         }
     }
 
@@ -130,7 +135,7 @@ namespace game
     void
     Actor_Layer_Move::fixed_step(f64 time, Array2d<u64>& table)
     {
-        u64       size = light_min(lctns->size, mvmts->size);
+        u64       size = pax_min(lctns->size, mvmts->size);
         Location* lctn = 0;
         Movement* mvmt = 0;
 

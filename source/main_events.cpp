@@ -1,14 +1,14 @@
-#include <light/Engine/import.hpp>
+#include <pax/Engine/import.hpp>
 #include <SDL2/SDL.h>
 
-using namespace light;
+using namespace pax;
 
 struct Keybd_Printer
-    : public Observer<Keybd_Event>
+    : public Observer<Keybd_Signal>
 {
 public:
     void
-    receive(const Keybd_Event& event)
+    receive(const Keybd_Signal& event)
     {
         system("clear");
 
@@ -20,27 +20,35 @@ public:
 };
 
 struct Closer
-    : public Observer<Keybd_Event>
+    : public Observer<Keybd_Signal>
+    , public Observer<Display_Signal>
 {
 public:
     Display* display = 0;
 
     void
-    receive(const Keybd_Event& event)
+    receive(const Keybd_Signal& event)
     {
         if ( event.is_press() ) return;
 
-        if ( event.symbol == SDLK_ESCAPE && display != 0 )
+        if ( event.symbol == Keybd_Symb::ESC && display != 0 )
+            display->destroy();
+    }
+
+    void
+    receive(const Display_Signal& event)
+    {
+        if ( event.is_close() && display != 0 )
             display->destroy();
     }
 };
 
 struct Mouse_Printer
-    : public Observer<Mouse_Event>
+    : public Observer<Mouse_Signal>
 {
 public:
     void
-    receive(const Mouse_Event& mouse)
+    receive(const Mouse_Signal& mouse)
     {
         system("clear");
 
@@ -59,12 +67,13 @@ public:
 int
 main(int, const char*[])
 {
-    Dispatcher          dispatcher;
-    Event_System_Source system_src;
-    Keybd_Printer       keybd_printer;
-    Mouse_Printer       mouse_printer;
-    Closer              closer;
-    Display             display;
+    Dispatcher    dispatcher;
+    System_Source system_src;
+    Keybd_Printer keybd_printer;
+    Mouse_Printer mouse_printer;
+    Closer        closer;
+    Display       display;
+    Painter       painter;
 
     closer.display = &display;
 
@@ -74,13 +83,34 @@ main(int, const char*[])
     );
 
     dispatcher.insert(keybd_printer);
-    dispatcher.insert(closer);
+    dispatcher.insert<Display_Signal>(closer);
+    dispatcher.insert<Keybd_Signal>(closer);
     dispatcher.insert(mouse_printer);
 
-    display.create(String("Prova", 0, 10), {1280, 720});
+    Screen screen;
 
-    while ( display.is_valid() )
+    SDL_Init(SDL_INIT_VIDEO);
+
+    display.create(screen, screen.size(),
+        String("Pax Tibi", 0, 10),
+        Display::BORDERLESS | Display::ALWAYS_TOP
+    );
+
+    if ( display.is_valid() ) {
+        painter.create(display);
+
+        if ( painter.is_valid() == false )
+            display.destroy();
+    }
+
+    while ( display.is_valid() ) {
         system_src.provide(dispatcher);
+
+        painter.prepare();
+        painter.present();
+    }
+
+    SDL_Quit();
 
     return 0;
 }

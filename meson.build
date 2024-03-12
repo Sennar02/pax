@@ -1,4 +1,4 @@
-project('light', 'cpp',
+project('pax', 'cpp',
   default_options: [
     'cpp_std=c++11',
     'warning_level=3',
@@ -11,29 +11,29 @@ project('light', 'cpp',
 
 cpp = meson.get_compiler('cpp')
 
-light_define = []
-light_header = [
+pax_define = []
+pax_header = [
   include_directories('header'),
 ]
-light_depend = [
+pax_depend = [
   cpp.find_library('m', required: true),
   cpp.find_library('SDL2', required: true),
 ]
 
-subdir('source/light/Base')
-subdir('source/light/Memory')
-subdir('source/light/Engine')
+subdir('source/pax/Base')
+subdir('source/pax/Memory')
+subdir('source/pax/Engine')
 
-executable('light',
+executable('pax',
   sources:             [
-    'source/main_events.cpp',
+    'source/main.cpp',
     'source/game/Piece.cpp',
     'source/game/Game_State.cpp',
     'source/game/Floor_Layer.cpp',
     'source/game/Actor_Layer.cpp',
     'source/game/Controls.cpp',
   ],
-  include_directories: [light_header],
-  dependencies:        [light_depend],
-  link_with:           [light_define],
+  include_directories: [pax_header],
+  dependencies:        [pax_depend],
+  link_with:           [pax_define],
 )

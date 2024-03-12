@@ -1,4 +1,4 @@
-#include <light/Engine/import.hpp>
+#include <pax/Engine/import.hpp>
 
 #include <time.h>  // time
 #include <stdio.h> // printf
@@ -11,9 +11,9 @@
 
 using namespace game;
 
-static const u64   TILE_SIZE    = 48u;        // Pixels.
-static const v2u64 GRID_SIZE    = {160u, 90u}; // Tiles.
-static const v2u64 VIEW_SIZE    = { 16u,  9u};  // Tiles.
+static const u64   TILE_SIZE = 48u;        // Pixels.
+static const v2u64 GRID_SIZE = {160u, 90u}; // Tiles.
+static const v2u64 VIEW_SIZE = { 16u,  9u};  // Tiles.
 
 static const u64 GRID_LAYERS = 10u;
 static const u64 GRID_STEPS  = 10u;
@@ -28,12 +28,19 @@ static const Buf<v4u64, 4u> FLOOR_COLOURS = {
 };
 
 static const u64        bump_size = 1024u * 256u;
+static const u64        pool_size = 1024u * 64u;
 static       Bump_Alloc bump      = Bump_Alloc();
+static       Pool_Alloc pool      = Pool_Alloc();
 
 int
 main(int, const char*[])
 {
     bump = Bump_Alloc(calloc(1u, bump_size), bump_size);
+    pool = Pool_Alloc(calloc(1u, pool_size), pool_size, 32u);
+
+    Builder builder;
+
+    builder.alloc = &pool;
 
     Array<v4u64>     colrs = Array<v4u64>(ACTORS_COUNT, &bump);
     Array<Location>  lctns = Array<Location>(ACTORS_COUNT, &bump);
@@ -114,22 +121,33 @@ main(int, const char*[])
         game_state.grid.layers[1].table[point] = i + 1u;
 
         if ( i != 0 ) {
-            ctrls[i] = reserve<Random_Controls>(bump);
+            Random_Controls* ctrl = builder.reserve<Random_Controls>();
 
-            if ( ctrls[i] != 0 )
-                ((Random_Controls*) ctrls[i])->spaces = rand() % top(frames / 2u) + bot(frames / 2u);
-            else
-                light_panic("null", "ctrls[i] == %p", (void*) ctrls[i]);
+            if ( ctrl != 0 ) {
+                ctrl->spaces = rand() % top(frames / 2u) + bot(frames / 2u);
+
+                ctrls[i] = ctrl;
+            } else
+                pax_panic("null", "ctrls[%lu] == %p", i, (void*) ctrl);
         } else {
-            const u8* keys = 0;
-            s32       size = 0;
+            const u8*        keys = 0;
+            s32              size = 0;
+            Player_Controls* ctrl = builder.reserve<Player_Controls>();
 
             keys = SDL_GetKeyboardState(&size);
 
-            ctrls[i] = reserve<Player_Controls>(bump);
-            ((Player_Controls*) ctrls[i])->keys = reserve<Array<const s8>>(bump);
-            ((Player_Controls*) ctrls[i])->keys->data = (const s8*) keys;
-            ((Player_Controls*) ctrls[i])->keys->size = size;
+            if ( ctrl != 0 ) {
+                ctrl->keys = builder.reserve<Array<const s8>>();
+
+                if ( ctrl->keys != 0 ) {
+                    ctrl->keys->data = (const s8*) keys;
+                    ctrl->keys->size = size;
+
+                    ctrls[i] = ctrl;
+                } else
+                    pax_panic("null", "ctrls[%lu].keys == %p", i, (void*) ctrl->keys);
+            } else
+                pax_panic("null", "ctrls[%lu] == %p", i, (void*) ctrl);
         }
 
         lctns[i].point.from(point * TILE_SIZE);
@@ -148,11 +166,11 @@ main(int, const char*[])
     mvmts[0].speed_limit = 10 * TILE_SIZE;
 
     game_state.grid.layers[0].push(&floor_draw);
-//    game_state.grid.layers[1].push(&actor_draw);
+    game_state.grid.layers[1].push(&actor_draw);
 
-    #define LIGHT_ACTOR_WRITE false
+    #define PAX_ACTOR_WRITE false
 
-    #if LIGHT_ACTOR_WRITE
+    #if PAX_ACTOR_WRITE
         game_state.grid.layers[1].push(&actor_write);
     #endif
 
@@ -174,4 +192,3 @@ main(int, const char*[])
 
     return 0;
 }
-

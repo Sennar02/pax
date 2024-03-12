@@ -1,12 +1,12 @@
 #ifndef GAME_CONTROLS_HPP
 #define GAME_CONTROLS_HPP
 
-#include <light/Engine/import.hpp>
+#include <pax/Engine/import.hpp>
 #include "Piece.hpp"
 
 namespace game
 {
-    using namespace light;
+    using namespace pax;
 
     struct Player_Controls
         : public Controls

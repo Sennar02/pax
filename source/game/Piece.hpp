@@ -1,11 +1,11 @@
 #ifndef GAME_PIECE_HPP
 #define GAME_PIECE_HPP
 
-#include <light/Engine/import.hpp>
+#include <pax/Engine/import.hpp>
 
 namespace game
 {
-    using namespace light;
+    using namespace pax;
 
     /**
      * Part of an actor which determines its position

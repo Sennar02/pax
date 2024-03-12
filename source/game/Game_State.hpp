@@ -1,13 +1,13 @@
 #ifndef GAME_GAME_STATE_HPP
 #define GAME_GAME_STATE_HPP
 
-#include <light/Engine/define.hpp>
-#include <light/Events/import.hpp>
+#include <pax/Engine/define.hpp>
+#include <pax/Signal/import.hpp>
 #include "Piece.hpp"
 
 namespace game
 {
-    using namespace light;
+    using namespace pax;
 
     struct Game_State
         : public State
@@ -168,9 +168,9 @@ Title_State::Title_State()
     grid.layers[0].push(&floor_draw);
     grid.layers[1].push(&actor_draw);
 
-    #define LIGHT_WRITE_ACTORS false
+    #define PAX_WRITE_ACTORS false
 
-    #if LIGHT_WRITE_ACTORS
+    #if PAX_WRITE_ACTORS
         grid.layers[1].push(&actor_write);
     #endif
 
@@ -253,9 +253,9 @@ Title_State::leave()
 bool
 Title_State::input()
 {
-    SDL_Event event;
+    SDL_Signal event;
 
-    while ( SDL_PollEvent(&event) ) {
+    while ( SDL_PollSignal(&event) ) {
         if ( event.type == SDL_QUIT ) return false;
 
         if ( event.type == SDL_KEYUP ) {
@@ -264,7 +264,7 @@ Title_State::input()
         }
 
         if ( event.type == SDL_MOUSEWHEEL ) {
-            view.factor = light_max(
+            view.factor = pax_max(
                 view.factor + 0.01 * event.wheel.y, 0
             );
         }
@@ -285,7 +285,7 @@ Title_State::fixed_step(f64 time)
 {
     Grid_Layer layer;
 
-    SDL_PumpEvents();
+    SDL_PumpSignal();
 
     control();
     collide(grid.layers[1].table);
