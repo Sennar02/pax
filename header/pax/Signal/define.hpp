@@ -24,12 +24,6 @@ namespace pax
      *
      */
     template <class Type>
-    struct Observable;
-
-    /**
-     *
-     */
-    template <class Type>
     struct Observer;
 } // pax
 

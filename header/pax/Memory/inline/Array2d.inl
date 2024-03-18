@@ -3,25 +3,31 @@
 namespace pax
 {
     template <class Type>
-    Array2d<Type>::Array2d() {}
-
-    template <class Type>
-    Array2d<Type>::Array2d(void* data, v2u64 size)
+    Array2d<Type>
+    Array2d<Type>::build(void* data, v2u64 size)
     {
-        u64 area = size[0] * size[1];
+        Array2d<Type> reslt;
+        u64           area = size[0] * size[1];
 
         if ( data != 0 && area != 0 ) {
-            this->data = (Type*) data;
-            this->size = area;
-            this->cols = size[0];
-            this->rows = size[1];
+            reslt.data = (Type*) data;
+            reslt.size = area;
+            reslt.cols = size[0];
+            reslt.rows = size[1];
         }
+
+        return reslt;
     }
 
     template <class Type>
-    Array2d<Type>::Array2d(v2u64 size, Alloc* alloc)
+    Array2d<Type>
+    Array2d<Type>::build(v2u64 size, Alloc* alloc)
     {
-        create(size, alloc);
+        Array2d<Type> reslt;
+
+        reslt.create(size, alloc);
+
+        return reslt;
     }
 
     template <class Type>
@@ -80,12 +86,12 @@ namespace pax
     bool
     Array2d<Type>::destroy()
     {
-        bool res = false;
+        bool reslt = false;
 
         if ( alloc != 0 && data != 0 ) {
-            res = alloc->reclaim(data);
+            reslt = alloc->reclaim(data);
 
-            if ( res ) {
+            if ( reslt ) {
                 this->data = 0;
                 this->size = 0;
                 this->cols = 0;
@@ -93,81 +99,60 @@ namespace pax
             }
         }
 
-        return res;
-    }
-
-    template <class Type>
-    Array2d<Type>&
-    Array2d<Type>::fill(const Type& value)
-    {
-        for ( u64 i = 0; i < size; i += 1u )
-            data[i] = value;
-
-        return *this;
-    }
-
-    template <class Type>
-    template <class Func, class... Args>
-    Array2d<Type>&
-    Array2d<Type>::fill(Func filler, Args... args)
-    {
-        for ( u64 i = 0; i < size; i += 1u )
-            data[i] = filler(args...);
-
-        return *this;
+        return reslt;
     }
 
     template <class Type>
     Type&
     Array2d<Type>::operator[](v2u64 index)
     {
-        u64 i = index[0];
-        u64 j = index[1];
+        u64 r = index[0];
+        u64 c = index[1];
 
         #if PAX_TEST_BOUNDS
-            if ( i >= cols ) pax_panic("test-bounds", "col %lu exceeds %lu", i, cols);
-            if ( j >= rows ) pax_panic("test-bounds", "row %lu exceeds %lu", j, rows);
+            if ( c >= cols ) pax_panic("test-bounds", "col %lu exceeds %lu", c, cols);
+            if ( r >= rows ) pax_panic("test-bounds", "row %lu exceeds %lu", r, rows);
         #endif
 
-        return data[j * cols + i];
+        return data[r * cols + c];
     }
 
     template <class Type>
     const Type&
     Array2d<Type>::operator[](v2u64 index) const
     {
-        u64 i = index[0];
-        u64 j = index[1];
+        u64 r = index[0];
+        u64 c = index[1];
 
         #if PAX_TEST_BOUNDS
-            if ( i >= cols ) pax_panic("test-bounds", "col %lu exceeds %lu", i, cols);
-            if ( j >= rows ) pax_panic("test-bounds", "row %lu exceeds %lu", j, rows);
+            if ( c >= cols ) pax_panic("test-bounds", "col %lu exceeds %lu", c, cols);
+            if ( r >= rows ) pax_panic("test-bounds", "row %lu exceeds %lu", r, rows);
         #endif
 
-        return data[j * cols + i];
+        return data[r * cols + c];
     }
 
     template <class Type>
-    Type&
+    Array<Type>
     Array2d<Type>::operator[](u64 index)
     {
         #if PAX_TEST_BOUNDS
-            if ( index >= size )
-                pax_panic("test-bounds", "index %lu exceeds %lu", index, size);
+            if ( index >= rows )
+                pax_panic("test-bounds", "row %lu exceeds %lu", index, rows);
         #endif
 
-        return data[index];
+        return Array<Type>(data + cols * index, cols);
     }
 
     template <class Type>
-    const Type&
+    const Array<Type>
     Array2d<Type>::operator[](u64 index) const
     {
         #if PAX_TEST_BOUNDS
-            if ( index >= size )
-                pax_panic("test-bounds", "index %lu exceeds %lu", index, size);
+            if ( index >= rows )
+                pax_panic("test-bounds", "row %lu exceeds %lu", index, rows);
         #endif
 
-        return data[index];
+        return Array<Type>(data + cols * index, cols);
     }
 } // pax

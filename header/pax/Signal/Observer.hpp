@@ -12,22 +12,6 @@ namespace pax
         /**
          *
          */
-        void* link = 0;
-
-        /**
-         *
-         */
-        Observer<Type>* next = 0;
-
-        /**
-         *
-         */
-        Observer<Type>* prev = 0;
-
-    public:
-        /**
-         *
-         */
         virtual void
         receive(const Type& event) = 0;
     };

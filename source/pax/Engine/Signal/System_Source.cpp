@@ -91,12 +91,12 @@ namespace pax
         return display;
     }
 
-    void
+    bool
     System_Source::provide(Dispatcher& dispat)
     {
         SDL_Event event;
 
-        while ( SDL_PollEvent(&event) != 0 ) {
+        if ( SDL_PollEvent(&event) != 0 ) {
             switch ( event.type ) {
                 case SDL_KEYDOWN:         pax_excl({ dispat.publish(from_sdl(event.key));    });
                 case SDL_KEYUP:           pax_excl({ dispat.publish(from_sdl(event.key));    });
@@ -106,6 +106,10 @@ namespace pax
                 case SDL_MOUSEWHEEL:      pax_excl({ dispat.publish(from_sdl(event.wheel));  });
                 case SDL_QUIT:            pax_excl({ dispat.publish(from_sdl(Display_Signal::FLAG_CLOSE)); });
             }
+
+            return true;
         }
+
+        return false;
     }
 } // pax

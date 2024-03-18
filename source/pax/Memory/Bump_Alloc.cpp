@@ -2,15 +2,18 @@
 
 namespace pax
 {
-    Bump_Alloc::Bump_Alloc() {}
-
-    Bump_Alloc::Bump_Alloc(void* data, u64 size)
+    Bump_Alloc
+    Bump_Alloc::build(void* data, u64 size)
     {
+        Bump_Alloc reslt;
+
         if ( data != 0 && size != 0 ) {
-            this->data = (s8*) data;
-            this->addr = (s8*) data;
-            this->size = size;
+            reslt.data = (s8*) data;
+            reslt.addr = (s8*) data;
+            reslt.size = size;
         }
+
+        return reslt;
     }
 
     void*

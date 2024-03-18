@@ -9,7 +9,6 @@ namespace pax
     struct Display
     {
     public:
-        pax_opt(u64, START_FULL);
         pax_opt(u64, START_SHOW);
         pax_opt(u64, START_HIDE);
         pax_opt(u64, START_MIN);

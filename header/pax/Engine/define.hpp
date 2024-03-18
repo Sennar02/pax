@@ -32,12 +32,7 @@ namespace pax
     /**
      *
      */
-    struct Grid_Layer;
-
-    /**
-     *
-     */
-    struct Grid;
+    struct Tile_Grid;
 
     /**
      *

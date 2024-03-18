@@ -17,13 +17,13 @@ namespace pax
          * Procedure used to initialize the state.
          */
         virtual void
-        startup() = 0;
+        start() = 0;
 
         /**
          * Procedure used to finalize the state.
          */
         virtual void
-        cleanup() = 0;
+        clean() = 0;
 
         /**
          * Procedure for the entering state transition.

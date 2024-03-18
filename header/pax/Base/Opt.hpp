@@ -26,14 +26,10 @@ namespace pax
 
     public:
         /**
-         * Default constructor to make the compiler happy.
-         */
-        Opt();
-
-        /**
          * Constructor used to provide an item.
          */
-        Opt(Item item);
+        static Opt<Item>
+        build(Item item);
     };
 } // pax
 

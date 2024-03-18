@@ -4,20 +4,15 @@ namespace pax
 {
     template <class Type>
     bool
-    Dispatcher::insert(Observer<Type>& observ)
+    Dispatcher::insert(Observer<Type>& item)
     {
-        auto* list = (Observer<Type>*) table[Type::KIND];
+        u64 kind = Type::KIND;
 
-        if ( observ.link == 0 ) {
-            observ.link = this;
-            observ.next = list;
+        if ( kind < table.size ) {
+            Array_List<void*>* list = &table[kind];
 
-            if ( list != 0 )
-                list->prev = &observ;
-
-            table[Type::KIND] = &observ;
-
-            return true;
+            if ( list->insert((void*) &item, list->count) )
+                return true;
         }
 
         return false;
@@ -25,22 +20,15 @@ namespace pax
 
     template <class Type>
     bool
-    Dispatcher::remove(Observer<Type>& observ)
+    Dispatcher::remove(u64 index)
     {
-        auto* next = observ.next;
-        auto* prev = observ.prev;
-        auto* list = (Observer<Type>*) table[Type::KIND];
+        u64 kind = Type::KIND;
 
-        if ( observ.link == this ) {
-            if ( list == &observ )
-                table[Type::KIND] = list->next;
+        if ( kind < table.size ) {
+            Array_List<void*>* list = &table[kind];
 
-            observ.link = 0;
-
-            if ( next != 0 ) next->prev = prev;
-            if ( prev != 0 ) prev->next = next;
-
-            return true;
+            if ( list->remove(index).is_valid )
+                return true;
         }
 
         return false;
@@ -50,15 +38,15 @@ namespace pax
     bool
     Dispatcher::publish(const Type& event) const
     {
-        auto* node = (Observer<Type>*) table[Type::KIND];
+        u64 kind = Type::KIND;
 
-        if ( event.kind() == Type::KIND ) {
-            for ( ; node != 0; node = node->next )
-                node->receive(event);
+        if ( event.kind() == kind && kind < table.size ) {
+            const Array_List<void*>* list = &table[kind];
 
-            return true;
+            for ( u64 i = 0; i < list->count; i += 1u )
+                ((Observer<Type>*) list->array.data[i])->receive(event);
         }
 
-        return false;
+        return true;
     }
 } // pax

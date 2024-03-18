@@ -52,17 +52,14 @@ namespace pax
         /**
          *
          */
-        Array2d();
+        static Array2d<Type>
+        build(void* data, v2u64 size);
 
         /**
          *
          */
-        Array2d(void* data, v2u64 size);
-
-        /**
-         *
-         */
-        Array2d(v2u64 size, Alloc* alloc);
+        static Array2d<Type>
+        build(v2u64 size, Alloc* alloc);
 
         /**
          *
@@ -85,19 +82,6 @@ namespace pax
         /**
          *
          */
-        Array2d<Type>&
-        fill(const Type& value);
-
-        /**
-         *
-         */
-        template <class Func, class... Args>
-        Array2d<Type>&
-        fill(Func filler, Args... args);
-
-        /**
-         *
-         */
         Type&
         operator[](v2u64 index);
 
@@ -110,13 +94,13 @@ namespace pax
         /**
          *
          */
-        Type&
+        Array<Type>
         operator[](u64 index);
 
         /**
          *
          */
-        const Type&
+        const Array<Type>
         operator[](u64 index) const;
     };
 } // pax

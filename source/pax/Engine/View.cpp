@@ -1,4 +1,4 @@
-#include <pax/Engine/Kernel/View.hpp>
+#include <pax/Engine/View.hpp>
 
 namespace pax
 {

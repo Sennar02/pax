@@ -11,7 +11,7 @@ namespace pax
         f64 time = 0;
         u64 tick = 0;
 
-        state.startup();
+        state.start();
         timer.update();
 
         while ( true ) {
@@ -25,7 +25,7 @@ namespace pax
             } else break;
         }
 
-        state.cleanup();
+        state.clean();
 
         return true;
     }

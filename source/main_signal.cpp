@@ -67,7 +67,11 @@ public:
 int
 main(int, const char*[])
 {
-    Dispatcher    dispatcher;
+    Bump_Alloc bump = Bump_Alloc::build(
+        calloc(1u, 1024u * 128u), 1024u * 128u
+    );
+
+    Dispatcher    dispat;
     System_Source system_src;
     Keybd_Printer keybd_printer;
     Mouse_Printer mouse_printer;
@@ -77,23 +81,26 @@ main(int, const char*[])
 
     closer.display = &display;
 
-    dispatcher.table = Array<void*>(
-        calloc(1, sizeof(void*) * 10),
-        sizeof(void*) * 10
-    );
+    dispat = Dispatcher::build({10, 10}, &bump);
 
-    dispatcher.insert(keybd_printer);
-    dispatcher.insert<Display_Signal>(closer);
-    dispatcher.insert<Keybd_Signal>(closer);
-    dispatcher.insert(mouse_printer);
+    printf("%lu\n", dispat.table.size);
+
+    for ( u64 i = 0; i < dispat.table.size; i += 1u )
+        printf("%lu\n", dispat.table[i].array.size);
+
+    dispat.insert(keybd_printer);
+    dispat.insert<Display_Signal>(closer);
+    dispat.insert<Keybd_Signal>(closer);
+    dispat.insert(mouse_printer);
 
     Screen screen;
 
+    screen.index = 1;
+
     SDL_Init(SDL_INIT_VIDEO);
 
-    display.create(screen, screen.size(),
-        String("Pax Tibi", 0, 10),
-        Display::BORDERLESS | Display::ALWAYS_TOP
+    display.create(screen, screen.size() / 2u,
+        String::build("Pax Tibi", 0, 10)
     );
 
     if ( display.is_valid() ) {
@@ -104,7 +111,7 @@ main(int, const char*[])
     }
 
     while ( display.is_valid() ) {
-        system_src.provide(dispatcher);
+        system_src.provide(dispat);
 
         painter.prepare();
         painter.present();

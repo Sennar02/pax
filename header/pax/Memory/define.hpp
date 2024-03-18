@@ -16,6 +16,9 @@ namespace pax
 
     template <class Type>
     struct Array2d;
+
+    template <class Type>
+    struct Array_List;
 } // pax
 
 #endif // PAX_MEMORY_DEFINE_HPP

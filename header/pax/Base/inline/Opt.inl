@@ -3,11 +3,14 @@
 namespace pax
 {
     template <class Item>
-    Opt<Item>::Opt() {}
+    Opt<Item>
+    Opt<Item>::build(Item item)
+    {
+        Opt<Item> reslt;
 
-    template <class Item>
-    Opt<Item>::Opt(Item item)
-        : item {item}
-        , is_valid {true}
-    {}
+        reslt.item     = item;
+        reslt.is_valid = true;
+
+        return reslt;
+    }
 } // pax

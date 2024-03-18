@@ -1,2 +1,5 @@
 # Ignore target directory.
 target/
+
+# Ignore every hidden file.
+.*

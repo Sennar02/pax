@@ -13,9 +13,15 @@ namespace pax
         /**
          *
          */
-        Array<void*> table = Array<void*>();
+        Array<Array_List<void*>> table;
 
     public:
+        /**
+         *
+         */
+        static Dispatcher
+        build(v2u64 size, Alloc* alloc);
+
         /**
          *
          */
@@ -28,7 +34,7 @@ namespace pax
          */
         template <class Type>
         bool
-        remove(Observer<Type>& observ);
+        remove(u64 index);
 
         /**
          *

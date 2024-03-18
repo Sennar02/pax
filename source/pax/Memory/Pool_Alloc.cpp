@@ -15,16 +15,19 @@ namespace pax
     static const u64 LEN_NODE = sizeof(Pool_Alloc::Node);
     static const u64 LEN_PREF = sizeof(Pool_Alloc::Pref);
 
-    Pool_Alloc::Pool_Alloc() {}
-
-    Pool_Alloc::Pool_Alloc(void* data, u64 size, u64 page, u8 align)
+    Pool_Alloc
+    Pool_Alloc::build(void* data, u64 size, u64 page, u8 align)
     {
-        if ( data != 0 && size != 0 ) {
-            this->data = (s8*) data;
-            this->size = size;
+        Pool_Alloc reslt;
 
-            reset(page, align);
+        if ( data != 0 && size != 0 ) {
+            reslt.data = (s8*) data;
+            reslt.size = size;
+
+            reslt.reset(page, align);
         }
+
+        return reslt;
     }
 
     void*

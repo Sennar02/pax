@@ -30,12 +30,8 @@ namespace pax
         /**
          *
          */
-        Bump_Alloc();
-
-        /**
-         *
-         */
-        Bump_Alloc(void* data, u64 size);
+        static Bump_Alloc
+        build(void* data, u64 size);
 
         /**
          *

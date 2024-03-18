@@ -3,13 +3,26 @@
 namespace pax
 {
     template <class Item, class Fail>
-    Res<Item, Fail>::Res(Item item)
-        : item {item}
-        , is_valid {true}
-    {}
+    Res<Item, Fail>
+    Res<Item, Fail>::build(Item item)
+    {
+        Res<Item, Fail> reslt;
+
+        reslt.item     = item;
+        reslt.is_valid = true;
+
+        return reslt;
+    }
 
     template <class Item, class Fail>
-    Res<Item, Fail>::Res(Fail fail)
-        : fail {fail}
-    {}
+    Res<Item, Fail>
+    Res<Item, Fail>::build(Fail fail)
+    {
+        Res<Item, Fail> reslt;
+
+        reslt.fail     = fail;
+        reslt.is_valid = false;
+
+        return reslt;
+    }
 } // pax

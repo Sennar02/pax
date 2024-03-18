@@ -38,12 +38,8 @@ namespace pax
         /**
          *
          */
-        Pool_Alloc();
-
-        /**
-         *
-         */
-        Pool_Alloc(void* data, u64 size, u64 page, u8 align = 8u);
+        static Pool_Alloc
+        build(void* data, u64 size, u64 page, u8 align = 8u);
 
         /**
          *

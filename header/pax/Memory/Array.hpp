@@ -42,17 +42,14 @@ namespace pax
         /**
          *
          */
-        Array();
+        static Array<Type>
+        build(void* data, u64 size);
 
         /**
          *
          */
-        Array(void* data, u64 size);
-
-        /**
-         *
-         */
-        Array(u64 size, Alloc* alloc);
+        static Array<Type>
+        build(u64 size, Alloc* alloc);
 
         /**
          *
@@ -71,19 +68,6 @@ namespace pax
          */
         bool
         destroy();
-
-        /**
-         *
-         */
-        Array<Type>&
-        fill(const Type& value);
-
-        /**
-         *
-         */
-        template <class Func, class... Args>
-        Array<Type>&
-        fill(Func filler, Args... args);
 
         /**
          *

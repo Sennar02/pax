@@ -28,11 +28,6 @@ namespace pax
 
     public:
         /**
-         * Default constructor to make the compiler happy.
-         */
-        String();
-
-        /**
          * Constructor that can be used to provide a specific size for the string.
          *
          * !!! WARNING !!!
@@ -43,7 +38,8 @@ namespace pax
          *  - crashes,
          *  - vulnerabilities.
          */
-        String(const s8* data, u64 size);
+        static String
+        build(const s8* data, u64 size);
 
         /**
          * Constructor that can be used to calculate the size of the string without
@@ -53,7 +49,8 @@ namespace pax
          * only the first valid portion. Otherwise, if the size is smaller than the
          * lower bound, this function ignores the string completely.
          */
-        String(const s8* data, u64 lower, u64 upper);
+        static String
+        build(const s8* data, u64 lower, u64 upper);
 
         /**
          * Tests if a string contains a specific byte. Returns true as soon as it

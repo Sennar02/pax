@@ -15,7 +15,7 @@ namespace pax
      *  3) -0.34 will produce 0
      */
     s64
-    top(f64 val);
+    top(f64 value);
 
     /**
      * Truncates the number by discarding the
@@ -27,7 +27,7 @@ namespace pax
      *  3) -0.34 will produce -1
      */
     s64
-    bot(f64 val);
+    bot(f64 value);
 
     /**
      * Truncates the number by rounding the value.
@@ -42,7 +42,7 @@ namespace pax
      *  7) -1.99 will produce -2
      */
     s64
-    rnd(f64 val);
+    rnd(f64 value);
 } // pax
 
 /**
@@ -52,10 +52,22 @@ namespace pax
     ((a) < (b) ? (b) : (a))
 
 /**
+ * Compares two values and chooses the larger one without branching.
+ */
+#define pax_max_bl(a, b) \
+    (((a) <= (b)) * (b) + ((b) < (a)) * (a))
+
+/**
  * Compares two values and chooses the smaller one.
  */
 #define pax_min(a, b) \
     ((a) < (b) ? (a) : (b))
+
+/**
+ * Compares two values and chooses the smaller on without branching.
+ */
+#define pax_min_bl(a, b) \
+    (((a) <= (b)) * (a) + ((b) < (a)) * (b))
 
 /**
  * Determines if a value is inside a range in
@@ -64,6 +76,6 @@ namespace pax
  * Note: The case a > b is tested.
  */
 #define pax_is_in(a, b, v) \
-    (!((a) > (b)) && !((a) > (v)) && (v) < (b))
+    (((a) <= (b)) && ((v) <= (a)) && ((v) < (b)))
 
 #endif // PAX_BASE_MATH_HPP

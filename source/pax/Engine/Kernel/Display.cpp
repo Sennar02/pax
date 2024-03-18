@@ -2,14 +2,13 @@
 
 namespace pax
 {
-    const u64 Display::START_FULL  = SDL_WINDOW_FULLSCREEN;
-    const u64 Display::START_SHOW  = SDL_WINDOW_SHOWN;
-    const u64 Display::START_HIDE  = SDL_WINDOW_HIDDEN;
-    const u64 Display::START_MIN   = SDL_WINDOW_MINIMIZED;
-    const u64 Display::START_MAX   = SDL_WINDOW_MAXIMIZED;
-    const u64 Display::RESIZEABLE  = SDL_WINDOW_RESIZABLE;
-    const u64 Display::BORDERLESS  = SDL_WINDOW_BORDERLESS;
-    const u64 Display::ALWAYS_TOP  = SDL_WINDOW_ALWAYS_ON_TOP;
+    const u64 Display::START_SHOW = SDL_WINDOW_SHOWN;
+    const u64 Display::START_HIDE = SDL_WINDOW_HIDDEN;
+    const u64 Display::START_MIN  = SDL_WINDOW_MINIMIZED;
+    const u64 Display::START_MAX  = SDL_WINDOW_MAXIMIZED;
+    const u64 Display::RESIZEABLE = SDL_WINDOW_RESIZABLE;
+    const u64 Display::BORDERLESS = SDL_WINDOW_BORDERLESS;
+    const u64 Display::ALWAYS_TOP = SDL_WINDOW_ALWAYS_ON_TOP;
 
     Display::Display() {}
 

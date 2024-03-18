@@ -34,12 +34,14 @@ namespace pax
         /**
          * Constructor used to provide an item.
          */
-        Res(Item item);
+        static Res<Item, Fail>
+        build(Item item);
 
         /**
          * Constructor used to provide additional failure data.
          */
-        Res(Fail fail);
+        static Res<Item, Fail>
+        build(Fail fail);
     };
 } // pax
 

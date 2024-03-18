@@ -23,11 +23,11 @@ namespace pax
 
     public:
         /**
-         * Populates the vector from one of another type.
+         * Constructor which populatea the vector from one of another type.
          */
         template <class Other>
-        void
-        from(Vec<Other, Size> other);
+        static Vec<Type, Size>
+        build(Vec<Other, Size> other);
 
         /**
          * Calculates the magnitude of the vector,

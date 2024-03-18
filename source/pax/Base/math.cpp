@@ -3,29 +3,29 @@
 namespace pax
 {
     s64
-    top(f64 val)
+    top(f64 value)
     {
-        s64 res = val;
+        s64 reslt = value;
 
-        return res +
-            (val > res);
+        return reslt +
+            (value > reslt);
     }
 
     s64
-    bot(f64 val)
+    bot(f64 value)
     {
-        s64 res = val;
+        s64 reslt = value;
 
-        return res -
-            (res > val);
+        return reslt -
+            (reslt > value);
     }
 
     s64
-    rnd(f64 val)
+    rnd(f64 value)
     {
         s64 sig =
-            (val > 0) - (val < 0);
+            (value > 0) - (value < 0);
 
-        return val + sig * 0.5;
+        return value + sig * 0.5;
     }
 } // pax

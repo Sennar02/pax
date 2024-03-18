@@ -3,21 +3,28 @@
 namespace pax
 {
     template <class Type>
-    Array<Type>::Array() {}
-
-    template <class Type>
-    Array<Type>::Array(void* data, u64 size)
+    Array<Type>
+    Array<Type>::build(void* data, u64 size)
     {
+        Array<Type> reslt;
+
         if ( data != 0 && size != 0 ) {
-            this->data = (Type*) data;
-            this->size = size;
+            reslt.data = (Type*) data;
+            reslt.size = size;
         }
+
+        return reslt;
     }
 
     template <class Type>
-    Array<Type>::Array(u64 size, Alloc* alloc)
+    Array<Type>
+    Array<Type>::build(u64 size, Alloc* alloc)
     {
-        create(size, alloc);
+        Array<Type> reslt;
+
+        reslt.create(size, alloc);
+
+        return reslt;
     }
 
     template <class Type>
@@ -71,39 +78,18 @@ namespace pax
     bool
     Array<Type>::destroy()
     {
-        bool res = false;
+        bool reslt = false;
 
         if ( alloc != 0 && data != 0 ) {
-            res = alloc->reclaim(data);
+            reslt = alloc->reclaim(data);
 
-            if ( res ) {
+            if ( reslt ) {
                 this->data = 0;
                 this->size = 0;
             }
         }
 
-        return res;
-    }
-
-    template <class Type>
-    Array<Type>&
-    Array<Type>::fill(const Type& value)
-    {
-        for ( u64 i = 0; i < size; i += 1u )
-            data[i] = value;
-
-        return *this;
-    }
-
-    template <class Type>
-    template <class Func, class... Args>
-    Array<Type>&
-    Array<Type>::fill(Func filler, Args... args)
-    {
-        for ( u64 i = 0; i < size; i += 1u )
-            data[i] = filler(args...);
-
-        return *this;
+        return reslt;
     }
 
     template <class Type>

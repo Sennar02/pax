@@ -12,7 +12,7 @@ namespace pax
         /**
          *
          */
-        virtual void
+        virtual bool
         provide(Dispatcher& dispat) = 0;
     };
 } // pax

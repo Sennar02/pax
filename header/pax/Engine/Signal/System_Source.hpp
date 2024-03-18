@@ -15,9 +15,11 @@ namespace pax
         /**
          *
          */
-        void
+        bool
         provide(Dispatcher& dispat);
     };
+
+    static System_Source system_src;
 } // pax
 
 #endif // PAX_ENGINE_EVENT_SYSTEM_SOURCE_HPP

@@ -27,28 +27,35 @@ namespace pax
         return size;
     }
 
-    String::String() {}
-
-    String::String(const s8* data, u64 size)
+    String
+    String::build(const s8* data, u64 size)
     {
+        String reslt;
+
         if ( data != 0 && size != 0 ) {
-            this->data = data;
-            this->size = size;
+            reslt.data = data;
+            reslt.size = size;
         }
+
+        return reslt;
     }
 
-    String::String(const s8* data, u64 lower, u64 upper)
+    String
+    String::build(const s8* data, u64 lower, u64 upper)
     {
-        u64 size = 0;
+        String reslt;
+        u64    size = 0;
 
         if ( data != 0 && lower < upper ) {
             size = string_count(data, upper);
 
             if ( size >= lower ) {
-                this->data = data;
-                this->size = size;
+                reslt.data = data;
+                reslt.size = size;
             }
         }
+
+        return reslt;
     }
 
     bool
@@ -65,31 +72,36 @@ namespace pax
     Opt<u64>
     String::index_of(s8 byte) const
     {
+        Opt<u64> reslt;
+
         for ( u64 i = 0; i < size; i += 1u ) {
             if ( data[i] == byte )
-                return i;
+                return Opt<u64>::build(i);
         }
 
-        return {};
+        return reslt;
     }
 
     Buf<String, 2u>
     String::split(s8 byte) const
     {
-        Buf<String, 2u> res;
+        Buf<String, 2u> reslt;
 
-        res[0] = String(data, size);
+        reslt[0] = String::build(data, size);
 
         for ( u64 i = 0; i < size; i += 1u ) {
             if ( data[i] == byte ) {
-                res[1] = String(data + i + 1u, size - i - 1u);
-                res[0] = String(data, i);
+                reslt[0] = String::build(data, i);
+                reslt[1] = String::build(
+                    data + i + 1u,
+                    size - i - 1u
+                );
 
                 break;
             }
         }
 
-        return res;
+        return reslt;
     }
 
     String&
