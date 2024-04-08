@@ -137,18 +137,18 @@ public:
 };
 
 void
+on_display_event(Display_Event event, Main_State* state)
+{
+    if ( event.is_close() ) state->active = false;
+}
+
+void
 on_keybd_event(Keybd_Event event, Main_State* state)
 {
     if ( event.is_press() ) return;
 
     if ( event.code == Keybd::ESC )
         state->active = false;
-}
-
-void
-on_display_event(Display_Event event, Main_State* state)
-{
-    if ( event.is_close() ) state->active = false;
 }
 
 void
@@ -166,7 +166,7 @@ on_mouse_event(Mouse_Event event, Main_State* state)
         pax_min(100.0, pax_max(0.01, scale(1))),
     };
 
-    if ( event.button == Mouse::BTN_CENTRE )
+    if ( event.button == Mouse::CENTRE )
         scale = {1.0, 1.0};
 
     state->view.scale = scale;
@@ -204,15 +204,15 @@ Main_State::acquire()
     // Fills the grid with all the actors' indeces and fills the pool with all the points creating
     // a bijection between every actor and its position in the grid.
     for ( u64 i = 0; i < position.size; i += 1u ) {
-        v2u64 tile = {};
+        v2u64 cell = {};
 
         do {
-            tile(0) = rand() % actors.size(0);
-            tile(1) = rand() % actors.size(1);
-        } while ( actors(tile) != 0 );
+            cell(0) = rand() % actors.size(0);
+            cell(1) = rand() % actors.size(1);
+        } while ( actors(cell) != 0 );
 
-        position(i).point = tile;
-        actors(tile) = i + 1u;
+        position(i).point = cell;
+        actors(cell) = i + 1u;
     }
 
     // Fills the movement pool with the same speed limit, if its limit is zero the actor is also immobile.
@@ -241,7 +241,7 @@ Main_State::acquire()
     // Prepares the view with centre on the player.
     view.offset = PAX_VIEW_HALF;
     view.size   = PAX_VIEW_SIZE;
-    view.unit   = PAX_TILE_SIZE;
+    view.unit   = PAX_CELL_SIZE;
     view.target = position(0).whole() + 0.5 - view.offset;
 
     // Prepares and fills the event dispat.
@@ -253,7 +253,7 @@ Main_State::acquire()
 
     // Prepares the display.
     display.acquire(monitor,
-        PAX_TITLE, PAX_VIEW_SIZE * PAX_TILE_SIZE
+        PAX_TITLE, PAX_VIEW_SIZE * PAX_CELL_SIZE
     );
 
     // Prepares the painter.
@@ -329,17 +329,17 @@ Main_State::actors_show()
 
     static const char* const TEXT_CLEAR = "\x1b[0m";
 
-    v4f64 diff = view.bounds();
-    v4u64 rect = view.cull(diff, {0, 0, actors.size(0), actors.size(1)});
+    v4f64 rect = view.rect();
+    v4u64 cull = view.cull(rect, {0, 0, actors.size(0), actors.size(1)});
 
-    system("release");
+    system("clear");
 
     for ( u64 row = 0; row < actors.size(1); row += 1u ) {
         for ( u64 col = 0; col < actors.size(0); col += 1u ) {
             u64 index = actors(col, row);
 
-            if ( col >= rect(0) && col < rect(2) &&
-                 row >= rect(1) && row < rect(3) )
+            if ( col >= cull(0) && col < cull(2) &&
+                 row >= cull(1) && row < cull(3) )
                 printf("%s", TEXT_BGRND[0]);
 
             printf("%s%3lu%s ",
@@ -386,11 +386,11 @@ Main_State::actors_control()
 void
 actors_collide_borders(u64, Main_State* state, Position* position, Movement* movement)
 {
-    v2u64 tile = position->point;
-    v2u64 next = tile + movement->input;
+    v2u64 cell = position->point;
+    v2u64 next = cell + movement->input;
 
-    if ( tile != next ) {
-        for ( u64 i = 0; i < tile.SIZE; i += 1u ) {
+    if ( cell != next ) {
+        for ( u64 i = 0; i < cell.SIZE; i += 1u ) {
             if ( next(i) >= state->actors.size(i) )
                 movement->input(i) = 0;
         }
@@ -406,14 +406,14 @@ actors_collide_objects(u64, Main_State* state, Position* position, Movement* mov
         v2u64 {1u, 1u},
     };
 
-    v2u64 tile = position->point;
-    v2u64 next = tile + movement->input;
+    v2u64 cell = position->point;
+    v2u64 next = cell + movement->input;
     v2s64 part = {};
 
-    if ( tile != next ) {
+    if ( cell != next ) {
         for ( u64 i = 0; i < ANGLE_PARTS.SIZE; i += 1u ) {
             part = movement->input * ANGLE_PARTS(i);
-            next = tile + part;
+            next = cell + part;
 
             if ( state->actors(next) != 0 )
                 movement->input -= part;
@@ -433,11 +433,11 @@ Main_State::actors_collide()
 void
 actors_move_start(u64 index, Main_State* state, Position* position, Movement* movement)
 {
-    v2u64 tile = position->point;
-    v2u64 next = tile + movement->input;
+    v2u64 cell = position->point;
+    v2u64 next = cell + movement->input;
     f64   norm = 0;
 
-    if ( tile != next ) {
+    if ( cell != next ) {
         if ( state->actors(next) == 0 ) {
             norm = movement->input.norm();
 
@@ -447,7 +447,7 @@ actors_move_start(u64 index, Main_State* state, Position* position, Movement* mo
             movement->set_moving(true);
 
             state->actors(next) = index + 1u;
-            state->actors(tile) = 0;
+            state->actors(cell) = 0;
         }
     }
 }
@@ -497,56 +497,56 @@ void
 ground_paint_collect(v2u64 index, Main_State* state, v4f64 diff)
 {
     Colour rgba = state->GROUND_COLOURS(state->ground(index));
-    v4f64  tile = {0, 0, state->view.unit(0), state->view.unit(1)};
+    v4f64  cell = {0, 0, state->view.unit(0), state->view.unit(1)};
 
-    tile(0) = tile(2) * (index(0) - diff(0));
-    tile(1) = tile(3) * (index(1) - diff(1));
+    cell(0) = cell(2) * (index(0) - diff(0));
+    cell(1) = cell(3) * (index(1) - diff(1));
 
     state->painter.set_colour(rgba);
-    state->painter.paint_rect_fill(tile);
+    state->painter.paint_rect_fill(cell);
 }
 
 void
 Main_State::ground_paint()
 {
-    v4f64  diff = view.bounds();
-    v4u64  rect = view.cull(diff, {0, 0, ground.size(0), ground.size(1)});
+    v4f64 rect = view.rect();
+    v4u64 cull = view.cull(rect, {0, 0, ground.size(0), ground.size(1)});
 
-    for ( u64 row = rect(1); row < rect(3); row += 1u ) {
-        for ( u64 col = rect(0); col < rect(2); col += 1u )
-            ground_paint_collect({col, row}, this, diff);
+    for ( u64 row = cull(1); row < cull(3); row += 1u ) {
+        for ( u64 col = cull(0); col < cull(2); col += 1u )
+            ground_paint_collect({col, row}, this, rect);
     }
 
     painter.set_colour();
 }
 
 void
-actors_paint_collect(v2u64 index, Main_State* state, v4f64 diff)
+actors_paint_collect(v2u64 index, Main_State* state, v4f64 rect)
 {
     Colour rgba  = {};
-    v4f64  tile  = {0, 0, state->view.unit(0), state->view.unit(1)};
+    v4f64  cell  = {0, 0, state->view.unit(0), state->view.unit(1)};
     u64    actor = state->actors(index) - 1u;
 
     if ( actor != MAX_U64 ) {
         rgba = state->colour(actor);
 
-        tile(0) = tile(2) * (state->position(actor).whole()(0) - diff(0));
-        tile(1) = tile(3) * (state->position(actor).whole()(1) - diff(1));
+        cell(0) = cell(2) * (state->position(actor).whole()(0) - rect(0));
+        cell(1) = cell(3) * (state->position(actor).whole()(1) - rect(1));
 
         state->painter.set_colour(rgba);
-        state->painter.paint_rect_fill(tile);
+        state->painter.paint_rect_fill(cell);
     }
 }
 
 void
 Main_State::actors_paint()
 {
-    v4f64  diff  = view.bounds();
-    v4u64  rect  = view.cull(diff, {0, 0, ground.size(0), ground.size(1)});
+    v4f64 rect = view.rect();
+    v4u64 cull = view.cull(rect, {0, 0, ground.size(0), ground.size(1)});
 
-    for ( u64 row = rect(1); row < rect(3); row += 1u ) {
-        for ( u64 col = rect(0); col < rect(2); col += 1u )
-            actors_paint_collect({col, row}, this, diff);
+    for ( u64 row = cull(1); row < cull(3); row += 1u ) {
+        for ( u64 col = cull(0); col < cull(2); col += 1u )
+            actors_paint_collect({col, row}, this, rect);
     }
 
     painter.set_colour();

@@ -2,12 +2,35 @@
 #define PAX_BASE_DEFINE_HPP
 
 /**
- * Determines if the library defines pax_show and pax_show_fmt macros.
+ * Determines if the library defines pax_show and pax_show_fmt macros. Those macros print to standard
+ * output the source's file and line in which are called, and then a group in which the message is
+ * categorized before the message itself.
+ *
+ * If not defined those macros expand to nothing.
+ *
+ * Example:
+ *   1) pax_show("debug", "Done!");
+ *   2) pax_show_fmt("debug", "Result = %u", 3);
+ *
+ * The difference between the two macros is that pax_show_fmt accepts a format and one or more variables
+ * to print, when pax_show only accepts a simple string as message.
  */
 #define PAX_DEF_SHOW true
 
 /**
- * Determines if the library defiens pax_test and pax_test_fmt macros, which also depend on PAX_DEF_SHOW.
+ * Determines if the library defines pax_test and pax_test_fmt macros. Those macros test if a condition
+ * is verified: if the condition is verified they do noting; otherwise they print to standard output the
+ * source's file and line in which are called, and then a group in which the message is categorized before
+ * the message itself (like the pax_show* macros) but also abort the program afterwards.
+ *
+ * If not defined those macros expand to nothing.
+ *
+ * Example:
+ *   1) pax_test(index < 3, "error", "Index is beyond the limit!");
+ *   2) pax_test_fmt(index < 3, "error", "Index = %u is beyond the limit = %lu!", index, 3);
+ *
+ * The difference between the two macros is that pax_test_fmt accepts a format and one or more variables
+ * to print, when pax_test only accepts a simple string as message.
  */
 #define PAX_DEF_TEST true
 
@@ -17,9 +40,7 @@ extern "C" {
     #include <stdlib.h>
     #include <math.h>
 
-    /**
-     * todo: Remove after completion.
-     */
+    // todo: Remove after completion.
     #include <stdio.h>
 }
 

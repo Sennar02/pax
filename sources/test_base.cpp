@@ -10,13 +10,13 @@ test_option()
     Option<u64> none;
     Option<u64> some = option_create<u64>(value);
 
-    if ( none.valid == some.valid )
+    if ( none.full == some.full )
         pax_show("test", "Valid and invalid are both valid");
 
-    if ( none.valid == true )
+    if ( none.full == true )
         pax_show("test", "Invalid is valid");
 
-    if ( some.valid == false )
+    if ( some.full == false )
         pax_show("test", "Valid is invalid");
 
     if ( some.item != value )

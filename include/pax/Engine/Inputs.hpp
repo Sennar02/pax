@@ -80,9 +80,9 @@ namespace pax
 
     struct Mouse
     {
-        static const u64 BTN_LEFT;
-        static const u64 BTN_CENTRE;
-        static const u64 BTN_RIGHT;
+        static const u64 LEFT;
+        static const u64 CENTRE;
+        static const u64 RIGHT;
     };
 
     /**

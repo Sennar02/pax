@@ -7,15 +7,23 @@ namespace pax
     struct Option
     {
     public:
-        /**
-         * When the option is invalid this member is empty, otherwise contains a specific value.
-         */
-        Item item = {};
+        union {
+            /**
+             * When the option is full, the item is valid. Instead, when it's empty the state is undefined.
+             */
+            Item item;
+        };
 
         /**
          * Determines if the option really contains a value.
          */
-        bool valid = false;
+        bool full = false;
+
+    public:
+        /**
+         * Default constructor to make the compiler happy in case of an ill-formed constructor.
+         */
+        Option();
     };
 
     /**

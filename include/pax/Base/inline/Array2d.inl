@@ -36,6 +36,10 @@ namespace pax
     }
 
     template <class Item>
+    Array2d<Item>::Array2d()
+    { }
+
+    template <class Item>
     bool
     Array2d<Item>::acquire(Item* data, v2u64 size)
     {
@@ -99,24 +103,24 @@ namespace pax
 
     template <class Item>
     Array<Item>
-    Array2d<Item>::line(u64 row)
+    Array2d<Item>::line(u64 index)
     {
-        pax_test_fmt(row < size(1),
-            "bounds", "index = %lu exceedes size = %lu", row, size(1)
+        pax_test_fmt(index < size(1),
+            "bounds", "index = %lu exceedes size = %lu", index, size(1)
         );
 
-        return array_create(data + row * size(0), size(0));
+        return array_create(data + index * size(0), size(0));
     }
 
     template <class Item>
     const Array<Item>
-    Array2d<Item>::line(u64 row) const
+    Array2d<Item>::line(u64 index) const
     {
-        pax_test_fmt(row < size(1),
-            "bounds", "index = %lu exceedes size = %lu", row, size(1)
+        pax_test_fmt(index < size(1),
+            "bounds", "index = %lu exceedes size = %lu", index, size(1)
         );
 
-        return array_create(data + row * size(0), size(0));
+        return array_create(data + index * size(0), size(0));
     }
 
     template <class Item>

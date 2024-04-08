@@ -32,6 +32,10 @@ namespace pax
     }
 
     template <class Item>
+    Array<Item>::Array()
+    { }
+
+    template <class Item>
     bool
     Array<Item>::acquire(Item* data, u64 size)
     {

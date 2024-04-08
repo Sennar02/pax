@@ -27,6 +27,11 @@ namespace pax
 
     public:
         /**
+         * Default constructor to make the compiler happy.
+         */
+        Array2d();
+
+        /**
          *
          */
         bool
@@ -60,13 +65,13 @@ namespace pax
          * todo: Comment.
          */
         Array<Item>
-        line(u64 row);
+        line(u64 index);
 
         /**
          * todo: Comment.
          */
         const Array<Item>
-        line(u64 row) const;
+        line(u64 index) const;
 
         /**
          * todo: Comment.

@@ -25,7 +25,7 @@ namespace pax
     }
 
     v4u64
-    Monitor::bounds() const
+    Monitor::rect() const
     {
         SDL_Rect rect;
         v4u64    value = {};

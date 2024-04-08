@@ -26,6 +26,11 @@ namespace pax
 
     public:
         /**
+         * Default constructor to make the compiler happy.
+         */
+        List();
+
+        /**
          * todo: Comment.
          */
         bool

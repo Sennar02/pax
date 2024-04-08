@@ -52,7 +52,7 @@ namespace pax
         if ( type < table.count ) {
             Option<Holder> value = table(type).remove(index);
 
-            if ( value.valid )
+            if ( value.full )
                 return option_create(value.item.func);
         }
 

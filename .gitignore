@@ -1,4 +1,4 @@
-# Exclude every hidden files and directories.
+# Exclude every hidden file and directory.
 .*
 # Exclude the build directory.
 build/

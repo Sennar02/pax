@@ -17,7 +17,7 @@ namespace pax
     f64
     Clock::delta() const
     {
-        return (time - prev + 1) / 1000.0;
+        return (time - prev) / 1000.0;
     }
 
     f64

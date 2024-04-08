@@ -5,7 +5,7 @@
 
 using namespace pax;
 
-#define DEMO_SHOW_TEXT_GRID false
+#define DEMO_SHOW_TEXT_GRID true
 
 /**
  * Title of the display.
@@ -13,19 +13,19 @@ using namespace pax;
 static const String PAX_TITLE = string_create("Pax Tibi", {0, 9u});
 
 /**
- * Size of a single tile in pixels.
+ * Size of a single cell in pixels.
  */
-static const v2f64 PAX_TILE_SIZE = {48.0, 48.0};
+static const v2f64 PAX_CELL_SIZE = {32.0, 32.0};
 
 /**
- * Half of a single tile in pixels.
+ * Half of a single cell in pixels.
  */
-static const v2f64 PAX_TILE_HALF = PAX_TILE_SIZE / 2.0;
+static const v2f64 PAX_CELL_HALF = PAX_CELL_SIZE / 2.0;
 
 /**
  * Size of the view in tiles.
  */
-static const v2f64 PAX_VIEW_SIZE = {21.0, 9.0};
+static const v2f64 PAX_VIEW_SIZE = {43.0, 18.0};
 
 /**
  * Half of the view in tiles.
@@ -35,11 +35,11 @@ static const v2f64 PAX_VIEW_HALF = PAX_VIEW_SIZE / 2.0;
 /**
  * Size of each grid in tiles.
  */
-static const v2u64 PAX_GRID_SIZE = {500u, 200u};
+static const v2u64 PAX_GRID_SIZE = {50u, 20u};
 
 /**
  * Total amount of actors in the game.
  */
-static const u64 PAX_MAX_ACTORS = 20000u;
+static const u64 PAX_MAX_ACTORS = 10u;
 
 #endif // DEMO_DEFINE_HPP

@@ -2,6 +2,9 @@
 
 namespace pax
 {
+    Dispatcher::Dispatcher()
+    { }
+
     bool
     Dispatcher::acquire(v2u64 size)
     {

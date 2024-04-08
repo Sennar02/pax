@@ -90,9 +90,9 @@ namespace pax
         return SDL_GetScancodeFromKey(key);
     }
 
-    const u64 Mouse::BTN_LEFT   = SDL_BUTTON_LEFT;
-    const u64 Mouse::BTN_CENTRE = SDL_BUTTON_MIDDLE;
-    const u64 Mouse::BTN_RIGHT  = SDL_BUTTON_RIGHT;
+    const u64 Mouse::LEFT   = SDL_BUTTON_LEFT;
+    const u64 Mouse::CENTRE = SDL_BUTTON_MIDDLE;
+    const u64 Mouse::RIGHT  = SDL_BUTTON_RIGHT;
 
     v2s64
     mouse_coords()

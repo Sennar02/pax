@@ -30,7 +30,7 @@ namespace pax
          * todo: Comment.
          */
         v4u64
-        bounds() const;
+        rect() const;
     };
 } // pax
 

@@ -18,6 +18,11 @@ namespace pax
 
     public:
         /**
+         * Default constructor to make the compiler happy.
+         */
+        Dispatcher();
+
+        /**
          * todo: Comment.
          */
         bool

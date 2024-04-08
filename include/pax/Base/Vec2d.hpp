@@ -11,17 +11,17 @@ namespace pax
     {
     public:
         /**
-         * Special vector which equals (x, y) = (0, 0).
+         * Special vector which contains (x, y) = (0, 0).
          */
         static const Vector<Item, 2u> ZERO;
 
         /**
-         * Special vector which equals (x, y) = (1, 0).
+         * Special vector which contains (x, y) = (1, 0).
          */
         static const Vector<Item, 2u> UNIT_X;
 
         /**
-         * Special vector which equals (x, y) = (0, 1).
+         * Special vector which contains (x, y) = (0, 1).
          */
         static const Vector<Item, 2u> UNIT_Y;
 

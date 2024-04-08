@@ -46,6 +46,9 @@ namespace pax
         return value;
     }
 
+    String::String()
+    { }
+
     s8
     String::item(u64 index) const
     {

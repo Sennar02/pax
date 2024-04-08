@@ -38,7 +38,7 @@ namespace pax
          * todo: Comment.
          */
         v4f64
-        bounds() const;
+        rect() const;
 
         /**
          * todo: Comment.

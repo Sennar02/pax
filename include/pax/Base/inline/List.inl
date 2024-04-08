@@ -34,6 +34,10 @@ namespace pax
     }
 
     template <class Item>
+    List<Item>::List()
+    { }
+
+    template <class Item>
     bool
     List<Item>::acquire(Item* data, u64 size)
     {
