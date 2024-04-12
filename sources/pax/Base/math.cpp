@@ -5,7 +5,7 @@ namespace pax
     s64
     math_top(f64 value)
     {
-        s64 reslt = value;
+        const s64 reslt = value;
 
         return reslt +
             (value > reslt);
@@ -14,7 +14,7 @@ namespace pax
     s64
     math_bot(f64 value)
     {
-        s64 reslt = value;
+        const s64 reslt = value;
 
         return reslt -
             (reslt > value);
@@ -23,7 +23,7 @@ namespace pax
     s64
     math_rnd(f64 value)
     {
-        s64 sig =
+        const s64 sig =
             (value > 0) - (value < 0);
 
         return value + sig * 0.5;
@@ -32,7 +32,7 @@ namespace pax
     f64
     math_abs(f64 value)
     {
-        s64 sig =
+        const s64 sig =
             (value > 0) - (value < 0);
 
         return value * sig;
@@ -41,15 +41,9 @@ namespace pax
     u64
     math_abs(s64 value)
     {
-        s64 sig =
+        const s64 sig =
             (value > 0) - (value < 0);
 
         return value * sig;
-    }
-
-    f64
-    interp_line(f64 value, f64 other, f64 alpha)
-    {
-        return value * (1 - alpha) + other * alpha;
     }
 } // pax

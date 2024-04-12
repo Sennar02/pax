@@ -26,7 +26,7 @@ namespace pax
     bool
     Display::acquire(Monitor& monitor, v2f64 size, u32 flags)
     {
-        u64 index = monitor.index;
+        const u64 index = monitor.index;
 
         if ( monitor.is_valid() ) {
             data = SDL_CreateWindow("",
@@ -44,7 +44,7 @@ namespace pax
     bool
     Display::acquire(Monitor& monitor, String title, v2f64 size, u32 flags)
     {
-        u64 index = monitor.index;
+        const u64 index = monitor.index;
 
         if ( monitor.is_valid() ) {
             data = SDL_CreateWindow(title.data,

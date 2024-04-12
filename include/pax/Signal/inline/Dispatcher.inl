@@ -2,41 +2,18 @@
 
 namespace pax
 {
-    struct Dispatcher::Holder {
-        void* func;
-        void* ctxt;
-    };
-
     template <class Item>
     Option<u64>
-    Dispatcher::insert(void (*func) (Item))
+    Dispatcher::insert(Invoker<void(Item)> invoker)
     {
+        List<Invoked>* list = 0;
+        const u64      type = Item::SIGNAL_TYPE;
 
-        u64 type = Item::SIGNAL_TYPE;
+        if ( invoker.is_valid() && type < table.count ) {
+            list = &table(type);
 
-        if ( func != 0 && type < table.count ) {
-            List<Holder>& list = table(type);
-
-            return list.insert(
-                {(void*) func, (void*) 0}, list.count
-            );
-        }
-
-        return {};
-    }
-
-    template <class Item, class Ctxt>
-    Option<u64>
-    Dispatcher::insert(void (*func) (Item, Ctxt*), Ctxt& ctxt)
-    {
-
-        u64 type = Item::SIGNAL_TYPE;
-
-        if ( func != 0 && type < table.count ) {
-            List<Holder>& list = table(type);
-
-            return list.insert(
-                {(void*) func, (void*) &ctxt}, list.count
+            return list->insert(
+                {invoker.func, invoker.ctxt}, list->count
             );
         }
 
@@ -44,17 +21,13 @@ namespace pax
     }
 
     template <class Item>
-    Option<void*>
+    Option<Invoked>
     Dispatcher::remove(u64 index)
     {
-        u64 type = Item::SIGNAL_TYPE;
+        const u64 type = Item::SIGNAL_TYPE;
 
-        if ( type < table.count ) {
-            Option<Holder> value = table(type).remove(index);
-
-            if ( value.full )
-                return option_create(value.item.func);
-        }
+        if ( type < table.count )
+            return table(type).remove(index);
 
         return {};
     }
@@ -63,22 +36,16 @@ namespace pax
     bool
     Dispatcher::publish(Item payload) const
     {
-        u64    type = Item::SIGNAL_TYPE;
-        Holder iter = {};
+        const List<Invoked>* list = 0;
+        const u64            type = Item::SIGNAL_TYPE;
 
         if ( type < table.count ) {
-            const List<Holder>& list = table(type);
+            list = &table(type);
 
-            for ( u64 i = 0; i < list.count; i += 1u ) {
-                iter = list(i);
+            for ( u64 i = 0; i < list->count; i += 1u )
+                invoke<void, Item>(list->item(i), payload);
 
-                if ( iter.ctxt != 0 )
-                    ((void (*) (Item, void*)) iter.func)(payload, iter.ctxt);
-                else
-                    ((void (*) (Item)) iter.func)(payload);
-            }
-
-            return list.count != 0;
+            return list->count != 0;
         }
 
         return false;

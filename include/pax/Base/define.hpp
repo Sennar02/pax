@@ -124,6 +124,17 @@ namespace pax {
     template <class Item>
     struct List;
 
+    /**
+     * todo: Comment.
+     */
+    struct Invoked;
+
+    /**
+     * Callable object.
+     */
+    template <class Resl, class... Args>
+    struct Invoker;
+
     static const u8   MAX_U8   = UINT8_MAX;
     static const u16  MAX_U16  = UINT16_MAX;
     static const u32  MAX_U32  = UINT32_MAX;

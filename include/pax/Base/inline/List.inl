@@ -23,14 +23,26 @@ namespace pax
     list_create(u64 size)
     {
         List<Item> value;
-        u64        bytes = pax_bytes_of(Item);
+        const u64  bytes = pax_bytes_of(Item);
 
         if ( size != 0 ) {
-            value.data  = (Item*) calloc(size, bytes);
-            value.size  = size;
+            value.data = (Item*) calloc(size, bytes);
+            value.size = size;
         }
 
         return value;
+    }
+
+    template <class Item>
+    List<Item>&
+    list_shuffle(List<Item>& list, v2u64 range)
+    {
+        range = list.clamp(range);
+
+        for ( u64 i = range(1); i != range(0); i -= 1u )
+            list.swap(i - 1u, rand() % i);
+
+        return list;
     }
 
     template <class Item>
@@ -56,7 +68,7 @@ namespace pax
     bool
     List<Item>::acquire(u64 size)
     {
-        u64 bytes = pax_bytes_of(Item);
+        const u64 bytes = pax_bytes_of(Item);
 
         if ( size != 0 ) {
             this->data  = (Item*) calloc(size, bytes);
@@ -98,6 +110,38 @@ namespace pax
 
     template <class Item>
     bool
+    List<Item>::contains(u64 index) const
+    {
+        return index < count;
+    }
+
+    template <class Item>
+    bool
+    List<Item>::contains(v2u64 index) const
+    {
+        return index(0) < count &&
+               index(1) < count;
+    }
+
+    template <class Item>
+    u64
+    List<Item>::clamp(u64 index) const
+    {
+        return pax_min(index, count);
+    }
+
+    template <class Item>
+    v2u64
+    List<Item>::clamp(v2u64 index) const
+    {
+        index(0) = pax_min(index(0), count);
+        index(1) = pax_min(index(1), count);
+
+        return index;
+    }
+
+    template <class Item>
+    bool
     List<Item>::swap(u64 index, u64 other)
     {
         Item temp = {};
@@ -120,6 +164,10 @@ namespace pax
     bool
     List<Item>::push(u64 index, s64 displ)
     {
+        /**
+         * todo: Verify.
+         */
+
         s64 dir = (displ > 0) - (displ < 0);
         u64 mod = (displ < 0) * (count - index);
         u64 lim = (displ > 0) * (displ) + count;
@@ -142,10 +190,36 @@ namespace pax
     }
 
     template <class Item>
+    template <class Func>
+    List<Item>&
+    List<Item>::loop(v2u64 range, Func func)
+    {
+        range = clamp(range);
+
+        for ( u64 i = range(0); i < range(1); i += 1u )
+            func(data[i], i);
+
+        return pax_self;
+    }
+
+    template <class Item>
+    template <class Func>
+    const List<Item>&
+    List<Item>::loop(v2u64 range, Func func) const
+    {
+        range = clamp(range);
+
+        for ( u64 i = range(0); i < range(1); i += 1u )
+            func(data[i], i);
+
+        return pax_self;
+    }
+
+    template <class Item>
     Option<u64>
     List<Item>::insert(Item item, u64 index)
     {
-        u64 other = count;
+        const u64 other = count;
 
         if ( index <= other && other < size ) {
             push(other, +1);
@@ -164,7 +238,7 @@ namespace pax
     List<Item>::remove(u64 index)
     {
         Option<Item> value;
-        u64          other = count - 1u;
+        const u64    other = count - 1u;
 
         if ( index <= other && other < size ) {
             value = option_create(data[index]);
@@ -180,7 +254,7 @@ namespace pax
     Option<u64>
     List<Item>::insert_push(Item item, u64 index)
     {
-        u64 other = count;
+        const u64 other = count;
 
         if ( index <= other && other < size ) {
             push(index, +1);
@@ -198,7 +272,7 @@ namespace pax
     List<Item>::remove_push(u64 index)
     {
         Option<Item> value;
-        u64          other = count - 1u;
+        const u64    other = count - 1u;
 
         if ( index <= other && other < size ) {
             value = option_create(data[index]);
@@ -207,6 +281,15 @@ namespace pax
         }
 
         return value;
+    }
+
+    template <class Item>
+    List<Item>&
+    List<Item>::clear()
+    {
+        count = 0;
+
+        return pax_self;
     }
 
     template <class Item>
@@ -249,21 +332,13 @@ namespace pax
     Item&
     List<Item>::operator()(u64 index)
     {
-        pax_test_fmt(index < size,
-            "bounds", "index = %lu exceedes size = %lu", index, size
-        );
-
-        return data[index];
+        return item(index);
     }
 
     template <class Item>
     const Item&
     List<Item>::operator()(u64 index) const
     {
-        pax_test_fmt(index < size,
-            "bounds", "index = %lu exceedes size = %lu", index, size
-        );
-
-        return data[index];
+        return item(index);
     }
 } // pax

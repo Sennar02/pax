@@ -8,8 +8,8 @@ namespace pax
     bool
     Engine::loop(State& state, f64 frame_rate)
     {
-        f64 unit = 1.0 / frame_rate;
-        f64 time = 0;
+        const f64 unit = 1.0 / frame_rate;
+        f64       time = 0;
 
         if ( startup() == false ) return false;
 

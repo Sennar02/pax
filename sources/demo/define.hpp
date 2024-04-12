@@ -5,7 +5,7 @@
 
 using namespace pax;
 
-#define DEMO_SHOW_TEXT_GRID true
+#define DEMO_SHOW_TEXT_GRID false
 
 /**
  * Title of the display.

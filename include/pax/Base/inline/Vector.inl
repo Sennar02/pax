@@ -36,20 +36,19 @@ namespace pax
     Vector<Item, Size>
     Vector<Item, Size>::normal() const
     {
-        Item value =
-            inner(pax_self);
+        if ( pax_self != Vector<Item, Size>::ZERO )
+            return pax_self / norm();
 
-        return pax_self / sqrt(value);
+        return pax_self;
     }
 
     template <class Item, u64 Size>
     Item
     Vector<Item, Size>::norm() const
     {
-        Item value =
-            inner(pax_self);
+        Item square = inner(pax_self);
 
-        return sqrt(value);
+        return sqrt(square);
     }
 
     template <class Item, u64 Size>
@@ -270,22 +269,14 @@ namespace pax
     Item&
     Vector<Item, Size>::operator()(u64 index)
     {
-        pax_test_fmt(index < SIZE,
-            "bounds", "index = %lu exceedes size = %lu", index, SIZE
-        );
-
-        return data[index];
+        return item(index);
     }
 
     template <class Item, u64 Size>
     const Item&
     Vector<Item, Size>::operator()(u64 index) const
     {
-        pax_test_fmt(index < SIZE,
-            "bounds", "index = %lu exceedes size = %lu", index, SIZE
-        );
-
-        return data[index];
+        return item(index);
     }
 
     template <class Item, u64 Size>

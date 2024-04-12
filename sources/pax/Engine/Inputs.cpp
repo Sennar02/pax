@@ -65,7 +65,7 @@ namespace pax
     bool
     is_keybd_press(u64 key)
     {
-        u64 scan = keybd_get_scan(key);
+        const u64 scan = keybd_get_scan(key);
 
         if ( scan < keybd_size )
             return keybd_data[scan] != 0;
@@ -76,7 +76,7 @@ namespace pax
     bool
     is_keybd_release(u64 key)
     {
-        u64 scan = keybd_get_scan(key);
+        const u64 scan = keybd_get_scan(key);
 
         if ( scan < keybd_size )
             return keybd_data[scan] == 0;

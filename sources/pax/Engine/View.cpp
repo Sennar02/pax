@@ -5,8 +5,8 @@ namespace pax
     v4f64
     View::rect() const
     {
-        v2f64 centre = target + offset;
-        v2f64 scaled = (size / scale) / 2.0;
+        const v2f64 centre = target + offset;
+        const v2f64 scaled = (size / scale) / 2.0;
 
         return {
             centre(0) - scaled(0), // x1
@@ -30,7 +30,7 @@ namespace pax
     v4u64
     View::cull(v4f64 rect, v4u64 limits) const
     {
-        v4s64 cull = snap(rect);
+        const v4s64 cull = snap(rect);
 
         return {
             pax_max((u64) pax_max(cull(0), 0), limits(0)),

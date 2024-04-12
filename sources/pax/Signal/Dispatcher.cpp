@@ -8,13 +8,13 @@ namespace pax
     bool
     Dispatcher::acquire(v2u64 size)
     {
-        List<Holder> list = {};
+        List<Invoked> list = {};
 
         if ( table.acquire(size(0)) == false )
             return false;
 
         for ( u64 i = 0; i < table.size; i += 1u ) {
-            list = list_create<Holder>(size(1));
+            list = list_create<Invoked>(size(1));
 
             table.insert(
                 list, table.count

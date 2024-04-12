@@ -137,13 +137,13 @@ public:
 };
 
 void
-on_display_event(Display_Event event, Main_State* state)
+on_display_event(Main_State* state, Display_Event event)
 {
     if ( event.is_close() ) state->active = false;
 }
 
 void
-on_keybd_event(Keybd_Event event, Main_State* state)
+on_keybd_event(Main_State* state, Keybd_Event event)
 {
     if ( event.is_press() ) return;
 
@@ -152,7 +152,7 @@ on_keybd_event(Keybd_Event event, Main_State* state)
 }
 
 void
-on_mouse_event(Mouse_Event event, Main_State* state)
+on_mouse_event(Main_State* state, Mouse_Event event)
 {
     v2f64 scale = state->view.scale;
     f64   extra = 1;
@@ -247,9 +247,9 @@ Main_State::acquire()
     // Prepares and fills the event dispat.
     dispat.acquire({32u, 8u});
 
-    dispat.insert(&on_display_event, pax_self);
-    dispat.insert(&on_keybd_event, pax_self);
-    dispat.insert(&on_mouse_event, pax_self);
+    dispat.insert(pax_bind(&on_display_event, pax_self));
+    dispat.insert(pax_bind(&on_keybd_event, pax_self));
+    dispat.insert(pax_bind(&on_mouse_event, pax_self));
 
     // Prepares the display.
     display.acquire(monitor,
@@ -339,8 +339,8 @@ Main_State::actors_show()
             u64 index = actors(col, row);
 
             if ( col >= cull(0) && col < cull(2) &&
-                 row >= cull(1) && row < cull(3) )
-                printf("%s", TEXT_BGRND[0]);
+                 row >= cull(1) && row < cull(3)
+            ) printf("%s", TEXT_BGRND[0]);
 
             printf("%s%3lu%s ",
                 TEXT_FGRND[index != 0], index, TEXT_CLEAR
@@ -494,13 +494,13 @@ Main_State::actors_move(f64 time)
 }
 
 void
-ground_paint_collect(v2u64 index, Main_State* state, v4f64 diff)
+ground_paint_collect(v2u64 index, Main_State* state, v4f64 rect)
 {
     Colour rgba = state->GROUND_COLOURS(state->ground(index));
     v4f64  cell = {0, 0, state->view.unit(0), state->view.unit(1)};
 
-    cell(0) = cell(2) * (index(0) - diff(0));
-    cell(1) = cell(3) * (index(1) - diff(1));
+    cell(0) = cell(2) * (index(0) - rect(0));
+    cell(1) = cell(3) * (index(1) - rect(1));
 
     state->painter.set_colour(rgba);
     state->painter.paint_rect_fill(cell);

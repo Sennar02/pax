@@ -78,7 +78,7 @@ namespace pax
     void
     Painter::paint_rect_fill(v4f64 border)
     {
-        SDL_Rect rect = {
+        const SDL_Rect rect = {
             (s32) border(0), // x
             (s32) border(1), // y
             (s32) border(2), // w

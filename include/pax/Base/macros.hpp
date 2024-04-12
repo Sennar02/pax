@@ -10,11 +10,14 @@
 #define pax_self \
     (*this)
 
+#define pax_bind \
+    pax::invoker_create
+
 #define pax_case_excl(name, ...) \
     case (name): __VA_ARGS__ break
 
-#define pax_case_fall(name, ...) \
-    case (name): __VA_ARGS__
+#define pax_case_fall(name) \
+    case (name):
 
 #define pax_show_fmt(group, messg, ...)
 #define pax_show(group, messg)

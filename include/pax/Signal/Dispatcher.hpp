@@ -8,13 +8,10 @@ namespace pax
     struct Dispatcher
     {
     public:
-        struct Holder;
-
-    public:
         /**
          * todo: Comment.
          */
-        List<List<Holder>> table;
+        List<List<Invoked>> table;
 
     public:
         /**
@@ -39,20 +36,13 @@ namespace pax
          */
         template <class Item>
         Option<u64>
-        insert(void (*func) (Item));
-
-        /**
-         * todo: Comment.
-         */
-        template <class Item, class Ctxt>
-        Option<u64>
-        insert(void (*func) (Item, Ctxt*), Ctxt& ctxt);
+        insert(Invoker<void(Item)> func);
 
         /**
          * todo: Comment.
          */
         template <class Item>
-        Option<void*>
+        Option<Invoked>
         remove(u64 index);
 
         /**

@@ -2,6 +2,8 @@
 #define PAX_BASE_LIST_HPP
 
 #include <pax/Base/define.hpp>
+#include <pax/Base/math.hpp>
+#include <pax/Base/Vec2d.hpp>
 
 namespace pax
 {
@@ -64,6 +66,30 @@ namespace pax
          * todo: Comment.
          */
         bool
+        contains(u64 index) const;
+
+        /**
+         * todo: Comment.
+         */
+        bool
+        contains(v2u64 index) const;
+
+        /**
+         * todo: Comment.
+         */
+        u64
+        clamp(u64 index) const;
+
+        /**
+         * todo: Comment.
+         */
+        v2u64
+        clamp(v2u64 index) const;
+
+        /**
+         * todo: Comment.
+         */
+        bool
         swap(u64 index, u64 other);
 
         /**
@@ -72,6 +98,20 @@ namespace pax
          */
         bool
         push(u64 index, s64 displ);
+
+        /**
+         * todo: Comment.
+         */
+        template <class Func>
+        List<Item>&
+        loop(v2u64 range, Func func);
+
+        /**
+         * todo: Comment.
+         */
+        template <class Func>
+        const List<Item>&
+        loop(v2u64 range, Func func) const;
 
         /**
          * todo: Comment.
@@ -96,6 +136,12 @@ namespace pax
          */
         Option<Item>
         remove_push(u64 index);
+
+        /**
+         * todo: Comment.
+         */
+        List<Item>&
+        clear();
 
         /**
          * todo: Comment.
@@ -147,6 +193,13 @@ namespace pax
     template <class Item>
     List<Item>
     list_create(u64 size);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    List<Item>&
+    list_shuffle(List<Item>& list, v2u64 range = {0, MAX_U64});
 } // pax
 
 #include <pax/Base/inline/List.inl>

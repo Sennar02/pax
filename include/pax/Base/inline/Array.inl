@@ -21,7 +21,7 @@ namespace pax
     array_create(u64 size)
     {
         Array<Item> value;
-        u64         bytes = pax_bytes_of(Item);
+        const u64   bytes = pax_bytes_of(Item);
 
         if ( size != 0 ) {
             value.data = (Item*) calloc(size, bytes);
@@ -29,6 +29,18 @@ namespace pax
         }
 
         return value;
+    }
+
+    template <class Item>
+    Array<Item>&
+    array_shuffle(Array<Item>& array, v2u64 range)
+    {
+        range = array.clamp(range);
+
+        for ( u64 i = range(1); i > range(0); i -= 1u )
+            array.swap(i - 1u, rand() % i);
+
+        return array;
     }
 
     template <class Item>
@@ -53,7 +65,7 @@ namespace pax
     bool
     Array<Item>::acquire(u64 size)
     {
-        u64 bytes = pax_bytes_of(Item);
+        const u64 bytes = pax_bytes_of(Item);
 
         if ( size != 0 ) {
             this->data = (Item*) calloc(size, bytes);
@@ -75,6 +87,84 @@ namespace pax
         size = 0;
 
         return true;
+    }
+
+    template <class Item>
+    bool
+    Array<Item>::contains(u64 index) const
+    {
+        return index < size;
+    }
+
+    template <class Item>
+    bool
+    Array<Item>::contains(v2u64 index) const
+    {
+        return index(0) < size &&
+               index(1) < size;
+    }
+
+    template <class Item>
+    u64
+    Array<Item>::clamp(u64 index) const
+    {
+        return pax_min(index, size);
+    }
+
+    template <class Item>
+    v2u64
+    Array<Item>::clamp(v2u64 index) const
+    {
+        index(0) = pax_min(index(0), size);
+        index(1) = pax_min(index(1), size);
+
+        return index;
+    }
+
+    template <class Item>
+    bool
+    Array<Item>::swap(u64 index, u64 other)
+    {
+        Item temp = {};
+
+        if ( index < size && other < size ) {
+            if ( index != other ) {
+                temp = data[index];
+
+                data[index] = data[other];
+                data[other] = temp;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    template <class Item>
+    template <class Func>
+    Array<Item>&
+    Array<Item>::loop(v2u64 range, Func func)
+    {
+        range = clamp(range);
+
+        for ( u64 i = range(0); i < range(1); i += 1u )
+            func(data[i], i);
+
+        return pax_self;
+    }
+
+    template <class Item>
+    template <class Func>
+    const Array<Item>&
+    Array<Item>::loop(v2u64 range, Func func) const
+    {
+        range = clamp(range);
+
+        for ( u64 i = range(0); i < range(1); i += 1u )
+            func(data[i], i);
+
+        return pax_self;
     }
 
     template <class Item>
@@ -103,21 +193,13 @@ namespace pax
     Item&
     Array<Item>::operator()(u64 index)
     {
-        pax_test_fmt(index < size,
-            "bounds", "index = %lu exceedes size = %lu", index, size
-        );
-
-        return data[index];
+        return item(index);
     }
 
     template <class Item>
     const Item&
     Array<Item>::operator()(u64 index) const
     {
-        pax_test_fmt(index < size,
-            "bounds", "index = %lu exceedes size = %lu", index, size
-        );
-
-        return data[index];
+        return item(index);
     }
 } // pax

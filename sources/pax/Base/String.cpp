@@ -62,10 +62,6 @@ namespace pax
     s8
     String::operator()(u64 index) const
     {
-        pax_test_fmt(index < size,
-            "bounds", "index = %lu exceedes size = %lu", index, size
-        );
-
-        return data[index];
+        return item(index);
     }
 } // pax
