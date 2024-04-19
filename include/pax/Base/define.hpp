@@ -10,7 +10,7 @@
  *
  * Example:
  *   1) pax_show("debug", "Done!");
- *   2) pax_show_fmt("debug", "Result = %u", 3);
+ *   2) pax_show_fmt("debug", "Result = %u", 3u);
  *
  * The difference between the two macros is that pax_show_fmt accepts a format and one or more variables
  * to print, when pax_show only accepts a simple string as message.
@@ -26,8 +26,8 @@
  * If not defined those macros expand to nothing.
  *
  * Example:
- *   1) pax_test(index < 3, "error", "Index is beyond the limit!");
- *   2) pax_test_fmt(index < 3, "error", "Index = %u is beyond the limit = %lu!", index, 3);
+ *   1) pax_test(index < 3u, "error", "Index is beyond the limit!");
+ *   2) pax_test_fmt(index < 3u, "error", "Index = %u is beyond the limit = %lu!", index, 3u);
  *
  * The difference between the two macros is that pax_test_fmt accepts a format and one or more variables
  * to print, when pax_test only accepts a simple string as message.
@@ -61,12 +61,6 @@ namespace pax {
 
     using f32 = float;
     using f64 = double;
-
-    /**
-     * Static array.
-     */
-    template <class Item, u64 Size>
-    struct Store;
 
     /**
      * Mathematical vector.
@@ -105,6 +99,36 @@ namespace pax {
      * Immutable string.
      */
     struct String;
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    struct Line_Iter_Forw;
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    struct Line_Iter_Back;
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    struct Grid_Iter_Forw;
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    struct Grid_Iter_Back;
+
+    /**
+     * Static array.
+     */
+    template <class Item, u64 Size>
+    struct Storage;
 
     /**
      * Dynamic array.

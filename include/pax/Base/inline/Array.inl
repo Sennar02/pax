@@ -33,14 +33,92 @@ namespace pax
 
     template <class Item>
     Array<Item>&
-    array_shuffle(Array<Item>& array, v2u64 range)
+    shuffle(Array<Item>& array)
     {
-        range = array.clamp(range);
+        u64  index = 0;
+        auto iter  = iter_back_create(array);
 
-        for ( u64 i = range(1); i > range(0); i -= 1u )
-            array.swap(i - 1u, rand() % i);
+        for ( ; iter.has_next(); iter.next() ) {
+            index = iter.index();
+
+            swap(array, index,
+                rand() % (index + 1u)
+            );
+        }
 
         return array;
+    }
+
+    template <class Item>
+    bool
+    swap(Array<Item>& array, u64 index, u64 other)
+    {
+        Item temp = {};
+
+        if ( array.contains(index) == false ||
+             array.contains(other) == false
+        ) return false;
+
+        if ( index != other ) {
+            temp = array(index);
+
+            array(index) = array(other);
+            array(other) = temp;
+        }
+
+        return true;
+    }
+
+    template <class Item>
+    Line_Iter_Forw<const Item>
+    iter_forw_create(const Array<Item>& array)
+    {
+        Line_Iter_Forw<const Item> iter;
+
+        iter.array = array.data;
+        iter.limit = array.size;
+        iter.state = 0;
+
+        return iter;
+    }
+
+    template <class Item>
+    Line_Iter_Forw<Item>
+    iter_forw_create(Array<Item>& array)
+    {
+        Line_Iter_Forw<Item> iter;
+
+        iter.array = array.data;
+        iter.limit = array.size;
+        iter.state = 0;
+
+        return iter;
+    }
+
+    template <class Item>
+    Line_Iter_Back<const Item>
+    iter_back_create(const Array<Item>& array)
+    {
+        Line_Iter_Back<const Item> iter;
+
+        iter.array = array.data;
+        iter.limit = array.size;
+        iter.state = array.size - 1u;
+
+        return iter;
+    }
+
+    template <class Item>
+    Line_Iter_Back<Item>
+    iter_back_create(Array<Item>& array)
+    {
+        Line_Iter_Back<Item> iter;
+
+        iter.array = array.data;
+        iter.limit = array.size;
+        iter.state = array.size - 1u;
+
+        return iter;
     }
 
     template <class Item>
@@ -94,77 +172,6 @@ namespace pax
     Array<Item>::contains(u64 index) const
     {
         return index < size;
-    }
-
-    template <class Item>
-    bool
-    Array<Item>::contains(v2u64 index) const
-    {
-        return index(0) < size &&
-               index(1) < size;
-    }
-
-    template <class Item>
-    u64
-    Array<Item>::clamp(u64 index) const
-    {
-        return pax_min(index, size);
-    }
-
-    template <class Item>
-    v2u64
-    Array<Item>::clamp(v2u64 index) const
-    {
-        index(0) = pax_min(index(0), size);
-        index(1) = pax_min(index(1), size);
-
-        return index;
-    }
-
-    template <class Item>
-    bool
-    Array<Item>::swap(u64 index, u64 other)
-    {
-        Item temp = {};
-
-        if ( index < size && other < size ) {
-            if ( index != other ) {
-                temp = data[index];
-
-                data[index] = data[other];
-                data[other] = temp;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    template <class Item>
-    template <class Func>
-    Array<Item>&
-    Array<Item>::loop(v2u64 range, Func func)
-    {
-        range = clamp(range);
-
-        for ( u64 i = range(0); i < range(1); i += 1u )
-            func(data[i], i);
-
-        return pax_self;
-    }
-
-    template <class Item>
-    template <class Func>
-    const Array<Item>&
-    Array<Item>::loop(v2u64 range, Func func) const
-    {
-        range = clamp(range);
-
-        for ( u64 i = range(0); i < range(1); i += 1u )
-            func(data[i], i);
-
-        return pax_self;
     }
 
     template <class Item>

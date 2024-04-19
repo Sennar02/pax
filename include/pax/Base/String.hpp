@@ -2,7 +2,7 @@
 #define PAX_BASE_STRING_HPP
 
 #include <pax/Base/define.hpp>
-#include <pax/Base/Store.hpp>
+#include <pax/Base/Storage.hpp>
 
 namespace pax
 {
@@ -57,7 +57,7 @@ namespace pax
      * it's larger than the upper bound, immediately returns a string without going beyond the limit.
      */
     String
-    string_create(const s8* data, Store<u64, 2u> range);
+    string_create(const s8* data, Storage<u64, 2u> range);
 } // pax
 
 #endif // PAX_BASE_STRING_HPP

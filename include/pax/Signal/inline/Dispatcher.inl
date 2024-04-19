@@ -12,8 +12,8 @@ namespace pax
         if ( invoker.is_valid() && type < table.count ) {
             list = &table(type);
 
-            return list->insert(
-                {invoker.func, invoker.ctxt}, list->count
+            return list->insert_tail(
+                {invoker.func, invoker.ctxt}
             );
         }
 

@@ -2,6 +2,7 @@
 #define PAX_BASE_LIST_HPP
 
 #include <pax/Base/define.hpp>
+#include <pax/Base/Line_Iter.hpp>
 #include <pax/Base/math.hpp>
 #include <pax/Base/Vec2d.hpp>
 
@@ -72,46 +73,7 @@ namespace pax
          * todo: Comment.
          */
         bool
-        contains(v2u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        u64
-        clamp(u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        v2u64
-        clamp(v2u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        bool
-        swap(u64 index, u64 other);
-
-        /**
-         * todo: Comment.
-         * todo: Test.
-         */
-        bool
-        push(u64 index, s64 displ);
-
-        /**
-         * todo: Comment.
-         */
-        template <class Func>
-        List<Item>&
-        loop(v2u64 range, Func func);
-
-        /**
-         * todo: Comment.
-         */
-        template <class Func>
-        const List<Item>&
-        loop(v2u64 range, Func func) const;
+        slide(u64 index, s64 displ);
 
         /**
          * todo: Comment.
@@ -122,20 +84,32 @@ namespace pax
         /**
          * todo: Comment.
          */
+        Option<u64>
+        insert_tail(Item item);
+
+        /**
+         * todo: Comment.
+         */
+        Option<u64>
+        insert_head(Item item);
+
+        /**
+         * todo: Comment.
+         */
         Option<Item>
         remove(u64 index);
 
         /**
          * todo: Comment.
          */
-        Option<u64>
-        insert_push(Item item, u64 index);
+        Option<Item>
+        remove_tail();
 
         /**
          * todo: Comment.
          */
         Option<Item>
-        remove_push(u64 index);
+        remove_head();
 
         /**
          * todo: Comment.
@@ -199,7 +173,42 @@ namespace pax
      */
     template <class Item>
     List<Item>&
-    list_shuffle(List<Item>& list, v2u64 range = {0, MAX_U64});
+    shuffle(List<Item>& list);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    bool
+    swap(List<Item>& list, u64 index, u64 other);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    Line_Iter_Forw<const Item>
+    iter_forw_create(const List<Item>& list);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    Line_Iter_Forw<Item>
+    iter_forw_create(List<Item>& list);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    Line_Iter_Back<const Item>
+    iter_back_create(const List<Item>& list);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    Line_Iter_Back<Item>
+    iter_back_create(List<Item>& list);
 } // pax
 
 #include <pax/Base/inline/List.inl>

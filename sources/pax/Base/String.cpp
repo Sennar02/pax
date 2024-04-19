@@ -29,7 +29,7 @@ namespace pax
     }
 
     String
-    string_create(const s8* data, Store<u64, 2u> range)
+    string_create(const s8* data, Storage<u64, 2u> range)
     {
         String value;
         u64    count = 0;

@@ -16,8 +16,8 @@ namespace pax
         for ( u64 i = 0; i < table.size; i += 1u ) {
             list = list_create<Invoked>(size(1));
 
-            table.insert(
-                list, table.count
+            table.insert_tail(
+                list
             );
         }
 

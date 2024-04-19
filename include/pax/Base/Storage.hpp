@@ -1,5 +1,5 @@
-#ifndef PAX_BASE_STORE_HPP
-#define PAX_BASE_STORE_HPP
+#ifndef PAX_BASE_STORAGE_HPP
+#define PAX_BASE_STORAGE_HPP
 
 #include <pax/Base/define.hpp>
 #include <pax/Base/math.hpp>
@@ -8,7 +8,7 @@
 namespace pax
 {
     template <typename Item, u64 Size>
-    struct Store
+    struct Storage
     {
     public:
         /**
@@ -28,44 +28,6 @@ namespace pax
          */
         bool
         contains(u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        bool
-        contains(v2u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        u64
-        clamp(u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        v2u64
-        clamp(v2u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        bool
-        swap(u64 index, u64 other);
-
-        /**
-         * todo: Comment.
-         */
-        template <class Func>
-        Store<Item, Size>&
-        loop(v2u64 range, Func func);
-
-        /**
-         * todo: Comment.
-         */
-        template <class Func>
-        const Store<Item, Size>&
-        loop(v2u64 range, Func func) const;
 
         /**
          * Returns the element contained in a particular index.
@@ -96,10 +58,45 @@ namespace pax
      * todo: Comment.
      */
     template <class Item, u64 Size>
-    Store<Item, Size>&
-    store_shuffle(Store<Item, Size>& store, v2u64 range = {0, MAX_U64});
+    Storage<Item, Size>&
+    shuffle(Storage<Item, Size>& storage);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item, u64 Size>
+    bool
+    swap(Storage<Item, Size>& storage, u64 index, u64 other);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item, u64 Size>
+    Line_Iter_Forw<const Item>
+    iter_forw_create(const Storage<Item, Size>& storage);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item, u64 Size>
+    Line_Iter_Forw<Item>
+    iter_forw_create(Storage<Item, Size>& storage);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item, u64 Size>
+    Line_Iter_Back<const Item>
+    iter_back_create(const Storage<Item, Size>& storage);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item, u64 Size>
+    Line_Iter_Back<Item>
+    iter_back_create(Storage<Item, Size>& storage);
 } // pax
 
-#include <pax/Base/inline/Store.inl>
+#include <pax/Base/inline/Storage.inl>
 
-#endif // PAX_BASE_STORE_HPP
+#endif // PAX_BASE_STORAGE_HPP

@@ -35,14 +35,92 @@ namespace pax
 
     template <class Item>
     List<Item>&
-    list_shuffle(List<Item>& list, v2u64 range)
+    shuffle(List<Item>& list)
     {
-        range = list.clamp(range);
+        u64  index = 0;
+        auto iter  = iter_back_create(list);
 
-        for ( u64 i = range(1); i != range(0); i -= 1u )
-            list.swap(i - 1u, rand() % i);
+        for ( ; iter.has_next(); iter.next() ) {
+            index = iter.index();
+
+            swap(list, index,
+                rand() % (index + 1u)
+            );
+        }
 
         return list;
+    }
+
+    template <class Item>
+    bool
+    swap(List<Item>& list, u64 index, u64 other)
+    {
+        Item temp = {};
+
+        if ( list.contains(index) == false ||
+             list.contains(other) == false
+        ) return false;
+
+        if ( index != other ) {
+            temp = list(index);
+
+            list(index) = list(other);
+            list(other) = temp;
+        }
+
+        return true;
+    }
+
+    template <class Item>
+    Line_Iter_Forw<const Item>
+    iter_forw_create(const List<Item>& list)
+    {
+        Line_Iter_Forw<const Item> iter;
+
+        iter.array = list.data;
+        iter.limit = list.count;
+        iter.state = 0;
+
+        return iter;
+    }
+
+    template <class Item>
+    Line_Iter_Forw<Item>
+    iter_forw_create(List<Item>& list)
+    {
+        Line_Iter_Forw<Item> iter;
+
+        iter.array = list.data;
+        iter.limit = list.count;
+        iter.state = 0;
+
+        return iter;
+    }
+
+    template <class Item>
+    Line_Iter_Back<const Item>
+    iter_back_create(const List<Item>& list)
+    {
+        Line_Iter_Back<const Item> iter;
+
+        iter.array = list.data;
+        iter.limit = list.count;
+        iter.state = list.count - 1u;
+
+        return iter;
+    }
+
+    template <class Item>
+    Line_Iter_Back<Item>
+    iter_back_create(List<Item>& list)
+    {
+        Line_Iter_Back<Item> iter;
+
+        iter.array = list.data;
+        iter.limit = list.count;
+        iter.state = list.count - 1u;
+
+        return iter;
     }
 
     template <class Item>
@@ -117,102 +195,27 @@ namespace pax
 
     template <class Item>
     bool
-    List<Item>::contains(v2u64 index) const
+    List<Item>::slide(u64 index, s64 displ)
     {
-        return index(0) < count &&
-               index(1) < count;
-    }
+        const s64 sign = (displ > 0) - (displ < 0);
+        const u64 stop = (displ > 0) * displ + count;
 
-    template <class Item>
-    u64
-    List<Item>::clamp(u64 index) const
-    {
-        return pax_min(index, count);
-    }
+        u64 orig = 1u - displ;
+        u64 dest = (displ > 0) * count +
+                   (displ < 0) * index + 1u;
 
-    template <class Item>
-    v2u64
-    List<Item>::clamp(v2u64 index) const
-    {
-        index(0) = pax_min(index(0), count);
-        index(1) = pax_min(index(1), count);
-
-        return index;
-    }
-
-    template <class Item>
-    bool
-    List<Item>::swap(u64 index, u64 other)
-    {
-        Item temp = {};
-
-        if ( index < count && other < count ) {
-            if ( index != other ) {
-                temp = data[index];
-
-                data[index] = data[other];
-                data[other] = temp;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    template <class Item>
-    bool
-    List<Item>::push(u64 index, s64 displ)
-    {
-        /**
-         * todo: Verify.
-         */
-
-        s64 dir = (displ > 0) - (displ < 0);
-        u64 mod = (displ < 0) * (count - index);
-        u64 lim = (displ > 0) * (displ) + count;
-        u64 src = 0;
-        u64 dst = 0;
-
-        if ( count + displ > size ) return false;
-
-        for ( u64 i = 0; i < count + displ - index; i += 1u ) {
-            dst = count - (mod + dir * i);
-            src = dst - displ;
-
-            if ( dst <= lim && src <= lim )
-                data[dst] = data[src];
-        }
+        if ( displ + count > size ) return false;
 
         count += displ;
 
+        for ( u64 i = 0; i < count; i += 1u ) {
+            orig -= sign, dest -= sign;
+
+            if ( orig <= stop && dest <= stop )
+                data[dest] = data[orig];
+        }
+
         return true;
-    }
-
-    template <class Item>
-    template <class Func>
-    List<Item>&
-    List<Item>::loop(v2u64 range, Func func)
-    {
-        range = clamp(range);
-
-        for ( u64 i = range(0); i < range(1); i += 1u )
-            func(data[i], i);
-
-        return pax_self;
-    }
-
-    template <class Item>
-    template <class Func>
-    const List<Item>&
-    List<Item>::loop(v2u64 range, Func func) const
-    {
-        range = clamp(range);
-
-        for ( u64 i = range(0); i < range(1); i += 1u )
-            func(data[i], i);
-
-        return pax_self;
     }
 
     template <class Item>
@@ -222,8 +225,8 @@ namespace pax
         const u64 other = count;
 
         if ( index <= other && other < size ) {
-            push(other, +1);
-            swap(index, other);
+            slide(other, +1);
+            swap(pax_self, index, other);
 
             data[index] = item;
 
@@ -231,6 +234,20 @@ namespace pax
         }
 
         return {};
+    }
+
+    template <class Item>
+    Option<u64>
+    List<Item>::insert_tail(Item item)
+    {
+        return insert(item, count);
+    }
+
+    template <class Item>
+    Option<u64>
+    List<Item>::insert_head(Item item)
+    {
+        return insert(item, 0);
     }
 
     template <class Item>
@@ -243,44 +260,25 @@ namespace pax
         if ( index <= other && other < size ) {
             value = option_create(data[index]);
 
-            swap(index, other);
-            push(other, -1);
+            swap(pax_self, index, other);
+            slide(other, -1);
         }
 
         return value;
-    }
-
-    template <class Item>
-    Option<u64>
-    List<Item>::insert_push(Item item, u64 index)
-    {
-        const u64 other = count;
-
-        if ( index <= other && other < size ) {
-            push(index, +1);
-
-            data[index] = item;
-
-            return option_create(index);
-        }
-
-        return {};
     }
 
     template <class Item>
     Option<Item>
-    List<Item>::remove_push(u64 index)
+    List<Item>::remove_tail()
     {
-        Option<Item> value;
-        const u64    other = count - 1u;
+        return remove(count - 1u);
+    }
 
-        if ( index <= other && other < size ) {
-            value = option_create(data[index]);
-
-            push(index, -1);
-        }
-
-        return value;
+    template <class Item>
+    Option<Item>
+    List<Item>::remove_head()
+    {
+        return remove(0);
     }
 
     template <class Item>

@@ -2,6 +2,7 @@
 #define PAX_BASE_ARRAY_HPP
 
 #include <pax/Base/define.hpp>
+#include <pax/Base/Line_Iter.hpp>
 #include <pax/Base/math.hpp>
 #include <pax/Base/Vec2d.hpp>
 
@@ -54,44 +55,6 @@ namespace pax
         /**
          * todo: Comment.
          */
-        bool
-        contains(v2u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        u64
-        clamp(u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        v2u64
-        clamp(v2u64 index) const;
-
-        /**
-         * todo: Comment.
-         */
-        bool
-        swap(u64 index, u64 other);
-
-        /**
-         * todo: Comment.
-         */
-        template <class Func>
-        Array<Item>&
-        loop(v2u64 range, Func func);
-
-        /**
-         * todo: Comment.
-         */
-        template <class Func>
-        const Array<Item>&
-        loop(v2u64 range, Func func) const;
-
-        /**
-         * todo: Comment.
-         */
         Item&
         item(u64 index);
 
@@ -133,7 +96,42 @@ namespace pax
      */
     template <class Item>
     Array<Item>&
-    array_shuffle(Array<Item>& array, v2u64 range = {0, MAX_U64});
+    shuffle(Array<Item>& array);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    bool
+    swap(Array<Item>& array, u64 index, u64 other);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    Line_Iter_Forw<const Item>
+    iter_forw_create(const Array<Item>& array);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    Line_Iter_Forw<Item>
+    iter_forw_create(Array<Item>& array);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    Line_Iter_Back<const Item>
+    iter_back_create(const Array<Item>& array);
+
+    /**
+     * todo: Comment.
+     */
+    template <class Item>
+    Line_Iter_Back<Item>
+    iter_back_create(Array<Item>& array);
 } // pax
 
 #include <pax/Base/inline/Array.inl>

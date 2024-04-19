@@ -29,14 +29,14 @@
     #undef pax_show_fmt
     #undef pax_show
 
-    #define pax_show_fmt(group, messg, ...)                   \
-        fprintf(stdout, "[%s, %u] {" group ": " messg "}\n",  \
-            __FILE__, __LINE__, __VA_ARGS__                   \
+    #define pax_show_fmt(group, messg, ...)             \
+        fprintf(stdout, "[%s, %u] { %s: " messg " }\n", \
+            __FILE__, __LINE__, group, __VA_ARGS__      \
         )
 
-    #define pax_show(group, messg)                            \
-        fprintf(stdout, "[%s, %u] {" group ": " messg "}\n",  \
-            __FILE__, __LINE__                                \
+    #define pax_show(group, messg)                      \
+        fprintf(stdout, "[%s, %u] { %s: " messg " }\n", \
+            __FILE__, __LINE__, group                   \
         )
 #endif
 
@@ -44,22 +44,22 @@
     #undef pax_test_fmt
     #undef pax_test
 
-    #define pax_test_fmt(test, group, messg, ...)                 \
-        if ( (test) == false ) {                                  \
-            fprintf(stderr, "[%s, %u] {" group ": " messg "}\n",  \
-                __FILE__, __LINE__, __VA_ARGS__                   \
-            );                                                    \
-                                                                  \
-            abort();                                              \
+    #define pax_test_fmt(test, group, messg, ...)           \
+        if ( (test) == false ) {                            \
+            fprintf(stderr, "[%s, %u] { %s: " messg " }\n", \
+                __FILE__, __LINE__, group, __VA_ARGS__      \
+            );                                              \
+                                                            \
+            abort();                                        \
         }
 
-    #define pax_test(test, group, messg)                          \
-        if ( (test) == false ) {                                  \
-            fprintf(stderr, "[%s, %u] {" group ": " messg "}\n",  \
-                __FILE__, __LINE__                                \
-            );                                                    \
-                                                                  \
-            abort();                                              \
+    #define pax_test(test, group, messg)                    \
+        if ( (test) == false ) {                            \
+            fprintf(stderr, "[%s, %u] { %s: " messg " }\n", \
+                __FILE__, __LINE__, group                   \
+            );                                              \
+                                                            \
+            abort();                                        \
         }
 #endif
 
